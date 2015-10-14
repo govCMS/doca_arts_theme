@@ -33,8 +33,9 @@
             <?php endif; ?>
         </div>
     <?php endforeach; ?>
-  <?php endif; ?>
   </div>
+
+  <?php endif; ?>
 
     <?php if (!empty($sort_by) || !empty($items_per_page) || !empty($offset)): ?>
       <div class="filter__right">

@@ -1,0 +1,134 @@
+<!--
+  name: build.xml
+  description: The main project build file for phing operations.
+-->
+
+<project name="dcomms" default="build" phingVersion="2.4.11">
+
+    <!--
+      This is currently a custom task that we trying to contribute back
+      to the Phing project. If we checkout more build files they will
+      get picked up automatically.
+      https://github.com/phingofficial/phing/pull/326
+    -->
+    <import optional="true">
+        <fileset dir="vendor/previousnext">
+            <patternset>
+                <include name="**/build*.xml"/>
+                <include name="**/build.standard.xml"/>
+                <exclude name="**/templates/build.xml"/>
+            </patternset>
+        </fileset>
+    </import>
+
+    <!--            -->
+    <!-- Properties -->
+    <!-- ===========-->
+
+    <!-- Application -->
+    <property name="app.uri" value="http://${phing.project.name}.dev" override="true" />
+    <property name="app.dir" value="app"                              override="true" />
+
+    <!-- Drush -->
+    <property name="drush.bin"  value="${project.basedir}/bin/drush"                                   override="true" />
+    <property name="drush.cmd"  value="${drush.bin} -r ${project.basedir}/${app.dir} --uri=${app.uri}" override="true" />
+    <property name="drush.make" value="dcomms.make"                                                    override="true" />
+
+    <!-- PHPQATools -->
+    <property name="php.sniff.dirs" value="themes" override="true" />
+
+    <!-- Database -->
+    <property name="drush.source"     value="@${phing.project.name}.dev"                override="true" />
+    <property name="drush.target"     value="@self"                                     override="true" />
+    <property name="drush.alias.file" value="${phing.project.name}.aliases.drushrc.php" override="true" />
+
+    <!--              -->
+    <!-- Meta targets -->
+    <!-- ============ -->
+
+    <target name="build"
+            description="Build the project."
+            depends="clean, prepare, make, symlink, styleguide:link, acquia:site-factory" />
+
+    <!--            -->
+    <!-- CI targets -->
+    <!-- ========== -->
+
+    <target name="ci:test:pr"
+            description="Run CI test suite for PR (short subset of important tests)."
+            depends="test" />
+
+    <target name="ci:test:head"
+            description="Run CI test suite for HEAD (all the tests)."
+            depends="test" />
+
+    <target name="test"
+            description="Common target to run a full test suite on this project.">
+        <phingcall target="ci:phpcs" />
+        <phingcall target="database:sync" />
+        <phingcall target="registry:rebuild" />
+        <phingcall target="cache:clear" />
+        <phingcall target="files:proxy" />
+    </target>
+
+    <!--                -->
+    <!-- Custom targets -->
+    <!-- ============== -->
+
+    <target name="clean"
+            description="Cleanup build artifacts">
+        <exec command="rm -fR ${project.basedir}/${app.dir}"
+              logoutput="true"
+              passthru="true" />
+    </target>
+
+    <target name="prepare"
+            depends="clean"
+            description="Prepare for build">
+        <exec command="composer install --prefer-dist --dev --no-progress"
+              logoutput="true"
+              passthru="true" />
+        <exec command="bundle install --path vendor/bundle" />
+    </target>
+
+    <target name="make"
+            description="Build the project based on the drush make.">
+        <echo msg="${drush.bin} make ${drush.make} ${project.basedir}/${app.dir}" />
+        <exec command="${drush.bin} make ${drush.make} ${project.basedir}/${app.dir}"
+              logoutput="true"
+              passthru="true" />
+
+        <symlink target="${project.basedir}/themes"                                 link="${app.dir}/sites/all/themes/govcms" />
+        <copy file="${project.basedir}/misc/favicon.ico"                            tofile="${app.dir}/profiles/govcms/themes/govcms/govcms_zen/favicon.ico" />
+        <copy file="${project.basedir}/misc/settings/settings.php"                  todir="${app.dir}/sites/default/"  />
+        <copy file="${project.basedir}/misc/settings/settings.theme.php"            todir="${app.dir}/sites/default/"  />
+        <copy file="${project.basedir}/misc/settings/settings.ga.php"               todir="${app.dir}/sites/default/"  />
+        <copy file="${project.basedir}/misc/settings/settings.file_stage_proxy.php" todir="${app.dir}/sites/default/"  />
+        <mkdir dir="${app.dir}/sites/default/private" />
+        <mkdir dir="${app.dir}/sites/default/files/tmp" />
+    </target>
+
+    <target name="symlink"
+            description="Symlinks the application directory so Local / QA / Staging / PR will work.">
+        <symlink target="${project.basedir}/themes" link="${app.dir}/sites/all/themes/govcms_subthemes" />
+    </target>
+
+    <target name="db-sync"
+            depends="drush:init">
+      <phingcall target="database:sync" />
+    </target>
+
+    <target name="uli">
+      <phingcall target="login" />
+    </target>
+
+    <target name="styleguide:link">
+      <symlink target="${project.basedir}/styleguide" link="${app.dir}/styleguide" />
+    </target>
+
+    <target name="acquia:site-factory">
+      <mkdir dir="app/sites/g/files/net301" />
+      <symlink target="${app.dir}/sites/default/files" link="${app.dir}/sites/g/files/net301/f" />
+    </target>
+
+</project>

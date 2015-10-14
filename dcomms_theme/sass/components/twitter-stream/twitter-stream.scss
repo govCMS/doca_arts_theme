@@ -44,6 +44,10 @@ html {
   @include breakpoint($large) {
     height: ($tweet-stream__large + $tweet-stream__margin-bottom);
   }
+
+  .timeline {
+    max-width: 100% !important;
+  }
 }
 
 

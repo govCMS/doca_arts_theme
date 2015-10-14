@@ -10,7 +10,7 @@ end
 
 group :frontend do
   gem 'breakpoint',     '~> 2.5.0'
-  gem 'bundler',        '~> 1.7.3'
+  gem 'bundler',        '> 1.7.3'
   gem 'compass',        '~> 1.0.1'
   # Build compass sprites faster with oily_png.
   gem 'oily_png',       '~> 1.1.2'

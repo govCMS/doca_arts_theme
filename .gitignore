@@ -4,9 +4,9 @@
 /bin
 /app
 /.vagrant
-build/node_modules
-build/bower_components
-build/styleguide/template/node_modules
+/dcomms_theme/node_modules
+/dcomms_theme/bower_components
+/dcomms_theme/styleguide/template/node_modules
 .sass-cache
 .DS_Store
 .idea

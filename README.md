@@ -15,7 +15,7 @@ bundle install
 
 sudo npm install gulp -g
 
-npm install bower -g
+sudo npm install bower -g
 
 bower install
 

@@ -12,7 +12,7 @@ var gulp        = require('gulp'),
     sourcemaps  = require('gulp-sourcemaps'),
 
     // Task configuration.
-    theme         = __dirname + '/../dcomms_theme/',
+    theme         = __dirname + '/',
     styleguide    = __dirname + '/styleguide/',
 
     // Get theme sub-directories from Compass' config.rb.

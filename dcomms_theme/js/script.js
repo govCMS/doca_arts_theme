@@ -40,5 +40,18 @@
     }
   };
 
+  Drupal.behaviors.twitterFeed = {
+    attach: function () {
+      setTimeout(function () {
+        $("iframe[id^=twitter-widget-").each(function () {
+          var head = $(this).contents().find('head');
+          if (head.length) {
+            head.append('<style type="text/css">.timeline { max-width: none !important; width: 100% !important; } .timeline .stream { max-width: none !important; width: 100% !important; } </style>');
+          }
+        });
+      }, 2000);
+    }
+  };
+
 
 })(jQuery, Drupal);

@@ -12,7 +12,7 @@
     print $q;
     ?>
 <?php endif; ?>
-<div class="filter__wrapper" style="background:grey">
+<div class="filter__wrapper">
     <?php foreach ($widgets as $id => $widget): ?>
         <div class="filter">
             <?php if (!empty($widget->label)): ?>

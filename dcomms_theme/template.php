@@ -329,6 +329,29 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
       hide($variables['content']['field_formal_submission_cta_2']);
       hide($variables['content']['field_other_embedded_webform']);
     }
+
+    // Set default values.
+    $short_comments_enabled = $file_uploads_enabled = FALSE;
+    // Create the entity metadata wrapper.
+    $wrapper = entity_metadata_wrapper('node', $node);
+
+    // If the 'Short comments enabled' field exists and is TRUE.
+    if (isset($node->field_short_comments_enabled) && $wrapper->field_short_comments_enabled->value()) {
+      $short_comments_enabled = TRUE;
+    }
+
+    // If the 'File upload enabled' field exists and is TRUE.
+    if (isset($node->field_file_uploads_enabled) && $wrapper->field_file_uploads_enabled->value()) {
+      $file_uploads_enabled = TRUE;
+    }
+
+    // Add the above results to javascript.
+    drupal_add_js(array(
+      'dcomms_theme' => array(
+        'shortCommentsEnabled' => $short_comments_enabled,
+        'fileUploadsEnabled' => $file_uploads_enabled,
+      ),
+    ), 'setting');
   }
 
   // Variables for optional display of child links grid and 'on this page'.

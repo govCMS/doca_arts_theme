@@ -39,6 +39,7 @@ To add a new library:
 bower install mylibrary --save-dev
 Then run "gulp" to move that library along with others to respective concatenated css or js files.
 
+
 ## Re-installing Dcomms after govcms update
 
 ```bash

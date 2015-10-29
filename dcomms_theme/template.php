@@ -46,6 +46,11 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
     $variables['theme_hook_suggestions'][] = 'page__403';
   }
 
+  // If this is the 'iframe_portrait' or 'iframe_landscape' Consultation page.
+  if (array_search('page__consultations__iframe_portrait', $variables['theme_hook_suggestions']) || array_search('page__consultations__iframe_landscape', $variables['theme_hook_suggestions'])) {
+    // Extend the theme hook suggestions to include a stripped page.
+    $variables['theme_hook_suggestions'][] = 'page__stripped';
+  }
 }
 
 /**

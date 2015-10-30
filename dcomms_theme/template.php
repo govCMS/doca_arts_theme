@@ -1216,7 +1216,7 @@ function dcomms_theme_pager($variables) {
         if ($i == $pager_current) {
           $items[] = array(
             'class' => array('pager-current'),
-            'data' => $i,
+            'data' => '<span>' . $i . '</span>',
           );
         }
         if ($i > $pager_current) {

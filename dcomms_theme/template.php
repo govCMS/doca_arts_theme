@@ -7,6 +7,9 @@
  * @see https://drupal.org/node/1728096
  */
 
+// Include the helper functions to make sharing between the main and admin themes easier.
+require_once drupal_get_path('theme', 'dcomms_theme') . '/template.helpers.inc';
+
 /**
  * Implements hook_preprocess_page().
  */
@@ -27,7 +30,6 @@ function dcomms_theme_js_alter(&$javascript) {
  * Implements hook_preprocess_page().
  */
 function dcomms_theme_preprocess_page(&$variables, $hook) {
-
   // Add pathToTheme to Drupal.settings in JS.
   drupal_add_js('jQuery.extend(Drupal.settings, { "pathToTheme": "' . path_to_theme() . '" });', 'inline');
 
@@ -263,6 +265,7 @@ function _dcomms_theme_related_content($node) {
  * Implements hook_preprocess_node().
  */
 function dcomms_theme_preprocess_node(&$variables, $hook) {
+  $node = $variables['node'];
   // Adjust the submitted date format.
   $variables['pubdate'] = '<time pubdate datetime="' . format_date($variables['node']->created, 'custom', 'c') . '">' . format_date($variables['node']->created, 'custom', 'jS M Y') . '</time>';
   if ($variables['display_submitted']) {
@@ -326,6 +329,31 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
       hide($variables['content']['field_formal_submission_cta_2']);
       hide($variables['content']['field_other_embedded_webform']);
     }
+
+    // Check if a fso has been provided.
+    if (isset($_GET['fso'])) {
+      // Check if the node is able to accept late submissions.
+      $accept_late_submissions = _dcomms_admin_accept_late_submission($node);
+      // If the node can accept late submissions.
+      if ($accept_late_submissions) {
+        // Get the salted hash for this nid.
+        $salted_hash = _dcomms_admin_return_salted_hash($node->nid);
+        // If the salted hash and the fso are equal.
+        if ($_GET['fso'] == $salted_hash) {
+          // Show the relevant HYS sections.
+          show($variables['content']['formal_submission_webform']);
+
+          // Build up the message to let the user know of the special case.
+          $message = t("Please note that acceptance of submissions for this round of the consultation has closed. It is at the Departments' discretion if late submissions are accepted. Thank you.");
+          // Output the status message.
+          $variables['status_message'] = $message;
+        }
+      }
+      elseif (isset($node->field_enable_late_submissions) && $wrapper->field_enable_late_submissions->value() !== TRUE) {
+        // Redirect the user to the custom 404 page.
+        drupal_goto('page-404-consultations');
+      }
+    }
   }
 
   // Variables for optional display of child links grid and 'on this page'.
@@ -346,7 +374,6 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     }
   }
 
-  $node = $variables['node'];
   $variables['read_more_text'] = t('Learn more');
   if (!empty($node->field_read_more_text[LANGUAGE_NONE][0]['safe_value'])) {
     $variables['read_more_text'] = $node->field_read_more_text[LANGUAGE_NONE][0]['safe_value'];
@@ -378,7 +405,6 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   if (array_intersect($submit_formal_submission_roles, array_values($user->roles))) {
     $variables['formal_submission_block'] = module_invoke('webform', 'block_view', 'client-block-15');
   }
-
 }
 
 /**

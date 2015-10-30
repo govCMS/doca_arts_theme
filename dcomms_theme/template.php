@@ -329,6 +329,31 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
       hide($variables['content']['field_formal_submission_cta_2']);
       hide($variables['content']['field_other_embedded_webform']);
     }
+
+    // Check if a fso has been provided.
+    if (isset($_GET['fso'])) {
+      // Check if the node is able to accept late submissions.
+      $accept_late_submissions = _dcomms_admin_accept_late_submission($node);
+      // If the node can accept late submissions.
+      if ($accept_late_submissions) {
+        // Get the salted hash for this nid.
+        $salted_hash = _dcomms_admin_return_salted_hash($node->nid);
+        // If the salted hash and the fso are equal.
+        if ($_GET['fso'] == $salted_hash) {
+          // Show the relevant HYS sections.
+          show($variables['content']['formal_submission_webform']);
+
+          // Build up the message to let the user know of the special case.
+          $message = t("Please note that acceptance of submissions for this round of the consultation has closed. It is at the Departments' discretion if late submissions are accepted. Thank you.");
+          // Output the status message.
+          $variables['status_message'] = $message;
+        }
+      }
+      elseif (isset($node->field_enable_late_submissions) && $wrapper->field_enable_late_submissions->value() !== TRUE) {
+        // Redirect the user to the custom 404 page.
+        drupal_goto('page-404-consultations');
+      }
+    }
   }
 
   // Variables for optional display of child links grid and 'on this page'.

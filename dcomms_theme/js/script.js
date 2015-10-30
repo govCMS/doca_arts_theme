@@ -53,5 +53,38 @@
     }
   };
 
+  Drupal.behaviors.uploadMultipleSubmissions = {
+    attach: function(context) {
+      // Attach toggle functionality for Have Your Say webform.
+      $('.webform-component--hys-formal-uploads', context).each(function() {
+        var $parent = $(this);
+        var $button = $('<input type="button" value="Upload another file" class="button--normal"/>');
+        $button.appendTo($parent);
+        // Click to show next item.
+        $button.bind('click', function() {
+          var $button = $(this);
+          var $divs = $button.parent().children('.fieldset-wrapper').children('div');
+          // Show next hidden div.
+          $divs.each(function() {
+            if (!$(this).is(':visible')) {
+              $(this).show();
+              return false;
+            }
+          });
+          // Hide button if all divs are visible.
+          if ($divs.filter(":hidden").length === 0) {
+            $button.hide();
+          }
+        });
+        // Hide all items initially.
+        $parent.children('.fieldset-wrapper').children('div').each(function(index, item) {
+          if (index != 0) {
+            $(item).hide();
+          }
+        });
+      });
+    }
+  };
+
 
 })(jQuery, Drupal);

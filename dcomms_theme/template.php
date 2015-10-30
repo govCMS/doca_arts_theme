@@ -318,6 +318,9 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
 
   // Conditionally remove Progress bar from all view modes where relevant.
   if ($variables['type'] == 'consultation') {
+    // Create the entity metadata wrapper.
+    $wrapper = entity_metadata_wrapper('node', $node);
+
     _consultation_vars($variables, $variables['node']);
     $consultation = $variables['consultation'];
 

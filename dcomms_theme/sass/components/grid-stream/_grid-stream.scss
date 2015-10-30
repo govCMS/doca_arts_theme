@@ -84,6 +84,11 @@
   .read-more {
     @extend %grid-stream__item__read-more;
   }
+  &.grid-stream__item--iframe {
+    .read-more {
+      display: block;
+    }
+  }
 }
 
 .grid-stream__has-update,

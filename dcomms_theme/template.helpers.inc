@@ -20,19 +20,14 @@ function _dcomms_admin_accept_late_submission($node) {
 
   // Check if the 'Enable late submissions' field exists and is TRUE.
   if (isset($node->field_enable_late_submissions) && $wrapper->field_enable_late_submissions->value() === TRUE) {
-    // If the 'Consultation date' field exists and is not blank.
-    if (isset($node->field_consultation_date) && !empty($wrapper->field_consultation_date->value())) {
-      // Get the 'Consultation date' field.
-      $consultation_date = $wrapper->field_consultation_date->value();
-      // Get the end date.
-      $consultation_date_end = $consultation_date['value2'];
-      // Get the current time.
-      $time = time();
-      // Check if the current date is greater than the end date (i.e. it's in the past).
-      if ($time > $consultation_date_end) {
-        // Update the answer.
-        $answer = TRUE;
-      }
+    // Get the consultation date end.
+    $consultation_date_end = _dcomms_admin_return_end_consultation_date($node, $wrapper);
+    // Get the current time.
+    $time = time();
+    // Check if the current date is greater than the end date (i.e. it's in the past).
+    if ($time > $consultation_date_end) {
+      // Update the answer.
+      $answer = TRUE;
     }
   }
 
@@ -100,4 +95,22 @@ function _dcomms_admin_return_user_has_role($roles = array()) {
 
   // Return the access value.
   return $access;
+}
+
+/**
+ * Helper function: Return end consultation date.
+ */
+function _dcomms_admin_return_end_consultation_date($node, $wrapper) {
+  // Set default consultation date end value.
+  $consultation_date_end = '';
+
+  // If the 'Consultation date' field exists and is not blank.
+  if (isset($node->field_consultation_date) && !empty($wrapper->field_consultation_date->value())) {
+    // Get the 'Consultation date' field.
+    $consultation_date = $wrapper->field_consultation_date->value();
+    // Get the end date.
+    $consultation_date_end = $consultation_date['value2'];
+  }
+
+  return $consultation_date_end;
 }

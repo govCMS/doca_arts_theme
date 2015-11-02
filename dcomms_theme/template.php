@@ -333,6 +333,11 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
       hide($variables['content']['field_other_embedded_webform']);
     }
 
+    // Get the end consultation date.
+    $end_consultation_date = _dcomms_admin_return_end_consultation_date($node, $wrapper);
+    // Get the current timestamp.
+    $time = time();
+
     // Check if a fso has been provided.
     if (isset($_GET['fso'])) {
       // Check if the node is able to accept late submissions.
@@ -352,7 +357,8 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
           $variables['status_message'] = $message;
         }
       }
-      elseif (isset($node->field_enable_late_submissions) && $wrapper->field_enable_late_submissions->value() !== TRUE) {
+      // If the 'Enable late submissions' value is not TRUE and the end consultation date is less than now.
+      elseif (isset($node->field_enable_late_submissions) && $wrapper->field_enable_late_submissions->value() !== TRUE && $end_consultation_date < $time) {
         // Redirect the user to the custom 404 page.
         drupal_goto('page-404-consultations');
       }

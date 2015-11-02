@@ -42,25 +42,27 @@
 
   Drupal.behaviors.formalSubmissionToggle = {
     attach: function(context) {
-      var fileUploadsEnabled = Drupal.settings.dcomms_theme.fileUploadsEnabled;
+      var fileUploadsEnabled   = Drupal.settings.dcomms_theme.fileUploadsEnabled;
       var shortCommentsEnabled = Drupal.settings.dcomms_theme.shortCommentsEnabled;
-      var message = 'It looks like you haven\'t added a submission. Please add a submission to have your say.';
-      var $forms = $('#webform-client-form-15', context);
+      var message              = 'It looks like you haven\'t added a submission. Please add a submission to have your say.';
+      var shortCommentSelector = 'textarea[name$="[short_comments]"]';
+      var firstFileSelector    = 'input[name$="formal_uploads_hys_formal_upload_file_1]"]';
+      var $forms               = $('#webform-client-form-15', context);
 
       $forms.each(function(index, item) {
         var $form = $(item);
         if (fileUploadsEnabled && !shortCommentsEnabled) {
-          $form.find('input[name="files[submitted_hys_formal_uploads_hys_formal_upload_file_1]"]').attr('required', 'true');
+          $form.find(firstFileSelector).attr('required', 'true');
         }
         else if (shortCommentsEnabled && !fileUploadsEnabled) {
-          $form.find('input[name="submitted[short_comments]"]').attr('required', 'true');
+          $form.find(shortCommentSelector).attr('required', 'true');
         }
         else if (shortCommentsEnabled && fileUploadsEnabled) {
-          $form.find('input[type=submit]').bind('click', function(e) {
+          $form.find('input[type=submit]').unbind('click.formalSubmissionToggle').bind('click.formalSubmissionToggle', function(e) {
             $form.find('.custom-message').remove();
             // Get fields
-            var file = $form.find('input[name="files[submitted_hys_formal_uploads_hys_formal_upload_file_1]"]')[0];
-            var $shortDescription = $form.find('input[name="submitted[short_comments]"]').val();
+            var file = $form.find(firstFileSelector)[0];
+            var $shortDescription = $form.find(shortCommentSelector).val();
             var pass = false;
 
             // Check for at least one field to be populated

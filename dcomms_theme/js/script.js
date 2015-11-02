@@ -65,17 +65,24 @@
             var $shortDescription = $form.find(shortCommentSelector).val();
             var pass = false;
 
-            // Check for at least one field to be populated
-            if ($shortDescription.length > 0 || file.files.length > 0) {
-              pass = true;
+            try {
+              // Check for at least one field to be populated
+              if ($shortDescription.length > 0 || file.files.length > 0) {
+                pass = true;
+              }
+              if (!pass) {
+                // Show error message
+                $form.find('h3').each(function() {
+                  if ($(this).html() === 'Your Submission') {
+                    $(this).after('<div class="messages--error messages error custom-message">'+message+'</div>');
+                    $(window).scrollTop($('.custom-message').position().top);
+                  }
+                });
+              }
             }
-            if (!pass) {
-              // Show error message
-              $form.find('h3').each(function() {
-                if ($(this).html() === 'Your Submission') {
-                  $(this).after('<div class="messages--error messages error custom-message">'+message+'</div>');
-                }
-              });
+            catch(e) {
+              console.log('An error occured validating form. Allowing to pass. ' + e);
+              pass = true;
             }
             return pass;
           });

@@ -146,6 +146,14 @@
   }
 }
 
+fieldset.separate {
+  border: 1px solid color(black);
+  padding: 12px 10px;
+  .fieldset-legend {
+    padding-bottom: 0;
+  }
+}
+
 .fieldset-legend {
   @extend %form__title;
 }

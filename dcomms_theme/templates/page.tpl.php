@@ -53,7 +53,7 @@
     <?php print render($page['highlighted']); ?>
   </div>
 
-  <div class="main_content" data-js="on-this-page__content responsive-video external-links">
+  <div <?php print ($is_front) ? '' : 'id="skip-content"'; ?> class="main_content" data-js="on-this-page__content responsive-video external-links">
 
     <?php if ($title): ?>
       <h1 class="<?php print ($is_front) ? 'element-invisible' : 'page__title'; ?>" id="page-title"><?php print $title; ?></h1>

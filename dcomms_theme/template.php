@@ -379,6 +379,28 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     $variables['formal_submission_block'] = module_invoke('webform', 'block_view', 'client-block-15');
   }
 
+  // If this is a 'Consultation' content type.
+  if ($variables['type'] == 'consultation') {
+    // Hide 'Discussion Forum' related fields initially.
+    hide($variables['content']['field_discussion_forum_heading']);
+    hide($variables['content']['field_discussion_forum_intro']);
+    // If comments are open.
+    if ($variables['comment'] == COMMENT_NODE_OPEN) {
+      // Create an entity metadata wrapper.
+      $wrapper = entity_metadata_wrapper('node', $node);
+      // If the heading 'Discussion Forum' heading field exists and is not blank.
+      if (isset($node->field_discussion_forum_heading) && $wrapper->field_discussion_forum_heading->value() != '') {
+        // Show the 'Discussion Forum' heading field.
+        show($variables['content']['field_discussion_forum_heading']);
+      }
+      // If the 'Discussion Forum' introduction field eixsts and is not blank.
+      if (isset($node->field_discussion_forum_intro) && $wrapper->field_discussion_forum_intro->value() != '') {
+        // Show the 'Discussion Forum' introduction field.
+        show($variables['content']['field_discussion_forum_intro']);
+      }
+    }
+  }
+
 }
 
 /**

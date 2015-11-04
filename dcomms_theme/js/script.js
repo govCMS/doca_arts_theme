@@ -61,13 +61,14 @@
           $form.find('input[type=submit]').unbind('click.formalSubmissionToggle').bind('click.formalSubmissionToggle', function(e) {
             $form.find('.custom-message').remove();
             // Get fields
-            var file = $form.find(firstFileSelector)[0];
+            var $files = $form.find(firstFileSelector);
             var $shortDescription = $form.find(shortCommentSelector).val();
             var pass = false;
+            var has_file = ($files.length > 0 && $files[0].value.length > 0);
 
             try {
               // Check for at least one field to be populated
-              if ($shortDescription.length > 0 || file.files.length > 0) {
+              if ($shortDescription.length > 0 || has_file) {
                 pass = true;
               }
               if (!pass) {

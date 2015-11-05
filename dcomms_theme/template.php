@@ -329,7 +329,7 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   }
 
   // Variables for optional display of child links grid and 'on this page'.
-  if (in_array($variables['type'], array('alert', 'bcr-data', 'blog-article', 'consultation', 'news-article', 'policy', 'page'))
+  if (in_array($variables['type'], array('alert', 'bcr_data', 'blog_article', 'consultation', 'news_article', 'policy', 'page'))
       && $variables['view_mode'] == 'full') {
     $wrapped_entity = entity_metadata_wrapper('node', $variables['node']);
     if ($variables['type'] == 'page') {
@@ -344,7 +344,7 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     }
 
     // Related content.
-    if (!empty($hide_related_content)) {
+    if (isset($hide_related_content) && !$hide_related_content) {
       $variables['content']['related_content'] = _dcomms_theme_related_content($variables['node']);
     }
   }

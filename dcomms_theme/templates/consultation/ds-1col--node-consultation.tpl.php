@@ -12,10 +12,15 @@
 <?php endif; ?>
 
 <?php if ($view_mode == "full"): ?>
-    <div class="layout-max spacer page-description">
-        <div class="layout-sidebar__main">
+    <div class="layout-max spacer">
+        <div class="layout-sidebar__main page-description">
             <?php print $node->field_consultation_summary[LANGUAGE_NONE][0]['safe_value']; ?>
         </div>
+        <?php if (isset($content['related_content'])): ?>
+          <div class="layout-sidebar__sidebar sidebar--right-align">
+            <?php print render($content['related_content']); ?>
+          </div>
+        <?php endif; ?>
     </div>
 
     <?php if(isset($service_links)): ?>

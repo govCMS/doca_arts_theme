@@ -821,6 +821,10 @@ function dcomms_theme_preprocess_field(&$variables, $hook) {
   // Return whether a node has the 'External source' field filled in.
   $external_source = _dcomms_admin_return_node_has_external_source($node);
   $variables['external_source'] = $external_source;
+
+  if ($variables['element']['#field_name'] == 'field_stackla_embed_para') {
+    drupal_add_js(path_to_theme() . '/js/stackla.js', array('file'));
+  }
 }
 
 /**

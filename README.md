@@ -46,4 +46,3 @@ Then run "gulp" to move that library along with others to respective concatenate
 $ phing build
 $ phing db-sync
 ```
-

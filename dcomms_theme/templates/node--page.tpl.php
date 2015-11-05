@@ -35,7 +35,7 @@
     <?php print render($content['body']); ?>
   </div>
   <?php if (isset($content['related_content'])): ?>
-    <div class="layout-sidebar__sidebar">
+    <div class="layout-sidebar__sidebar sidebar--right-align">
       <?php print render($content['related_content']); ?>
     </div>
   <?php endif; ?>

@@ -807,6 +807,9 @@ function dcomms_theme_preprocess_field(&$variables, $hook) {
 
   }
 
+  if ($variables['element']['#field_name'] == 'field_stackla_embed_para') {
+    drupal_add_js(path_to_theme() . '/js/stackla.js', array('file'));
+  }
 }
 
 /**

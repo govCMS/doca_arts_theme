@@ -401,6 +401,20 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     }
   }
 
+  if ($variables['type'] == 'alert') {
+    if (isset($variables['field_priority_level']) && count($variables['field_priority_level'])) {
+      $priority_level = $variables['field_priority_level'][LANGUAGE_NONE][0]['tid'];
+      if ($priority_level = taxonomy_term_load($priority_level)) {
+        $variables['classes_array'][] = 'alert-priority-'.strtolower(trim($priority_level->name));
+        $variables['alert_priority'] = $priority_level->name;
+
+        if ($variables['view_mode'] == 'rss_feed') {
+          $variables['title'] = t('Alert Priority !priority: !title', array('!priority' => $priority_level->name, '!title' => $variables['title']));
+        }
+      }
+    }
+  }
+
 }
 
 /**
@@ -885,6 +899,17 @@ function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$var
 
       if ($hide_stream === TRUE) {
         $variables['classes_array'][] = 'grid-stream__item--business-area--hide-stream';
+      }
+    }
+
+    // add different classes to relevant priority levels of SSO Alerts
+    if ($variables['type'] == 'alert') {
+      if (isset($variables['field_priority_level']) && count($variables['field_priority_level'])) {
+        $priority_level = $variables['field_priority_level'][LANGUAGE_NONE][0]['tid'];
+        if ($priority_level = taxonomy_term_load($priority_level)) {
+          $variables['classes_array'][] = 'alert-priority-'.strtolower(trim($priority_level->name));
+          $variables['alert_priority'] = $priority_level->name;
+        }
       }
     }
   }

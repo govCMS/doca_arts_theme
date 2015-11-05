@@ -20,7 +20,10 @@
     <?php print $service_links; ?>
   </div>
 <?php endif; ?>
-<div class="layout-max spacer spacer--bottom-large">
+<div class="layout-max spacer spacer--bottom-large <?php print !empty($alert_priority) ? strtolower(trim('alert-priority-'.$alert_priority)) : ''; ?>">
+  <?php if (!empty($alert_priority)):?>
+  <div><?php print t('Alert Priority !priority', array('!priority' => $alert_priority)); ?></div>
+  <?php endif;?>
   <?php print render($content['field_alert_date']); ?>
   <div class="layout-sidebar__main">
     <?php print render($content['body']); ?>

@@ -83,8 +83,7 @@
             }
           };
         }
-
-        $files.bind('change', refreshSubmissionView);
+        $files.unbind('change.multi_submission').bind('change.multi_submission', refreshSubmissionView);
         refreshSubmissionView();
       });
     }

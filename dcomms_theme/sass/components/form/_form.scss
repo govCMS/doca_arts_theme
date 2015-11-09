@@ -147,6 +147,7 @@
 }
 
 fieldset.separate {
+  @extend %max-width__medium;
   border: 1px solid color(black);
   padding: 12px 10px;
   .fieldset-legend {

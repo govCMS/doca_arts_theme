@@ -7,14 +7,31 @@ $alert_low: #0C6364;
 .alert-priority {
   text-transform: uppercase;
   font-weight: 700;
+  .alert-list__icon {
+    display: inline;
+    svg {
+      width: 42px;
+      height: 27px;
+      vertical-align: middle;
+    }
+  }
   &.alert-priority-high {
     color: $alert_high;
+    .alert-list__icon {
+      color: $alert_high;
+    }
   }
   &.alert-priority-moderate {
     color: $alert_moderate;
+    .alert-list__icon {
+      color: $alert_moderate;
+    }
   }
   &.alert-priority-low {
     color: $alert_low;
+    .alert-list__icon {
+      color: $alert_low;
+    }
   }
 }
 
@@ -36,16 +53,25 @@ $alert_low: #0C6364;
     .read-more {
       color: $alert_high;
     }
+    .alert-list__icon {
+      color: $alert_high;
+    }
   }
   &.alert-priority-moderate {
     border-top-color: $alert_moderate;
     .read-more {
       color: $alert_moderate;
     }
+    .alert-list__icon {
+      color: $alert_moderate;
+    }
   }
   &.alert-priority-low {
     border-top-color: $alert_low;
     .read-more {
+      color: $alert_low;
+    }
+    .alert-list__icon {
       color: $alert_low;
     }
   }

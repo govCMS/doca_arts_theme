@@ -21,5 +21,7 @@
  * regardless of any changes in the aliasing that might happen if
  * the view is modified.
  */
+;if (!empty(trim($output))):
 ?>
-<h3 class="document-list__title--slim--comment"><?php print $output; ?></h3>
+<div class="document-list__desc--comment"><?php print $output; ?></div>
+<?php endif; ?>

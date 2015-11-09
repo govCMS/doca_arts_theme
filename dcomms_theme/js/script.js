@@ -53,5 +53,15 @@
     }
   };
 
+  Drupal.behaviors.submissionCommentDisplay = {
+    attach: function () {
+  console.log('started');
+      $('.document-list__comment--comment-link').click(function(){
+  console.log('working');
+        $('.document-list__desc--comment').toggle();
+      });
+    }
+  }
+
 
 })(jQuery, Drupal);

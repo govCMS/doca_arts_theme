@@ -28,6 +28,10 @@
 %document-list__inner {
   max-width: 780px;
   overflow: hidden;
+  &--comment {
+    @extend %document-list__inner;
+    max-width: 100%;
+  }
 }
 
 .document-list__title,
@@ -46,6 +50,14 @@
       float: left;
       width: 50%;
       margin-bottom: 0;
+    }
+    &--comment {
+      @extend %document-list__title;
+      @include breakpoint($medium) {
+        float: left;
+        width: 40%;
+        margin-bottom: 0;
+      }
     }
   }
 }
@@ -79,6 +91,35 @@
   @extend %clearfix;
   @extend %font__small;
   clear: both;
+  &--comment {
+    @extend %clearfix;
+    @extend %font__small;
+    padding-top: 10px;
+    float: right;
+    width: 60%;
+    display:none;
+  }
+}
+
+.document-list__comment,
+%document-list__comment {
+  @extend %font__small;
+  &--comment-link {
+    @extend %font__small;
+    float: left;
+    width: 120px;
+    font-weight: bold;
+    &.link:after {
+      content: 'v';
+    }
+
+  }
+  &--comment-docs {
+    @extend %font__small;
+    float: left;
+    width: 60%;
+    padding-left: 10px;
+  }
 }
 
 .document-list__list,

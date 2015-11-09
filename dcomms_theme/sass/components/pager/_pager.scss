@@ -70,6 +70,12 @@
   // The current page's list item.
   @extend %pager-item;
   color: color(dark);
+  span {
+    font-weight: 600;
+    text-decoration: none;
+    padding-bottom: .125rem;
+    border-bottom: 2px solid currentColor;
+  }
 }
 
 .pager-previous,

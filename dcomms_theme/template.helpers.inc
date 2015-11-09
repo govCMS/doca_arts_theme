@@ -117,7 +117,7 @@ function _dcomms_admin_return_user_has_role($roles = array()) {
   // Loop through the user roles.
   foreach ($user->roles as $role) {
     // If this role is one we are looking for.
-    if (in_array($role, $roles)) {
+    if (in_array(strtolower($role), $roles)) {
       // Update the access value.
       $access = TRUE;
       // There is no need to check the other roles; so we can safely end the loop.

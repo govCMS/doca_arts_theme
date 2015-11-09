@@ -31,6 +31,9 @@
   &--comment {
     @extend %document-list__inner;
     max-width: 100%;
+    .file {
+      margin: 0 1rem 0 0;
+    }
   }
 }
 
@@ -111,9 +114,6 @@
     font-weight: bold;
     &.link:after {
       content: 'v';
-    }
-    &.file {
-      margin: 0 1rem 0 0;
     }
   }
   &--comment-docs {

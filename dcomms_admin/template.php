@@ -11,3 +11,12 @@ function dcomms_admin_form_node_form_alter(&$form, &$form_state, $form_id) {
     unset($form['options']['workbench_moderation_state_new']['#options']['archive']);
   }
 }
+
+function dcomms_admin_form_workbench_moderation_moderate_form_alter(&$form, &$form_state, $form_id) {
+  if (!empty($form['node']['#value'])) {
+    $node = $form['node']['#value'];
+    if (!empty($node->nid) && isset($node->workbench_moderation['published']->vid)) {
+      unset($form['state']['#options']['archive']);
+    }
+  }
+}

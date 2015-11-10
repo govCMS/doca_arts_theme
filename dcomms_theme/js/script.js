@@ -37,31 +37,28 @@
         });
       }
 
-      $('#webform-client-form-15 input[name="submitted[step_1_your_submission][remain_anonymous][anonymous]"]').change(function() {
-        $('#webform-client-form-15 input[name="submitted[step_1_your_submission][private_submission][private]"]')
-          .attr('checked', false)
-          .attr('disabled', $(this).is(":checked"));
+      $('#formal-submission-webform #webform-client-form-15 input[id*="remain-anonymous"]').change(function() {
+        $('#formal-submission-webform #webform-client-form-15 input[id*="private-submission"]')
+          .attr('checked', false);
         if($(this).is(":checked")) {
-          $('#webform-client-form-15 input[name="submitted[step_1_your_submission][hys_formal_your_name]"]')
+          $('#formal-submission-webform #webform-client-form-15 input[id*="hys-formal-your-name"]')
             .val('Anonymous')
             .attr('disabled', true);
         } else {
-          $('#webform-client-form-15 input[name="submitted[step_1_your_submission][hys_formal_your_name]"]')
+          $('#formal-submission-webform #webform-client-form-15 input[id*="hys-formal-your-name"]')
             .val('')
             .attr('disabled', false);
         }
       });
-
-      $('#webform-client-form-15 input[name="submitted[step_1_your_submission][private_submission][private]"]').change(function() {
-        $('#webform-client-form-15 input[name="submitted[step_1_your_submission][remain_anonymous][anonymous]"]')
-          .attr('checked', false)
-          .attr('disabled', $(this).is(":checked"));
+      $('#formal-submission-webform #webform-client-form-15 input[id*="private-submission"]').change(function() {
+        $('#formal-submission-webform #webform-client-form-15 input[id*="remain-anonymous"]')
+          .attr('checked', false);
         if($(this).is(":checked")) {
-          $('#webform-client-form-15 input[name="submitted[step_1_your_submission][hys_formal_your_name]"]')
+          $('#formal-submission-webform #webform-client-form-15 input[id*="hys-formal-your-name"]')
             .val('Not required - private submission')
             .attr('disabled', true);
         } else {
-          $('#webform-client-form-15 input[name="submitted[step_1_your_submission][hys_formal_your_name]"]')
+          $('#formal-submission-webform #webform-client-form-15 input[id*="hys-formal-your-name"]')
             .val('')
             .attr('disabled', false);
         }

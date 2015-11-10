@@ -16,9 +16,25 @@
 
   Drupal.behaviors.linkExternal = {
     attach: function() {
-      $('[data-js*="external-links"] a').filter(function() {
-        return this.hostname && this.hostname !== location.hostname && !$(this).hasClass('read-more') && !$(this).hasClass('link-external__no-icon') && !$(this).children("img").length;
-      }).addClass('link-external').attr('target','_blank');
+      $('[data-js*="external-links"] a').each(function() {
+
+        var $this                    = $(this);
+        var is_link_external_no_icon = $this.hasClass('link-external__no-icon');
+        var has_child_image          = $this.children("img").length;
+
+        if (this.hostname && this.hostname !== location.hostname && !is_link_external_no_icon && !has_child_image) {
+          // Read More Links
+          if ($this.hasClass('read-more')) {
+            $this.addClass('external-link').attr('target','_blank');
+            $this.find('svg').before('<svg name="external-link" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" preserveAspectRatio="xMidYMid meet"> <path d="M11.3 6.2c.2 0 .4-.2.4-.4V.7H6.6c-.2 0-.4.2-.4.4s.2.4.4.4h3.7L4.2 7.6c-.2.2-.2.4 0 .6.2.2.4.2.6 0l6.1-6.1v3.7c0 .2.1.4.4.4z"/><path d="M9.5 9c0-.2-.2-.4-.4-.4s-.5.2-.5.4v2.1H1.4V3.8h2.1c.2 0 .4-.2.4-.4S3.7 3 3.5 3H.6v8.9h8.9V9z"/></svg>');
+          }
+          // Every other link
+          else {
+            $this.addClass('link-external').attr('target','_blank');
+          }
+        }
+
+      });
     }
   };
 

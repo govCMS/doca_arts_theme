@@ -7,6 +7,9 @@
  * @see https://drupal.org/node/1728096
  */
 
+// Include the helper functions to make sharing between the main and admin themes easier.
+require_once drupal_get_path('theme', 'dcomms_theme') . '/template.helpers.inc';
+
 /**
  * Implements hook_preprocess_page().
  */
@@ -27,7 +30,6 @@ function dcomms_theme_js_alter(&$javascript) {
  * Implements hook_preprocess_page().
  */
 function dcomms_theme_preprocess_page(&$variables, $hook) {
-
   // Add pathToTheme to Drupal.settings in JS.
   drupal_add_js('jQuery.extend(Drupal.settings, { "pathToTheme": "' . path_to_theme() . '" });', 'inline');
 
@@ -263,6 +265,7 @@ function _dcomms_theme_related_content($node) {
  * Implements hook_preprocess_node().
  */
 function dcomms_theme_preprocess_node(&$variables, $hook) {
+  $node = $variables['node'];
   // Adjust the submitted date format.
   $variables['pubdate'] = '<time pubdate datetime="' . format_date($variables['node']->created, 'custom', 'c') . '">' . format_date($variables['node']->created, 'custom', 'jS M Y') . '</time>';
   if ($variables['display_submitted']) {
@@ -346,11 +349,14 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     }
   }
 
-  $node = $variables['node'];
   $variables['read_more_text'] = t('Learn more');
   if (!empty($node->field_read_more_text[LANGUAGE_NONE][0]['safe_value'])) {
     $variables['read_more_text'] = $node->field_read_more_text[LANGUAGE_NONE][0]['safe_value'];
   }
+
+  // Find out whether the node has an 'External source' filled in.
+  $external_source = _dcomms_admin_return_node_has_external_source($node);
+  $variables['external_source'] = $external_source;
 
   // Build service links.
   $variables['service_links'] = NULL;
@@ -440,11 +446,13 @@ function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
  *   URL of the read more link.
  * @param string $text
  *   Text of the read more link.
+ * @param boolean $external
+ *   Whether the link is external or not. Defaults to FALSE.
  *
  * @return string
  *   HTML markup for read more link.
  */
-function dcomms_theme_read_more_link($href, $text) {
+function dcomms_theme_read_more_link($href, $text, $external = FALSE) {
   $template_file = drupal_get_path('theme', 'dcomms_theme') . '/templates/read-more-link.tpl.php';
 
   // Make sure relative links start with /.
@@ -454,6 +462,7 @@ function dcomms_theme_read_more_link($href, $text) {
   return theme_render_template($template_file, array(
     'href' => $href,
     'text' => $text,
+    'external' => $external,
   ));
 }
 
@@ -807,6 +816,11 @@ function dcomms_theme_preprocess_field(&$variables, $hook) {
 
   }
 
+  // Get the node.
+  $node = $element['#object'];
+  // Return whether a node has the 'External source' field filled in.
+  $external_source = _dcomms_admin_return_node_has_external_source($node);
+  $variables['external_source'] = $external_source;
 }
 
 /**

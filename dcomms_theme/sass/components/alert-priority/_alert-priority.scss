@@ -10,8 +10,12 @@ $alert_low: #0C6364;
   .alert-list__icon {
     display: inline;
     svg {
-      width: 42px;
-      height: 27px;
+      width: 32px;
+      height: 18px;
+      @include breakpoint($large) {
+        width: 42px;
+        height: 27px;
+      }
       vertical-align: middle;
     }
   }
@@ -38,12 +42,21 @@ $alert_low: #0C6364;
 .alert-wrapper {
   .alert-priority {
     display: inline-block;
+    @include breakpoint($large) {
+      display: inline;
+    }
   }
   .clearfix__overflow {
-    display: inline;
-    border-left: 1px solid #12293a;
-    margin-left: 1em;
-    padding-left: 1em;
+    display: inline-block;
+    border-left: 0;
+    padding-left: 0;
+    margin-left: 0;
+    @include breakpoint($large) {
+      display: inline;
+      border-left: 1px solid #12293a;
+      margin-left: 1em;
+      padding-left: 1em;
+    }
   }
 }
 
@@ -80,8 +93,18 @@ $alert_low: #0C6364;
 body.node-type-alert {
   .alert {
     .alert-wrapper {
-      width: 75%;
-      margin-bottom: 4rem;
+      width: 100%;
+      margin-bottom: 1rem;
+      @include breakpoint($large) {
+        width: 75%;
+        margin-bottom: 4rem;
+      }
+      .clearfix__overflow {
+        margin-top: 1em;
+        @include breakpoint($large) {
+          margin-top: auto;
+        }
+      }
     }
   }
 }

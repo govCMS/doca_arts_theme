@@ -18,7 +18,9 @@
 
   <div class="<?php print (!empty($alert_priority)) ? "alert-wrapper" : ""; ?>">
     <?php if (!empty($alert_priority)):?>
-    <div class="alert-priority <?php print strtolower(trim('alert-priority-' . $alert_priority)); ?>"><?php print t('Alert Priority !priority', array('!priority' => $alert_priority)); ?></div>
+      <div class="alert-priority <?php print strtolower(trim('alert-priority-' . $alert_priority)); ?>">
+        <?php print t('Alert Priority !priority', array('!priority' => $alert_priority)); ?>
+      </div>
     <?php endif;?>
     <?php print render($content['field_alert_date']); ?>
   </div>

@@ -32,32 +32,26 @@
   print $field->content;
   print $field->wrapper_suffix;
 ?>
-    <div class="document-list__comment--comment-docs">
-      <div class="document-list__comment--comment-link
 <?php
-  if (!empty(trim($fields['value_5']->content))):
+  $value_5_content = trim(drupal_html_to_text($fields['value_5']->content));
+  $is_val_5_available = !empty($value_5_content);
 ?>
-        link">View comment
-<?php
-  else:
-?>
-        ">&nbsp;
-<?php
-  endif;
-?>
-      </div>
-<?php
-  $field = $fields['nothing'];
-  if (!empty($field->separator)):
-    print $field->separator;
-  endif;
-  print $field->wrapper_prefix;
-  print $field->label_html;
-  print $field->content;
-  print $field->wrapper_suffix;
-?>
-    </div>
+<div class="document-list__comment--comment-docs">
+  <div class="document-list__comment--comment-link<?php print ($is_val_5_available) ? " link" : ""; ?>">
+    <?php print ($is_val_5_available) ? "View comment" : "&nbsp;"; ?>
+  </div>
   <?php
+    $field = $fields['nothing'];
+    if (!empty($field->separator)):
+      print $field->separator;
+    endif;
+    print $field->wrapper_prefix;
+    print $field->label_html;
+    print $field->content;
+    print $field->wrapper_suffix;
+  ?>
+</div>
+<?php
   $field = $fields['value_5'];
   if (!empty($field->separator)):
     print $field->separator;
@@ -66,4 +60,4 @@
   print $field->label_html;
   print $field->content;
   print $field->wrapper_suffix;
-   ?>
+?>

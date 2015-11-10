@@ -54,10 +54,43 @@
   };
 
   Drupal.behaviors.submissionCommentDisplay = {
-    attach: function () {
-      $('.document-list__comment--comment-link').click(function(){
-        $(this).parent().siblings('.document-list__desc--comment').toggle();
+    attach: function (context) {
+      var is_mobile = null;
+      var $window = $(window);
+      var medium_breakpoint = 720 - 15;
+      var accordion = '.document-list__inner--comment';
+      var comment_toolbar = '.document-list__comment--comment-docs';
+      var accordion_head = '.document-list__comment--comment-link';
+      var accordion_body = '.document-list__desc--comment';
+
+      // Set up toggle click
+      $(accordion_head, context).bind('click', function() {
+        $(this).closest(accordion).find(accordion_body).toggle();
       });
+      // Set up mobile switch
+      function windowResize() {
+        // 720 - 15px for scrollbar
+        if ($window.width() < medium_breakpoint) {
+          if (!is_mobile || is_mobile === null) {
+            $(accordion_body, context).each(function() {
+              var acc_head = $(this).closest(accordion).find(accordion_head);
+              $(this).insertAfter(acc_head);
+            });
+            is_mobile = true;
+          }
+        }
+        else {
+          if (is_mobile || is_mobile === null) {
+            $(accordion_body, context).each(function() {
+              var comm_toolbar = $(this).closest(accordion).find(comment_toolbar);
+              $(this).insertAfter(comm_toolbar);
+            });
+            is_mobile = false;
+          }
+        }
+      }
+      $window.resize(windowResize);
+      windowResize();
     }
   }
 

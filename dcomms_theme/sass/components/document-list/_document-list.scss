@@ -31,8 +31,16 @@
   &--comment {
     @extend %document-list__inner;
     max-width: 100%;
+    .file__wrapper--slim {
+      display: table-cell;
+      vertical-align: bottom;
+    }
     .file {
       margin: 0 1rem 0 0;
+      display: block;
+      @include breakpoint($medium) {
+        display: inline-block;
+      }
     }
   }
 }
@@ -58,6 +66,7 @@
       @extend %document-list__title;
       @include breakpoint($medium) {
         float: left;
+        display: table;
         width: 40%;
         margin-bottom: 0;
       }
@@ -98,9 +107,12 @@
     @extend %clearfix;
     @extend %font__small;
     padding-top: 10px;
-    float: right;
-    width: 60%;
+    padding-bottom: 10px;
     display:none;
+    @include breakpoint($medium) {
+      float: right;
+      width: 60%;
+    }
   }
 }
 
@@ -109,18 +121,24 @@
   @extend %font__small;
   &--comment-link {
     @extend %font__small;
-    float: left;
-    width: 120px;
     font-weight: bold;
+    width: 120px;
     &.link:after {
       content: 'v';
+    }
+    @include breakpoint($medium) {
+      display: table-cell;
+      vertical-align: bottom;
     }
   }
   &--comment-docs {
     @extend %font__small;
-    float: left;
-    width: 60%;
     padding-left: 10px;
+    @include breakpoint($medium) {
+      // float: left;
+      display: table;
+      width: 60%;
+    }
   }
 }
 

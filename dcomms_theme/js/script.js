@@ -66,6 +66,59 @@
     }
   };
 
+  Drupal.behaviors.formalSubmissionToggle = {
+    attach: function(context) {
+      var fileUploadsEnabled   = Drupal.settings.dcomms_theme.fileUploadsEnabled;
+      var shortCommentsEnabled = Drupal.settings.dcomms_theme.shortCommentsEnabled;
+      var message              = 'It looks like you haven\'t added a submission. Please add a submission to have your say.';
+      var shortCommentSelector = 'textarea[name$="[short_comments]"]';
+      var firstFileSelector    = 'input[name$="formal_uploads_hys_formal_upload_file_1]"]';
+      var $forms               = $('#webform-client-form-15', context);
+
+      $forms.each(function(index, item) {
+        var $form = $(item);
+        if (fileUploadsEnabled && !shortCommentsEnabled) {
+          $form.find(firstFileSelector).attr('required', 'true');
+        }
+        else if (shortCommentsEnabled && !fileUploadsEnabled) {
+          $form.find(shortCommentSelector).attr('required', 'true');
+        }
+        else if (shortCommentsEnabled && fileUploadsEnabled) {
+          $form.find('input[type=submit]').unbind('click.formalSubmissionToggle').bind('click.formalSubmissionToggle', function(e) {
+            $form.find('.custom-message').remove();
+            // Get fields
+            var $files = $form.find(firstFileSelector);
+            var $shortDescription = $form.find(shortCommentSelector).val();
+            var pass = false;
+            var has_file = ($files.length > 0 && $files[0].value.length > 0);
+
+            try {
+              // Check for at least one field to be populated
+              if ($shortDescription.length > 0 || has_file) {
+                pass = true;
+              }
+              if (!pass) {
+                // Show error message
+                $form.find('h3').each(function() {
+                  if ($(this).html() === 'Your Submission') {
+                    $(this).after('<div class="messages--error messages error custom-message">'+message+'</div>');
+                    $(window).scrollTop($('.custom-message').position().top);
+                  }
+                });
+              }
+            }
+            catch(e) {
+              console.log('An error occured validating form. Allowing to pass. ' + e);
+              pass = true;
+            }
+            return pass;
+          });
+        }
+      });
+
+    }
+  };
+
   Drupal.behaviors.twitterFeed = {
     attach: function () {
       setTimeout(function () {

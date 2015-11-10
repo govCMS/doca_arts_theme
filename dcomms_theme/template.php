@@ -252,7 +252,7 @@ function _dcomms_theme_related_content($node) {
   // Get list of links from related content nodes.
   $items = array();
   foreach (node_load_multiple($related_content_nids) as $related_nid => $related_node) {
-    $items[] = l(check_plain($related_node->title), 'node/' . $related_nid);
+    $items[] = l($related_node->title, 'node/' . $related_nid);
   }
 
   return array(

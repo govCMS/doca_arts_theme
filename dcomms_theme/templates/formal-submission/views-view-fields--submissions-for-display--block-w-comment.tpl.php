@@ -23,7 +23,8 @@
  *
  * @ingroup views_templates
  */
-  $field = $fields['value_2'];
+
+  $field = $fields['field_field_submission_name'];
   if (!empty($field->separator)):
     print $field->separator;
   endif;
@@ -33,12 +34,12 @@
   print $field->wrapper_suffix;
 ?>
 <?php
-  $value_5_content = trim(drupal_html_to_text($fields['value_5']->content));
-  $is_val_5_available = !empty($value_5_content);
+  $comment_content = trim(drupal_html_to_text($fields['body']->content));
+  $is_comment_available = !empty($comment_content);
 ?>
 <div class="document-list__comment--comment-docs">
-  <div class="document-list__comment--comment-link<?php print ($is_val_5_available) ? " link" : ""; ?>">
-    <?php print ($is_val_5_available) ? "View comment" : "&nbsp;"; ?>
+  <div class="document-list__comment--comment-link<?php print ($is_comment_available) ? " link" : ""; ?>">
+    <?php print ($is_comment_available) ? "View comment" : "&nbsp;"; ?>
   </div>
   <?php
     $field = $fields['nothing'];
@@ -52,7 +53,7 @@
   ?>
 </div>
 <?php
-  $field = $fields['value_5'];
+  $field = $fields['body'];
   if (!empty($field->separator)):
     print $field->separator;
   endif;

@@ -148,8 +148,8 @@
 
 fieldset.separate {
   @extend %max-width__medium;
-  border: 1px solid color(black);
-  padding: 12px 10px;
+  border: 1px solid color(grey-light);
+  padding: 0.75rem 3.5rem 0.75rem 2rem;
   .fieldset-legend {
     padding-bottom: 0;
   }

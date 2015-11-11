@@ -66,7 +66,7 @@
     }
   };
 
-  Drupal.behaviors.formalSubmissionToggle = {
+  Drupal.behaviors.formalSubmissionValidation = {
     attach: function(context) {
       var fileUploadsEnabled   = Drupal.settings.dcomms_theme.fileUploadsEnabled;
       var shortCommentsEnabled = Drupal.settings.dcomms_theme.shortCommentsEnabled;

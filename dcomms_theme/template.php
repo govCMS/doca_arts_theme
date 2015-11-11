@@ -413,10 +413,18 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     // Hide 'Discussion Forum' related fields initially.
     hide($variables['content']['field_discussion_forum_heading']);
     hide($variables['content']['field_discussion_forum_intro']);
+    // Create an entity metadata wrapper.
+    $wrapper = entity_metadata_wrapper('node', $node);
+
+    if (!$wrapper->field_short_comments_enabled->value()) {
+      $variables['classes_array'][] = 'hide_short_comments';
+    }
+    if (!$wrapper->field_file_uploads_enabled->value()) {
+      $variables['classes_array'][] = 'hide_files';
+    }
+
     // If comments are open.
     if ($variables['comment'] == COMMENT_NODE_OPEN) {
-      // Create an entity metadata wrapper.
-      $wrapper = entity_metadata_wrapper('node', $node);
       // If the heading 'Discussion Forum' heading field exists and is not blank.
       if (isset($node->field_discussion_forum_heading) && $wrapper->field_discussion_forum_heading->value() != '') {
         // Show the 'Discussion Forum' heading field.

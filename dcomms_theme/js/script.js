@@ -43,11 +43,11 @@
         if($(this).is(":checked")) {
           $('#formal-submission-webform #webform-client-form-15 input[id*="hys-formal-your-name"]')
             .val('Anonymous')
-            .attr('disabled', true);
+            .attr('readonly', true);
         } else {
           $('#formal-submission-webform #webform-client-form-15 input[id*="hys-formal-your-name"]')
             .val('')
-            .attr('disabled', false);
+            .attr('readonly', false);
         }
       });
       $('#formal-submission-webform #webform-client-form-15 input[id*="private-submission"]').change(function() {
@@ -56,11 +56,11 @@
         if($(this).is(":checked")) {
           $('#formal-submission-webform #webform-client-form-15 input[id*="hys-formal-your-name"]')
             .val('Not required - private submission')
-            .attr('disabled', true);
+            .attr('readonly', true);
         } else {
           $('#formal-submission-webform #webform-client-form-15 input[id*="hys-formal-your-name"]')
             .val('')
-            .attr('disabled', false);
+            .attr('readonly', false);
         }
       });
     }

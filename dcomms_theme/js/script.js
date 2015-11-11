@@ -84,7 +84,7 @@
           $form.find(shortCommentSelector).attr('required', 'true');
         }
         else if (shortCommentsEnabled && fileUploadsEnabled) {
-          $form.find('input[type=submit]').unbind('click.formalSubmissionToggle').bind('click.formalSubmissionToggle', function(e) {
+          $form.find('.webform-submit').unbind('click.formalSubmissionValidation').bind('click.formalSubmissionValidation', function(e) {
             $form.find('.custom-message').remove();
             // Get fields
             var $files = $form.find(firstFileSelector);
@@ -99,11 +99,9 @@
               }
               if (!pass) {
                 // Show error message
-                $form.find('h3').each(function() {
-                  if ($(this).html() === 'Your Submission') {
-                    $(this).after('<div class="messages--error messages error custom-message">'+message+'</div>');
-                    $(window).scrollTop($('.custom-message').position().top);
-                  }
+                $form.find('.webform-component--step-1-your-submission > .fieldset-wrapper').each(function() {
+                  $(this).prepend('<div class="messages--error messages error custom-message">'+message+'</div>');
+                  $(window).scrollTop($('.custom-message').position().top);
                 });
               }
             }

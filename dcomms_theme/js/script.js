@@ -68,12 +68,13 @@
 
   Drupal.behaviors.formalSubmissionValidation = {
     attach: function(context) {
-      var fileUploadsEnabled   = Drupal.settings.dcomms_theme.fileUploadsEnabled;
-      var shortCommentsEnabled = Drupal.settings.dcomms_theme.shortCommentsEnabled;
-      var message              = 'It looks like you haven\'t added a submission. Please add a submission to have your say.';
-      var shortCommentSelector = 'textarea[name$="[short_comments]"]';
-      var firstFileSelector    = 'input[name$="formal_uploads_hys_formal_upload_file_1]"]';
-      var $forms               = $('#webform-client-form-15', context);
+      var fileUploadsEnabled    = Drupal.settings.dcomms_theme.fileUploadsEnabled;
+      var shortCommentsEnabled  = Drupal.settings.dcomms_theme.shortCommentsEnabled;
+      var message               = 'It looks like you haven\'t added a submission. Please add a submission to have your say.';
+      var shortCommentSelector  = 'textarea[name$="[short_comments]"]';
+      var firstFileSelector     = 'input[name$="formal_uploads_hys_formal_upload_file_1]"]';
+      var submittedFileSelector = 'div[id$="formal-uploads-hys-formal-upload-file-1-upload"] > .file';
+      var $forms                = $('#webform-client-form-15', context);
 
       $forms.each(function(index, item) {
         var $form = $(item);
@@ -87,10 +88,11 @@
           $form.find('.webform-submit').unbind('click.formalSubmissionValidation').bind('click.formalSubmissionValidation', function(e) {
             $form.find('.custom-message').remove();
             // Get fields
-            var $files = $form.find(firstFileSelector);
+            var $filesInput = $form.find(firstFileSelector);
+            var $filesSubmitted = $form.find(submittedFileSelector);
             var $shortDescription = $form.find(shortCommentSelector).val();
             var pass = false;
-            var has_file = ($files.length > 0 && $files[0].value.length > 0);
+            var has_file = ($filesInput.length > 0 && $filesInput[0].value.length > 0) || $filesSubmitted.length > 0;
 
             try {
               // Check for at least one field to be populated

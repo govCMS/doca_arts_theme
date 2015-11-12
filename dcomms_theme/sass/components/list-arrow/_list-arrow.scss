@@ -29,12 +29,17 @@
 %list-arrow__item {
   margin: 0 0 .5rem;
   fill: currentColor;
+  position: relative;
+  padding-left: 20px;
 
   svg {
     height: 16px;
     width: 16px;
     padding-right: .25rem;
     vertical-align: baseline;
+    position: absolute;
+    top: 3px;
+    left: 0;
   }
 
   // Subsite theming (doesn't need to be extendable).

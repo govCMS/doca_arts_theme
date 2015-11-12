@@ -65,6 +65,7 @@
 
       // Set up toggle click
       $(accordion_head, context).bind('click', function() {
+        $(this).toggleClass('link-open');
         $(this).closest(accordion).find(accordion_body).toggle();
       });
       // Set up mobile switch

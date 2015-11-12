@@ -123,8 +123,26 @@
     @extend %font__small;
     font-weight: bold;
     width: 120px;
+    &.link {
+      font-weight: 300;
+      cursor: pointer;
+      color: color(blue);
+      &:hover {
+        text-decoration: underline;
+      }
+    }
     &.link:after {
-      content: 'v';
+      content: url('../sass/components/filter/down--blue.svg');
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      vertical-align: middle;
+      margin-bottom: 8px;
+      margin-left: 3px;
+      color: currentColor;
+    }
+    &.link.link-open:after {
+      content: url('../sass/components/filter/up--blue.svg');
     }
     @include breakpoint($medium) {
       display: table-cell;

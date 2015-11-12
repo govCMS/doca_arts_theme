@@ -470,6 +470,12 @@ function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
     $component_key = "privacy";
     $form['actions'][$component_key] = $form['submitted'][$component_key];
     unset($form['submitted'][$component_key]);
+
+    // Check if the 'Short comments' field is available.
+    if (isset($form['submitted']['short_comments'])) {
+      // Update the attributes and set the maxlength.
+      $form['submitted']['short_comments']['#attributes']['maxlength'] = 500;
+    }
   }
 }
 

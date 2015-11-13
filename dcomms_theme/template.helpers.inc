@@ -137,9 +137,10 @@ function _dcomms_admin_return_end_consultation_date($node, $wrapper) {
   $consultation_date_end = '';
 
   // If the 'Consultation date' field exists and is not blank.
-  if (isset($node->field_consultation_date) && !empty($wrapper->field_consultation_date->value())) {
+  $consultation_date_value = $wrapper->field_consultation_date->value();
+  if (isset($node->field_consultation_date) && !empty($consultation_date_value)) {
     // Get the 'Consultation date' field.
-    $consultation_date = $wrapper->field_consultation_date->value();
+    $consultation_date = $consultation_date_value;
     // Get the end date.
     $consultation_date_end = $consultation_date['value2'];
   }

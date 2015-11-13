@@ -89,5 +89,16 @@
     }
   };
 
+  Drupal.behaviors.iframeLinks = {
+    attach: function(context) {
+      $('.view-consultations-iframe', context).find('a').each(function() {
+        var $this = $(this);
+        if (!$this.is('[target]')) {
+          $this.attr('target', '_parent');
+        }
+      });
+    }
+  };
+
 
 })(jQuery, Drupal);

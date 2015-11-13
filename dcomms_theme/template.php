@@ -481,6 +481,13 @@ function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
     $form['actions'][$component_key] = $form['submitted'][$component_key];
     unset($form['submitted'][$component_key]);
   }
+
+  if ($form_id == 'workbench_moderation_moderate_form' && !empty($form['node']['#value'])) {
+    $node = $form['node']['#value'];
+    if (!empty($node->nid) && isset($node->workbench_moderation['published']->vid)) {
+      unset($form['state']['#options']['archive']);
+    }
+  }
 }
 
 /**

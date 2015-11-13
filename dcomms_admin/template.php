@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Contains the theme's functions to manipulate Drupal's default markup.
@@ -9,6 +10,27 @@
 
 // Include the helper functions to make sharing between the main and admin themes easier.
 require_once drupal_get_path('theme', 'dcomms_theme') . '/template.helpers.inc';
+
+/**
+ * Implements hook_form_alter().
+ * Conditionally remove the Archived state from publishing options if the node
+ * has a currently published revision.
+ */
+function dcomms_admin_form_node_form_alter(&$form, &$form_state, $form_id) {
+  $node = $form['#node'];
+  if (!empty($node->nid) && isset($node->workbench_moderation['published']->vid)) {
+    unset($form['options']['workbench_moderation_state_new']['#options']['archive']);
+  }
+}
+
+function dcomms_admin_form_workbench_moderation_moderate_form_alter(&$form, &$form_state, $form_id) {
+  if (!empty($form['node']['#value'])) {
+    $node = $form['node']['#value'];
+    if (!empty($node->nid) && isset($node->workbench_moderation['published']->vid)) {
+      unset($form['state']['#options']['archive']);
+    }
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

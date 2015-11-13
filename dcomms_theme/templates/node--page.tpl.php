@@ -43,6 +43,8 @@
 
 <?php print render($content['field_entity_content']); ?>
 
+<?php print render($content['field_stackla_embed_para']); ?>
+
 <?php if (!$hide_child_pages) : ?>
   <?php print $child_pages_block; ?>
 <?php endif; ?>

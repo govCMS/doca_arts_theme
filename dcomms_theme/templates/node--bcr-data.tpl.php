@@ -35,4 +35,6 @@
 <?php print render($content['field_entity_content']); ?>
 
 <?php print render($content['field_creative_commons_license']); ?>
+<?php print render($content['field_stackla_embed_para']); ?>
+
 <?php print render($content['comments']); ?>

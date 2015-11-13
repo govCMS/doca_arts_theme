@@ -318,6 +318,9 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
 
   // Conditionally remove Progress bar from all view modes where relevant.
   if ($variables['type'] == 'consultation') {
+    // Create the entity metadata wrapper.
+    $wrapper = entity_metadata_wrapper('node', $node);
+
     _consultation_vars($variables, $variables['node']);
     $consultation = $variables['consultation'];
 
@@ -352,6 +355,37 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
         'fileUploadsEnabled' => $file_uploads_enabled,
       ),
     ), 'setting');
+
+    // Get the end consultation date.
+    $end_consultation_date = _dcomms_admin_return_end_consultation_date($node, $wrapper);
+    // Get the current timestamp.
+    $time = time();
+
+    // Check if a fso has been provided.
+    if (isset($_GET['fso'])) {
+      // Check if the node is able to accept late submissions.
+      $accept_late_submissions = _dcomms_admin_accept_late_submission($node);
+      // If the node can accept late submissions.
+      if ($accept_late_submissions) {
+        // Get the salted hash for this nid.
+        $salted_hash = _dcomms_admin_return_salted_hash($node->nid);
+        // If the salted hash and the fso are equal.
+        if ($_GET['fso'] == $salted_hash) {
+          // Show the relevant HYS sections.
+          show($variables['content']['formal_submission_webform']);
+
+          // Build up the message to let the user know of the special case.
+          $message = t("Please note that acceptance of submissions for this round of the consultation has closed. It is at the Departments' discretion if late submissions are accepted. Thank you.");
+          // Output the status message.
+          $variables['status_message'] = $message;
+        }
+      }
+      // If the 'Enable late submissions' value is not TRUE and the end consultation date is less than now.
+      elseif (isset($node->field_enable_late_submissions) && $wrapper->field_enable_late_submissions->value() !== TRUE && $end_consultation_date < $time) {
+        // Redirect the user to the custom 404 page.
+        drupal_goto('page-404-consultations');
+      }
+    }
   }
 
   // Variables for optional display of child links grid and 'on this page'.

@@ -168,5 +168,21 @@
     }
   };
 
+  Drupal.behaviors.shortCommentMaxLength = {
+    attach: function (context) {
+      var maxLengthHandler = function(e) {
+        var target = e.target;
+        if (target.value.length > 500) {
+          target.value = target.value.substring(0, 500);
+        }
+      };
+
+      $('textarea[name="submitted[step_1_your_submission][short_comments]"]')
+        .attr('maxlength', 500)
+        .keyup(maxLengthHandler)
+        .keydown(maxLengthHandler);
+    }
+  };
+
 
 })(jQuery, Drupal);

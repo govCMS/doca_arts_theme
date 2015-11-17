@@ -333,6 +333,29 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
       hide($variables['content']['field_other_embedded_webform']);
     }
 
+    // Set default values.
+    $short_comments_enabled = $file_uploads_enabled = FALSE;
+    // Create the entity metadata wrapper.
+    $wrapper = entity_metadata_wrapper('node', $node);
+
+    // If the 'Short comments enabled' field exists and is TRUE.
+    if (isset($node->field_short_comments_enabled) && $wrapper->field_short_comments_enabled->value()) {
+      $short_comments_enabled = TRUE;
+    }
+
+    // If the 'File upload enabled' field exists and is TRUE.
+    if (isset($node->field_file_uploads_enabled) && $wrapper->field_file_uploads_enabled->value()) {
+      $file_uploads_enabled = TRUE;
+    }
+
+    // Add the above results to javascript.
+    drupal_add_js(array(
+      'dcomms_theme' => array(
+        'shortCommentsEnabled' => $short_comments_enabled,
+        'fileUploadsEnabled' => $file_uploads_enabled,
+      ),
+    ), 'setting');
+
     // Get the end consultation date.
     $end_consultation_date = _dcomms_admin_return_end_consultation_date($node, $wrapper);
     // Get the current timestamp.
@@ -427,10 +450,18 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     // Hide 'Discussion Forum' related fields initially.
     hide($variables['content']['field_discussion_forum_heading']);
     hide($variables['content']['field_discussion_forum_intro']);
+    // Create an entity metadata wrapper.
+    $wrapper = entity_metadata_wrapper('node', $node);
+
+    if (!$wrapper->field_short_comments_enabled->value()) {
+      $variables['classes_array'][] = 'hide_short_comments';
+    }
+    if (!$wrapper->field_file_uploads_enabled->value()) {
+      $variables['classes_array'][] = 'hide_files';
+    }
+
     // If comments are open.
     if ($variables['comment'] == COMMENT_NODE_OPEN) {
-      // Create an entity metadata wrapper.
-      $wrapper = entity_metadata_wrapper('node', $node);
       // If the heading 'Discussion Forum' heading field exists and is not blank.
       if (isset($node->field_discussion_forum_heading) && $wrapper->field_discussion_forum_heading->value() != '') {
         // Show the 'Discussion Forum' heading field.
@@ -483,6 +514,12 @@ function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
     $component_key = "privacy";
     $form['actions'][$component_key] = $form['submitted'][$component_key];
     unset($form['submitted'][$component_key]);
+
+    // Check if the 'Short comments' field is available.
+    if (isset($form['submitted']['short_comments'])) {
+      // Update the attributes and set the maxlength.
+      $form['submitted']['short_comments']['#attributes']['maxlength'] = 500;
+    }
   }
 
   if ($form_id == 'workbench_moderation_moderate_form' && !empty($form['node']['#value'])) {

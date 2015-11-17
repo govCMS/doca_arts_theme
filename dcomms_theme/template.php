@@ -252,7 +252,7 @@ function _dcomms_theme_related_content($node) {
   // Get list of links from related content nodes.
   $items = array();
   foreach (node_load_multiple($related_content_nids) as $related_nid => $related_node) {
-    $items[] = l(check_plain($related_node->title), 'node/' . $related_nid);
+    $items[] = l($related_node->title, 'node/' . $related_nid);
   }
 
   return array(
@@ -389,19 +389,22 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   }
 
   // Variables for optional display of child links grid and 'on this page'.
-  if ($variables['type'] == 'page' && $variables['view_mode'] == 'full') {
+  if (in_array($variables['type'], array('alert', 'bcr_data', 'blog_article', 'consultation', 'news_article', 'policy', 'page'))
+      && $variables['view_mode'] == 'full') {
     $wrapped_entity = entity_metadata_wrapper('node', $variables['node']);
-    $variables['hide_child_pages'] = $wrapped_entity->field_hide_child_pages->value();
-    $variables['hide_on_this_page'] = $wrapped_entity->field_hide_on_this_page->value();
+    if ($variables['type'] == 'page') {
+      $variables['hide_child_pages'] = $wrapped_entity->field_hide_child_pages->value();
+      $variables['hide_on_this_page'] = $wrapped_entity->field_hide_on_this_page->value();
+    }
     $hide_related_content = $wrapped_entity->field_hide_related_content->value();
 
-    if (!$variables['hide_child_pages']) {
+    if (!empty($variables['hide_child_pages'])) {
       $block = module_invoke('bean', 'block_view', 'standard-page-children---coloure');
       $variables['child_pages_block'] = render($block['content']);
     }
 
     // Related content.
-    if (!$hide_related_content) {
+    if (isset($hide_related_content) && !$hide_related_content) {
       $variables['content']['related_content'] = _dcomms_theme_related_content($variables['node']);
     }
   }

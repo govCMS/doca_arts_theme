@@ -44,4 +44,6 @@
 
 <?php print render($content['field_embedded_poll']); ?>
 <?php print render($content['field_creative_commons_license']); ?>
+<?php print render($content['field_stackla_embed_para']); ?>
+
 <?php print render($content['comments']); ?>

@@ -441,6 +441,16 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     }
   }
 
+  if ($variables['type'] == 'alert') {
+    if (isset($variables['field_priority_level']) && count($variables['field_priority_level'])) {
+      $priority_level = $variables['field_priority_level'][LANGUAGE_NONE][0]['tid'];
+      if ($priority_level = taxonomy_term_load($priority_level)) {
+        $variables['classes_array'][] = 'alert-priority-'.strtolower(trim($priority_level->name));
+        $variables['alert_priority'] = $priority_level->name;
+      }
+    }
+  }
+
 }
 
 /**
@@ -470,6 +480,13 @@ function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
     $component_key = "privacy";
     $form['actions'][$component_key] = $form['submitted'][$component_key];
     unset($form['submitted'][$component_key]);
+  }
+
+  if ($form_id == 'workbench_moderation_moderate_form' && !empty($form['node']['#value'])) {
+    $node = $form['node']['#value'];
+    if (!empty($node->nid) && isset($node->workbench_moderation['published']->vid)) {
+      unset($form['state']['#options']['archive']);
+    }
   }
 }
 
@@ -855,6 +872,10 @@ function dcomms_theme_preprocess_field(&$variables, $hook) {
   // Return whether a node has the 'External source' field filled in.
   $external_source = _dcomms_admin_return_node_has_external_source($node);
   $variables['external_source'] = $external_source;
+
+  if ($variables['element']['#field_name'] == 'field_stackla_embed_para') {
+    drupal_add_js(path_to_theme() . '/js/stackla.js', array('file'));
+  }
 }
 
 /**
@@ -933,6 +954,17 @@ function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$var
 
       if ($hide_stream === TRUE) {
         $variables['classes_array'][] = 'grid-stream__item--business-area--hide-stream';
+      }
+    }
+
+    // add different classes to relevant priority levels of SSO Alerts
+    if ($variables['type'] == 'alert') {
+      if (isset($variables['field_priority_level']) && count($variables['field_priority_level'])) {
+        $priority_level = $variables['field_priority_level'][LANGUAGE_NONE][0]['tid'];
+        if ($priority_level = taxonomy_term_load($priority_level)) {
+          $variables['classes_array'][] = 'alert-priority-'.strtolower(trim($priority_level->name));
+          $variables['alert_priority'] = $priority_level->name;
+        }
       }
     }
   }
@@ -1330,5 +1362,26 @@ function dcomms_theme_pager($variables) {
     $output .= "</div>";
 
     return $output;
+  }
+}
+
+/**
+ * Implements hook_node_view
+ * @param $node
+ * @param $view_mode
+ * @param $langcode
+ */
+function dcomms_theme_node_view_alter(&$build) {
+  if ($build['#node']->type == 'alert' && $build['#view_mode'] == 'rss_feed') {
+    $node = $build['#node'];
+    if (!empty($node->field_priority_level[LANGUAGE_NONE][0]['tid'])) {
+      $priority_level = $node->field_priority_level[LANGUAGE_NONE][0]['tid'];
+      if ($priority_level = taxonomy_term_load($priority_level)) {
+        $node->title = t('Alert Priority !priority: !title', array(
+          '!priority' => $priority_level->name,
+          '!title'    => $node->title,
+        ));
+      }
+    }
   }
 }

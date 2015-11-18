@@ -22,5 +22,29 @@
   @include breakpoint($large) {
     float: right;
     width: 25%;
+    &.sidebar--right-align {
+      margin-right: -1rem;
+    }
+  }
+  & > .list-arrow {
+    li.list-arrow__item {
+      &:focus,
+      &:active,
+      &:hover {
+        color: color(blue);
+      }
+      &, a {
+        color: color(blue);
+      }
+      a {
+        &:focus,
+        &:hover {
+          color: color(blue-light);
+        }
+        &:active {
+          color: color(dark);
+        }
+      }
+    }
   }
 }

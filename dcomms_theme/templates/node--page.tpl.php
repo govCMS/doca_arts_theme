@@ -35,13 +35,15 @@
     <?php print render($content['body']); ?>
   </div>
   <?php if (isset($content['related_content'])): ?>
-    <div class="layout-sidebar__sidebar">
+    <div class="layout-sidebar__sidebar sidebar--right-align">
       <?php print render($content['related_content']); ?>
     </div>
   <?php endif; ?>
 </div>
 
 <?php print render($content['field_entity_content']); ?>
+
+<?php print render($content['field_stackla_embed_para']); ?>
 
 <?php if (!$hide_child_pages) : ?>
   <?php print $child_pages_block; ?>

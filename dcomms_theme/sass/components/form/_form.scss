@@ -82,7 +82,7 @@
   margin-right: 10px !important;
   vertical-align: top;
   line-height: 1rem;
-  padding: 0.55rem;
+  padding: 0.5rem;
 }
 
 %form__input--select {
@@ -200,4 +200,16 @@ fieldset.separate {
 
 .form-actions {
   @extend %spacer--top;
+}
+
+.hide_short_comments {
+  .webform-component--step-1-your-submission--short-comments {
+    display: none;
+  }
+}
+
+.hide_files {
+  .webform-component--step-1-your-submission--hys-formal-uploads {
+    display: none;
+  }
 }

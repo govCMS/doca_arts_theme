@@ -29,10 +29,19 @@
 <?php endif; ?>
 
 <div class="layout-max spacer">
+  <div class="layout-sidebar__main">
     <?php print render($content['body']); ?>
+  </div>
+  <?php if (isset($content['related_content'])): ?>
+    <div class="layout-sidebar__sidebar sidebar--right-align">
+      <?php print render($content['related_content']); ?>
+    </div>
+  <?php endif; ?>
 </div>
 
 <?php print render($content['field_entity_content']); ?>
 
 <?php print render($content['field_creative_commons_license']); ?>
+<?php print render($content['field_stackla_embed_para']); ?>
+
 <?php print render($content['comments']); ?>

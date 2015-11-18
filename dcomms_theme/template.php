@@ -402,8 +402,9 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
       $variables['hide_on_this_page'] = $wrapped_entity->field_hide_on_this_page->value();
     }
     $hide_related_content = $wrapped_entity->field_hide_related_content->value();
+    $hide_child_pages = $wrapped_entity->field_hide_child_pages->value();
 
-    if (!empty($variables['hide_child_pages'])) {
+    if (isset($hide_child_pages) && !$hide_child_pages) {
       $block = module_invoke('bean', 'block_view', 'standard-page-children---coloure');
       $variables['child_pages_block'] = render($block['content']);
     }

@@ -119,6 +119,19 @@
     }
   };
 
+  Drupal.behaviors.skipLink = {
+    attach: function () {
+      setTimeout(function () {
+        var firstElement = $('#skip-link').siblings().first();
+        $(firstElement).before($('#skip-link'));
+      }, 2100);
+
+      $('#skip-link').click(function() {
+        $('#skip-content').focus();
+      });
+    }
+  };
+
   Drupal.behaviors.twitterFeed = {
     attach: function () {
       setTimeout(function () {

@@ -47,6 +47,9 @@
 
 </head>
 <body class="<?php print $classes; ?>" <?php print $attributes;?>>
+<?php if ($skip_link_text && $skip_link_anchor): ?>
+  <a id="skip-link" href="#<?php print $skip_link_anchor; ?>" class="element-invisible element-focusable" tabindex="1"><?php print $skip_link_text; ?></a>
+<?php endif; ?>
 <!-- Google Tag Manager -->
 <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WCC3TZ"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -56,9 +59,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','IRXDataLayer','GTM-WCC3TZ');</script>
 <!-- End Google Tag Manager -->
-<?php if ($skip_link_text && $skip_link_anchor): ?>
-    <a id="skip-link" href="#<?php print $skip_link_anchor; ?>" class="element-invisible element-focusable"><?php print $skip_link_text; ?></a>
-<?php endif; ?>
 <?php print $page_top; ?>
 <?php print $page; ?>
 <?php print $page_bottom; ?>

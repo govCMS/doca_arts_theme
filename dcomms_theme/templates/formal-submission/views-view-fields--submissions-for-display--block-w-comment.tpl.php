@@ -24,7 +24,7 @@
  * @ingroup views_templates
  */
 
-  $field = $fields['field_field_submission_name'];
+  $field = $fields['field_submission_name'];
   if (!empty($field->separator)):
     print $field->separator;
   endif;

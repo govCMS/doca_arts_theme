@@ -28,6 +28,21 @@
 %document-list__inner {
   max-width: 780px;
   overflow: hidden;
+  &--comment {
+    @extend %document-list__inner;
+    max-width: 100%;
+    .file__wrapper--slim {
+      display: table-cell;
+      vertical-align: bottom;
+    }
+    .file {
+      margin: 0 1rem 0 0;
+      display: block;
+      @include breakpoint($medium) {
+        display: inline-block;
+      }
+    }
+  }
 }
 
 .document-list__title,
@@ -46,6 +61,15 @@
       float: left;
       width: 50%;
       margin-bottom: 0;
+    }
+    &--comment {
+      @extend %document-list__title;
+      @include breakpoint($medium) {
+        float: left;
+        display: table;
+        width: 40%;
+        margin-bottom: 0;
+      }
     }
   }
 }
@@ -79,6 +103,61 @@
   @extend %clearfix;
   @extend %font__small;
   clear: both;
+  &--comment {
+    @extend %clearfix;
+    @extend %font__small;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display:none;
+    @include breakpoint($medium) {
+      float: right;
+      width: 60%;
+    }
+  }
+}
+
+.document-list__comment,
+%document-list__comment {
+  @extend %font__small;
+  &--comment-link {
+    @extend %font__small;
+    font-weight: bold;
+    width: 120px;
+    &.link {
+      font-weight: 300;
+      cursor: pointer;
+      color: color(blue);
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    &.link:after {
+      content: url('../sass/components/filter/down--blue.svg');
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      vertical-align: middle;
+      margin-bottom: 8px;
+      margin-left: 3px;
+      color: currentColor;
+    }
+    &.link.link-open:after {
+      content: url('../sass/components/filter/up--blue.svg');
+    }
+    @include breakpoint($medium) {
+      display: table-cell;
+      vertical-align: bottom;
+    }
+  }
+  &--comment-docs {
+    @extend %font__small;
+    padding-left: 10px;
+    @include breakpoint($medium) {
+      // float: left;
+      display: table;
+      width: 60%;
+    }
+  }
 }
 
 .document-list__list,

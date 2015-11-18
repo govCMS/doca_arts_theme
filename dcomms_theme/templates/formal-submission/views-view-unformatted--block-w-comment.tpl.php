@@ -12,6 +12,6 @@
 <?php endif; ?>
 <?php foreach ($rows as $id => $row): ?>
   <div class="document-list__item js-file-extension">
-    <div class="document-list__inner"><?php print $row; ?></div>
+    <div class="document-list__inner--comment"><?php print $row; ?></div>
   </div>
 <?php endforeach; ?>

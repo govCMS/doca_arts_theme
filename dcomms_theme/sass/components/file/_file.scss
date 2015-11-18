@@ -26,6 +26,8 @@
   &--slim {
     @extend %file__wrapper;
     margin-bottom: 0;
+    margin-left: 15px;
+    float: left;
   }
 }
 

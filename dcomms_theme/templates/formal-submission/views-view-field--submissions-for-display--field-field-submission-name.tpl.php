@@ -22,4 +22,4 @@
  * the view is modified.
  */
 ?>
-<h3 class="document-list__title--slim"><?php print $output; ?></h3>
+<h3 class="document-list__title--slim--comment"><?php print $output; ?></h3>

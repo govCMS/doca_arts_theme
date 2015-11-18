@@ -48,6 +48,11 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
     $variables['theme_hook_suggestions'][] = 'page__403';
   }
 
+  // If this is the 'iframe_portrait' or 'iframe_landscape' Consultation page.
+  if (array_search('page__consultations__iframe_portrait', $variables['theme_hook_suggestions']) || array_search('page__consultations__iframe_landscape', $variables['theme_hook_suggestions'])) {
+    // Extend the theme hook suggestions to include a stripped page.
+    $variables['theme_hook_suggestions'][] = 'page__stripped';
+  }
 }
 
 /**
@@ -252,7 +257,7 @@ function _dcomms_theme_related_content($node) {
   // Get list of links from related content nodes.
   $items = array();
   foreach (node_load_multiple($related_content_nids) as $related_nid => $related_node) {
-    $items[] = l(check_plain($related_node->title), 'node/' . $related_nid);
+    $items[] = l($related_node->title, 'node/' . $related_nid);
   }
 
   return array(
@@ -333,6 +338,29 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
       hide($variables['content']['field_other_embedded_webform']);
     }
 
+    // Set default values.
+    $short_comments_enabled = $file_uploads_enabled = FALSE;
+    // Create the entity metadata wrapper.
+    $wrapper = entity_metadata_wrapper('node', $node);
+
+    // If the 'Short comments enabled' field exists and is TRUE.
+    if (isset($node->field_short_comments_enabled) && $wrapper->field_short_comments_enabled->value()) {
+      $short_comments_enabled = TRUE;
+    }
+
+    // If the 'File upload enabled' field exists and is TRUE.
+    if (isset($node->field_file_uploads_enabled) && $wrapper->field_file_uploads_enabled->value()) {
+      $file_uploads_enabled = TRUE;
+    }
+
+    // Add the above results to javascript.
+    drupal_add_js(array(
+      'dcomms_theme' => array(
+        'shortCommentsEnabled' => $short_comments_enabled,
+        'fileUploadsEnabled' => $file_uploads_enabled,
+      ),
+    ), 'setting');
+
     // Get the end consultation date.
     $end_consultation_date = _dcomms_admin_return_end_consultation_date($node, $wrapper);
     // Get the current timestamp.
@@ -366,19 +394,22 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   }
 
   // Variables for optional display of child links grid and 'on this page'.
-  if ($variables['type'] == 'page' && $variables['view_mode'] == 'full') {
+  if (in_array($variables['type'], array('alert', 'bcr_data', 'blog_article', 'consultation', 'news_article', 'policy', 'page'))
+      && $variables['view_mode'] == 'full') {
     $wrapped_entity = entity_metadata_wrapper('node', $variables['node']);
-    $variables['hide_child_pages'] = $wrapped_entity->field_hide_child_pages->value();
-    $variables['hide_on_this_page'] = $wrapped_entity->field_hide_on_this_page->value();
+    if ($variables['type'] == 'page') {
+      $variables['hide_child_pages'] = $wrapped_entity->field_hide_child_pages->value();
+      $variables['hide_on_this_page'] = $wrapped_entity->field_hide_on_this_page->value();
+    }
     $hide_related_content = $wrapped_entity->field_hide_related_content->value();
 
-    if (!$variables['hide_child_pages']) {
+    if (!empty($variables['hide_child_pages'])) {
       $block = module_invoke('bean', 'block_view', 'standard-page-children---coloure');
       $variables['child_pages_block'] = render($block['content']);
     }
 
     // Related content.
-    if (!$hide_related_content) {
+    if (isset($hide_related_content) && !$hide_related_content) {
       $variables['content']['related_content'] = _dcomms_theme_related_content($variables['node']);
     }
   }
@@ -424,10 +455,18 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     // Hide 'Discussion Forum' related fields initially.
     hide($variables['content']['field_discussion_forum_heading']);
     hide($variables['content']['field_discussion_forum_intro']);
+    // Create an entity metadata wrapper.
+    $wrapper = entity_metadata_wrapper('node', $node);
+
+    if (!$wrapper->field_short_comments_enabled->value()) {
+      $variables['classes_array'][] = 'hide_short_comments';
+    }
+    if (!$wrapper->field_file_uploads_enabled->value()) {
+      $variables['classes_array'][] = 'hide_files';
+    }
+
     // If comments are open.
     if ($variables['comment'] == COMMENT_NODE_OPEN) {
-      // Create an entity metadata wrapper.
-      $wrapper = entity_metadata_wrapper('node', $node);
       // If the heading 'Discussion Forum' heading field exists and is not blank.
       if (isset($node->field_discussion_forum_heading) && $wrapper->field_discussion_forum_heading->value() != '') {
         // Show the 'Discussion Forum' heading field.
@@ -480,6 +519,12 @@ function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
     $component_key = "privacy";
     $form['actions'][$component_key] = $form['submitted'][$component_key];
     unset($form['submitted'][$component_key]);
+
+    // Check if the 'Short comments' field is available.
+    if (isset($form['submitted']['short_comments'])) {
+      // Update the attributes and set the maxlength.
+      $form['submitted']['short_comments']['#attributes']['maxlength'] = 500;
+    }
   }
 
   if ($form_id == 'workbench_moderation_moderate_form' && !empty($form['node']['#value'])) {
@@ -885,6 +930,10 @@ function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$var
   if (isset($variables['type'])) {
     $feature_types = array('page', 'blog_article', 'alert', 'news_article');
     if ($variables['type'] === 'consultation' || $variables['type'] === 'poll') {
+      // If viewed in iframe mode - add additional class.
+      if ($variables['view']->name === 'consultations_iframe') {
+        $variables['classes_array'][] = 'grid-stream__item--iframe';
+      }
       // Modify the class if the node has a Featured Image.
       $modifier_class = '';
       if (!empty($variables['field_feature_image'])) {

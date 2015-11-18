@@ -393,17 +393,17 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     }
   }
 
-  // Variables for optional display of child links grid and 'on this page'.
+  // Variables for optional display of child links grid, 'on this page', suggested content.
   if (in_array($variables['type'], array('alert', 'bcr_data', 'blog_article', 'consultation', 'news_article', 'policy', 'page'))
       && $variables['view_mode'] == 'full') {
     $wrapped_entity = entity_metadata_wrapper('node', $variables['node']);
     if ($variables['type'] == 'page') {
-      $variables['hide_child_pages'] = $wrapped_entity->field_hide_child_pages->value();
+      $hide_child_pages = $variables['hide_child_pages'] = $wrapped_entity->field_hide_child_pages->value();
       $variables['hide_on_this_page'] = $wrapped_entity->field_hide_on_this_page->value();
     }
     $hide_related_content = $wrapped_entity->field_hide_related_content->value();
-    $hide_child_pages = $wrapped_entity->field_hide_child_pages->value();
 
+    // Child pages.
     if (isset($hide_child_pages) && !$hide_child_pages) {
       $block = module_invoke('bean', 'block_view', 'standard-page-children---coloure');
       $variables['child_pages_block'] = render($block['content']);

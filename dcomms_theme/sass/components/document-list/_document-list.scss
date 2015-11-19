@@ -151,7 +151,6 @@
   }
   &--comment-docs {
     @extend %font__small;
-    padding-left: 10px;
     @include breakpoint($medium) {
       // float: left;
       display: table;

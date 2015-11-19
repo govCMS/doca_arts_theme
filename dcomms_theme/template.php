@@ -291,6 +291,10 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
 
   // Conditionally remove Formal Submission fields where relevant.
   if ($variables['type'] == 'consultation' && $variables['view_mode'] == 'full') {
+
+    // Include Consultation specific script.
+    drupal_add_js(path_to_theme() . '/js/script-consultation.js', array('file'));
+
     _consultation_vars($variables, $variables['node']);
     $consultation = $variables['consultation'];
 

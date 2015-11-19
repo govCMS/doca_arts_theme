@@ -169,7 +169,6 @@ function _dcomms_theme_related_content_category_term(&$related_content_nids, $li
       ->fields('n', array('nid'));
     $query->join('field_data_' . $field_name, 'tags', 'n.nid = tags.entity_id AND n.vid = tags.revision_id');
     $query->condition('n.status', 1, '=')
-      ->condition('n.type', $node->type, '=')
       ->condition('n.nid', $node->nid, '<>');
     if (!empty($related_content_nids)) {
       $query->condition('n.nid', $related_content_nids, 'NOT IN');

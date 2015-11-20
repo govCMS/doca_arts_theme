@@ -211,7 +211,6 @@ function _dcomms_theme_related_content($node) {
     $query = db_select('node', 'n')->fields('n', array('nid'));
     $query->join('field_data_field_tags', 'tags', 'n.nid = tags.entity_id AND n.vid = tags.revision_id');
     $query->condition('n.status', 1, '=')
-      ->condition('n.type', $node->type, '=')
       ->condition('n.nid', $node->nid, '<>')
       ->condition('tags.field_tags_tid', $tids, 'IN')
       ->groupBy('nid')

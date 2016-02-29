@@ -15,7 +15,7 @@
     <div class="clearfix">
   <?php endif; ?>
   <?php print $row; ?>
-  <?php if ($delta == 2 || ($delta == (count($rows) - 1) && (($delta + 1) % 3) != 0)): ?>
+  <?php if ($delta == 1 || ($delta == (count($rows) - 1) && (($delta + 1) % 3) != 0)): ?>
     </div>
   <?php endif; ?>
 <?php endforeach; ?>

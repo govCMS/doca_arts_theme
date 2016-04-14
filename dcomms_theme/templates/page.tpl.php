@@ -73,6 +73,19 @@
 
   </div>
 
+  <!-- WEB-4 JZ Start -->
+  <div class="form-feedback" id="form-feedback">
+    <div class="form-feedback__inner">
+      <div class="form-feedback__text">
+        <p>Was this page helpful?</p>
+      </div>
+      <div class="form-feedback__simple">
+        <a href="#">Yes</a> / <a href="#">No</a>
+      </div>
+    </div>
+  </div>
+  <!-- WEB-4 JZ End -->
+
   <?php print render($page['footer_top']); ?>
   <div class="footer__wrapper">
 

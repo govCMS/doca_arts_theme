@@ -1,136 +1,127 @@
 'use strict';
 
-// Include Gulp & Tools We'll Use
-var gulp        = require('gulp'),
-    $           = require('gulp-load-plugins')(),
-    del         = require('del'),
-    runSequence = require('run-sequence'),
-    exec        = require('child_process').exec,
-    path        = require('path'),
-    pixrem      = require('gulp-pixrem'),
-    rubySass    = require('gulp-ruby-sass'),
-    sourcemaps  = require('gulp-sourcemaps'),
+var theme = __dirname + '/';
+var styleguide = __dirname + '/styleguide/';
 
-    // Task configuration.
-    theme         = __dirname + '/',
-    styleguide    = __dirname + '/styleguide/',
+var del = require('del');
+var path = require('path');
+var runSequence = require('run-sequence');
+var exec = require('child_process').exec;
+var compass = require('compass-options').dirs({'config': theme + 'config.rb'});
+var mainBowerFiles = require('main-bower-files');
 
-    // Get theme sub-directories from Compass' config.rb.
-    compass          = require('compass-options').dirs({'config': theme + 'config.rb'}),
-
-    uglify           = require('gulp-uglify'),
-    mainBowerFiles   = require('main-bower-files'),
-    modernizr        = require('gulp-modernizr'),
-    concat           = require('gulp-concat');
+var gulp = require('gulp');
+var plugins = require('gulp-load-plugins')();
+var rubySass = require('gulp-ruby-sass');
 
 // Build styleguide.
-gulp.task('styleguide', ['clean:styleguide'], $.shell.task([
-        // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
-        'kss-node <%= source %> <%= destination %> --template <%= template %>'
-    ], {
-        templateData: {
-            source:       theme + compass.sass,
-            destination:  styleguide,
-            template:     styleguide + 'template'
-        }
+gulp.task('styleguide', ['clean:styleguide'], plugins.shell.task([
+    // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
+    'kss-node <%= source %> <%= destination %> --template <%= template %>'
+  ], {
+    templateData: {
+      source: theme + compass.sass,
+      destination: styleguide,
+      template: styleguide + 'template'
     }
+  }
 ));
 
 // Lint JavaScript.
 gulp.task('lint:js', function () {
-    return gulp.src(theme + '/**/*.js')
-        .pipe($.jshint())
-        .pipe($.jshint.reporter('jshint-stylish'));
+  return gulp.src(theme + '/**/*.js')
+    .pipe(plugins.jshint())
+    .pipe(plugins.jshint.reporter('jshint-stylish'));
 });
 
 // Lint Sass.
-gulp.task('lint:sass', function() {
-    return gulp.src(theme + compass.sass + '/**/*.scss')
-        .pipe($.scssLint({'bundleExec': true}));
+gulp.task('lint:sass', function () {
+  return gulp.src(theme + compass.sass + '/**/*.scss')
+    .pipe(plugins.scssLint({'bundleExec': true}));
 });
 
 // Lint Sass and JavaScript.
 gulp.task('lint', function (cb) {
-    runSequence(['lint:js', 'lint:sass'], cb);
+  runSequence(['lint:js', 'lint:sass'], cb);
 });
 
 // Concat and minify JavaScript.
-gulp.task('scripts', function() {
+gulp.task('scripts', function () {
   return gulp.src([theme + '/sass/components/**/*.js'])
-    .pipe(concat('components.min.js'))
-    .pipe(uglify())
+    .pipe(plugins.concat('components.min.js'))
+    .pipe(plugins.uglify())
     .pipe(gulp.dest(theme + '/js'));
 });
 
-gulp.task('bower-scripts', function() {
+gulp.task('bower-scripts', function () {
   return gulp.src(mainBowerFiles({
-    includeDev: true,
-    paths: {
-      bowerDirectory: __dirname + '/bower_components',
-      bowerJson: __dirname + '/bower.json'
-    },
-    filter: '**/*.js'
-  }))
-    .pipe(concat('bower-components.min.js'))
-    .pipe(uglify())
+      includeDev: true,
+      paths: {
+        bowerDirectory: __dirname + '/bower_components',
+        bowerJson: __dirname + '/bower.json'
+      },
+      filter: '**/*.js'
+    }))
+    .pipe(plugins.concat('bower-components.min.js'))
+    .pipe(plugins.uglify())
     .pipe(gulp.dest(theme + 'js'));
 });
 
-gulp.task('bower-css', function() {
+gulp.task('bower-css', function () {
   return gulp.src(mainBowerFiles({
-    includeDev: true,
-    paths: {
-      bowerDirectory: __dirname + '/bower_components',
-      bowerJson: __dirname + '/bower.json'
-    },
-    filter: '**/*.css'
-  }))
-    .pipe(concat('bower-components.css'))
+      includeDev: true,
+      paths: {
+        bowerDirectory: __dirname + '/bower_components',
+        bowerJson: __dirname + '/bower.json'
+      },
+      filter: '**/*.css'
+    }))
+    .pipe(plugins.concat('bower-components.css'))
     .pipe(gulp.dest(theme + 'css'));
 });
 
-gulp.task('modernizr', function() {
+gulp.task('modernizr', function () {
   gulp.src(theme + './sass/components/**/*.{js,scss}')
-    .pipe(modernizr("modernizr.min.js", {
-      "options" : [
+    .pipe(plugins.modernizr("modernizr.min.js", {
+      "options": [
         "setClasses"
       ]
     }))
-    .pipe(uglify())
+    .pipe(plugins.uglify())
     .pipe(gulp.dest("js/"))
 });
 
 process.chdir(theme);
-gulp.task('sass:development', function() {
-    return rubySass(theme + 'sass/', {
-        compass: true,
-        bundleExec: true,
-        sourcemap: true,
-        style: 'expanded'
+gulp.task('sass:development', function () {
+  return rubySass(theme + 'sass/', {
+    compass: true,
+    bundleExec: true,
+    sourcemap: true,
+    style: 'expanded'
+  })
+    .on('error', function (err) {
+      console.error('Error!', err.message);
     })
-      .on('error', function (err) {
-          console.error('Error!', err.message);
-      })
-      .pipe(pixrem())
-      .pipe(sourcemaps.write())
-      .pipe(gulp.dest('css'));
+    .pipe(plugins.pixrem())
+    .pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest('css'));
 });
 
-gulp.task('sass:production', function() {
-    return rubySass(theme + 'sass/', {
-        compass: true,
-        bundleExec: true,
-        style: 'compressed'
+gulp.task('sass:production', function () {
+  return rubySass(theme + 'sass/', {
+    compass: true,
+    bundleExec: true,
+    style: 'compressed'
+  })
+    .on('error', function (err) {
+      console.error('Error!', err.message);
     })
-      .on('error', function (err) {
-          console.error('Error!', err.message);
-      })
-      .pipe(pixrem())
-      .pipe(gulp.dest('css'));
+    .pipe(plugins.pixrem())
+    .pipe(gulp.dest('css'));
 });
 
 // Styles
-gulp.task('watch', ['modernizr', 'sass:development', 'lint', 'styleguide'],  function () {
+gulp.task('watch', ['modernizr', 'sass:development', 'lint', 'styleguide'], function () {
   gulp.watch(theme + 'sass/**/*.scss', ['modernizr', 'sass:development', 'lint']);
   gulp.watch(theme + 'sass/**/*.html', ['styleguide']);
   gulp.watch(theme + 'sass/**/*.js', ['scripts']);
@@ -146,10 +137,11 @@ gulp.task('clean:css', del.bind(null, [theme + '**/.sass-cache', theme + compass
 gulp.task('clean', ['clean:css', 'clean:styleguide']);
 
 // Production build of front-end.
-gulp.task('build', ['clean', 'sass:production', 'styleguide', 'scripts', 'bower-css', 'bower-scripts', 'modernizr'], function (cb) {
+gulp.task('build', ['clean', 'sass:production', 'styleguide', 'scripts', 'bower-css', 'bower-scripts', 'modernizr'],
+  function (cb) {
     // Run linting last, otherwise its output gets lost.
     runSequence(['lint'], cb);
-});
+  });
 
 // The default task.
 gulp.task('default', ['build']);

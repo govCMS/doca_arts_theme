@@ -74,15 +74,18 @@
   </div>
 
   <!-- WEB-4 JZ Start -->
-  <div class="form-feedback" id="form-feedback">
-    <div class="form-feedback__inner">
-      <div class="form-feedback__text">
+  <div class="site-feedback-block" id="site-feedback-block">
+    <div class="site-feedback-block__inner">
+      <div class="site-feedback-block__content">
         <p>Was this page helpful?</p>
       </div>
-      <div class="form-feedback__simple">
-        <a href="#">Yes</a> / <a href="#">No</a>
+      <div class="site-feedback-block__simple">
+        <a href="#">Yes</a> <span class="divider">/</span> <a href="#site-feedback-form" class="popup-site-feedback-form">No</a>
       </div>
     </div>
+  </div>
+  <div id="site-feedback-form" class="site-feedback-form mfp-hide">
+    Popup content
   </div>
   <!-- WEB-4 JZ End -->
 

@@ -1,0 +1,65 @@
+// Site-Feedback
+//
+// Markup: site-feedback.html
+//
+// Styleguide components.site-feedback
+
+// Site feedback block.
+.site-feedback-block {
+  background: #0d293b;
+  color: white;
+
+  & {
+    @extend %heading--2;
+    margin: 1rem 0 0 0;
+    padding: 1rem 0;
+    font-weight: 300;
+  }
+
+  a {
+    margin: 0 0.8rem;
+  }
+
+  &__inner {
+    @extend %layout-max;
+    @include display-flex;
+    align-items: center;
+    padding: 1rem;
+    > * {
+      // Invalidated by flexbox parent on newer browsers
+      float: left;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    @include breakpoint($medium) {
+      width: 80%;
+      flex: 0 1 auto;
+      .flexbox & {
+        width: auto;
+      }
+    }
+    p {
+      margin: 0;
+    }
+  }
+
+  &__simple {
+    margin-left: 4rem;
+    flex: 0 auto;
+    .divider {
+      color: darken(#ffffff, 50);
+    }
+  }
+}
+
+// Site feedback form.
+.site-feedback-form {
+  position: relative;
+  background: white;
+  padding: 20px;
+  width: auto;
+  max-width: 500px;
+  margin: 20px auto;
+}

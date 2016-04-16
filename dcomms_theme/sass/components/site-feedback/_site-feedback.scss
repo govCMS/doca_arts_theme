@@ -60,6 +60,25 @@
   background: white;
   padding: 20px;
   width: auto;
-  max-width: 500px;
+  max-width: 640px;
   margin: 20px auto;
+  fieldset {
+    legend {
+      span {
+        @extend %heading--2;
+      }
+    }
+  }
+  .webform-component--site-feedback-page-url {
+    display: none;
+    visibility: hidden;
+  }
+  .webform-component--site-feedback-helpful {
+    display: none;
+    visibility: hidden;
+  }
+  .url-textfield {
+    display: none;
+    visibility: hidden;
+  }
 }

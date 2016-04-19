@@ -69,12 +69,13 @@ function site_feedback_webform_ajax_callback($form, &$form_state) {
   $output = array();
   // If user completed his submission, determine what to do.
   if (!empty($form_state['webform_completed']) && empty($form_state['save_draft'])) {
-    $text = '<h2 class="site-feedback-thanks" ">Thanks for your feedback</h2>
-             <p style="display:none; visibility: hidden;">This window will be automatically closed in <span class="site-feedback-thanks-lock">5</span> seconds</p>';
+    $text = '<h2 class="site-feedback-thanks">Thanks for your feedback</h2>
+             <p>This window will be automatically closed in <span class="site-feedback-thanks-countdown">5</span> seconds</p>';
     $output = array(
       '#type' => 'ajax',
       '#commands' => array(
         ajax_command_replace('.site-feedback-form__content', $text),
+        ajax_command_invoke('.site-feedback-thanks', 'trigger', array('click')),
       ),
     );
   }

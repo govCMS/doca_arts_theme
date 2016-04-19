@@ -1,4 +1,5 @@
 $ = @jQuery
+document = @document
 Drupal = @Drupal
 
 @Drupal.behaviors.siteFeedback =
@@ -27,24 +28,6 @@ Drupal = @Drupal
     ###
     sendResponse = ->
       $('.site-feedback-block__inner', context).text('Thanks for your feedback')
-      return
-
-    ###
-    Build Form.
-    ###
-    buildForm = () ->
-      url = location.protocol + "//" + location.host + settings.basePath + settings.pathToTheme + '/api/ajax/feedback/webform.php'
-      $.ajax url,
-        type: 'POST'
-        data: options
-        success: (data) ->
-          $("#site-feedback-form .site-feedback-form__content", context).html(data);
-          sendPopup()
-          return
-        error: (jqXHR) ->
-          console.log(jqXHR)
-          return
-      return
 
     ###
     Open Popup window.

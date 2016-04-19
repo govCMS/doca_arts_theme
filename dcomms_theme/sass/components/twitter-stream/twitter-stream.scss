@@ -51,17 +51,18 @@ html {
 }
 
 
-.stream {
+.timeline-TweetList {
 
-  .avatar {
-    display: none;
+  .TweetAuthor-avatar {
+    display: none !important;
   }
 
-  .header {
+  .timeline-Tweet-text, .timeline-Tweet-author, .timeline-Tweet-actions {
     padding-left: 0 !important;
+    margin-left: 0 !important;
   }
 
-  .tweet {
+  .timeline-TweetList-tweet {
     // Include layout-three-column__item with slightly smaller medium BP to fit smaller iframe media query.
     @include layout-three-column__item(($medium - 50px), $large);
     @include box-sizing(border-box);
@@ -81,13 +82,13 @@ html {
       height: $tweet-stream__large;
     }
 
-    .e-entry-title {
+    .timeline-Tweet-text {
       font-weight: 300 !important;
       font-size: 1rem !important;
       line-height: 1.5rem !important;
     }
 
-    .inline-media {
+    .MediaCard-media {
       display: none !important;
     }
 

@@ -80,12 +80,19 @@
         <p>Was this page helpful?</p>
       </div>
       <div class="site-feedback-block__simple">
-        <a href="#">Yes</a> <span class="divider">/</span> <a href="#site-feedback-form" class="popup-site-feedback-form">No</a>
+        <a href="#" class="site-feedback-action" data-option="1">Yes</a> <span class="divider">/</span> <a href="#" class="site-feedback-action" data-mfp-src="#site-feedback-form" data-option="0">No</a>
       </div>
     </div>
   </div>
   <div id="site-feedback-form" class="site-feedback-form mfp-hide">
-    Popup content
+    <div class="site-feedback-form__content">
+      <?php
+      $nid = '7401';
+      $wnode = node_load($nid);
+      $form = drupal_get_form('webform_client_form_' . $nid, $wnode, array());
+      print render($form);
+      ?>
+    </div>
   </div>
   <!-- WEB-4 JZ End -->
 

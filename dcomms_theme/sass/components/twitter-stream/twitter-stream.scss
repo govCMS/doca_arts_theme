@@ -61,7 +61,9 @@ html {
     padding-left: 0 !important;
     margin-left: 0 !important;
   }
-
+  .timeline-Tweet-retweetCredit {
+    margin-left: 0 !important;
+  }
   .timeline-TweetList-tweet {
     // Include layout-three-column__item with slightly smaller medium BP to fit smaller iframe media query.
     @include layout-three-column__item(($medium - 50px), $large);

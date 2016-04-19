@@ -16,7 +16,7 @@
        */
       var options, ref, sendData, sendPopup, sendResponse, setData;
       options = {
-        nid: 7392,
+        nid: 7401,
         sid: null,
         token: null,
         url: (ref = settings.currentPath) != null ? ref : window.location.href,

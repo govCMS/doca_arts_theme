@@ -9,7 +9,7 @@
  * Implements hook_form_FORM_ID_alter().
  */
 function dcomms_theme_form_webform_client_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'webform_client_form_7392') {
+  if ($form_id == 'webform_client_form_7401') {
     $webform = $form['#node']->webform;
 
     // Reset webform action.

@@ -33,7 +33,31 @@
             $this.addClass('link-external').attr('target','_blank');
           }
         }
-
+        if ($("body").hasClass('caretaker')) {
+          $this.click(function(e) {
+            e.preventDefault();
+            $.magnificPopup.open({
+              items: {
+                preloader: true,
+                src: '#external-link-popup-content',
+                type: 'inline'
+              }
+            });
+            $("#external-link-action-continue").attr("href", $this.attr("href"));
+            $("#external-link-action-continue").attr("target", $this.attr("target"));
+          });
+          $("#external-link-action-cancel").click(function(e) {
+            e.preventDefault();
+            var magnificPopup;
+            magnificPopup = $.magnificPopup.instance;
+            magnificPopup.close();
+          });
+          $("#external-link-action-continue").click(function(e) {
+            var magnificPopup;
+            magnificPopup = $.magnificPopup.instance;
+            magnificPopup.close();
+          });
+        }
       });
     }
   };

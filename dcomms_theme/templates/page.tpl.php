@@ -95,6 +95,23 @@
     </div>
   </div>
   <!-- WEB-4 JZ End -->
+  <?php if (theme_get_setting('external_link_enable_popup') == 1): ?>
+  <!-- External link popup window -->
+  <div id="external-link-popup-content" class="external-link-popup mfp-hide">
+    <h2>Goodbye</h2>
+    <div class="external-link-popup__content">
+      <?php
+        print theme_get_setting('external_link_popup_text');
+      ?>
+      <div>
+        <ul>
+          <li><a href="#" id="external-link-action-cancel">Cancel</a></li>
+          <li><a href="#" id="external-link-action-continue">Continue</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
 
   <?php print render($page['footer_top']); ?>
   <div class="footer__wrapper">

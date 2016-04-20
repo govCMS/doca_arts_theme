@@ -21,4 +21,20 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
     '#default_value' => theme_get_setting('rss_author'),
     '#description'   => t('Set author name to appear in the dc:creator field in RSS feeds.'),
   );
+  $form['external_link_popup'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('External link popup'),
+  );
+  $form['external_link_popup']['external_link_enable_popup'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Enable external link popup'),
+    '#default_value' => theme_get_setting('external_link_enable_popup'),
+    '#description'   => t('Display a popup modal window when an external link is clicked.'),
+  );
+  $form['external_link_popup']['external_link_popup_text'] = array(
+    '#type'          => 'textarea',
+    '#title'         => t('Text in the popup window'),
+    '#default_value' => theme_get_setting('external_link_popup_text'),
+    '#description'   => t('Text to be display in the external link popup.'),
+  );
 }

@@ -9,15 +9,18 @@
   background: #0d293b;
   color: white;
 
-  & {
-    @extend %heading--2;
-    margin: 1rem 0 0 0;
-    padding: 1rem 0;
-    font-weight: 300;
-  }
+  margin-top: 1rem;
+  margin-bottom: 0;
 
-  a {
-    margin: 0 0.8rem;
+  & {
+    @include heading;
+    @include font-size-line-height($h2-font-size * .5, $heading-line-height-ratio);
+    font-family: Gafata, serif, monospace;
+
+    @include breakpoint($large) {
+      @include font-size-line-height($h2-font-size, $heading-line-height-ratio);
+    }
+
   }
 
   &__inner {
@@ -46,7 +49,7 @@
   }
 
   &__simple {
-    margin-left: 4rem;
+    margin-left: 0;
     flex: 0 auto;
     .divider {
       color: darken(#ffffff, 50);
@@ -84,5 +87,44 @@
   .site-feedback-thanks-countdown {
     color: #cd4d02;
     font-weight: bold;
+  }
+}
+
+@media (min-width: 479px) {
+  .site-feedback-block {
+    & {
+      @include font-size-line-height($h2-font-size * .7, $heading-line-height-ratio);
+      margin: 1rem 0 0 0;
+      padding: 1rem 0;
+    }
+    &__simple {
+      margin-left: 4rem;
+    }
+
+    a {
+      margin: 0 0.8rem;
+    }
+  }
+}
+
+@media (min-width: 720px) {
+  .site-feedback-block {
+    & {
+      @include font-size-line-height($h2-font-size * .8, $heading-line-height-ratio);
+    }
+  }
+  .site-feedback-form {
+    .webform-client-form {
+      input[type="tel"], input[type="email"] {
+        min-width: 200px;
+        width: 260px;
+      }
+      .webform-component-email {
+        float:left;
+      }
+      .webform-component-phone {
+        float:right;
+      }
+    }
   }
 }

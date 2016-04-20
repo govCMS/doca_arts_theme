@@ -18,6 +18,8 @@
        Close Popup window.
        */
       $(document).delegate('.site-feedback-form', 'siteFeedbackPopupClose', function () {
+        var magnificPopup = $.magnificPopup.instance;
+
         // Init count.
         var count = 5;
 
@@ -33,15 +35,30 @@
           }
         }
 
-        // Start count down.
-        countDown();
-
-        // Close Pop up.
-        setTimeout(function () {
-          var magnificPopup;
-          magnificPopup = $.magnificPopup.instance;
+        function closePopup() {
           magnificPopup.close();
-        }, 5000);
+        }
+
+        // Init process.
+        function process() {
+          closePopup();
+          // Init count down.
+          countDown();
+          // Open popup.
+          magnificPopup.open({
+            items: {
+              preloader: true,
+              src: '#site-feedback-form',
+              type: 'inline'
+            }
+          });
+          // Close Pop up.
+          setTimeout(function () {
+            magnificPopup.close();
+          }, 5000);
+        }
+
+        process();
       });
     }
   };

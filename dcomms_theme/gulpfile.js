@@ -1,7 +1,6 @@
 'use strict';
 
 var theme = __dirname + '/';
-var styleguide = __dirname + '/styleguide/';
 
 var del = require('del');
 var path = require('path');
@@ -13,19 +12,6 @@ var mainBowerFiles = require('main-bower-files');
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var rubySass = require('gulp-ruby-sass');
-
-// Build styleguide.
-gulp.task('styleguide', ['clean:styleguide'], plugins.shell.task([
-    // kss-node [source folder of files to parse] [destination folder] --template [location of template files]
-    'kss-node <%= source %> <%= destination %> --template <%= template %>'
-  ], {
-    templateData: {
-      source: theme + compass.sass,
-      destination: styleguide,
-      template: styleguide + 'template'
-    }
-  }
-));
 
 // Lint JavaScript.
 gulp.task('lint:js', function () {
@@ -121,23 +107,19 @@ gulp.task('sass:production', function () {
 });
 
 // Styles
-gulp.task('watch', ['modernizr', 'sass:development', 'lint', 'styleguide'], function () {
+gulp.task('watch', ['modernizr', 'sass:development', 'lint'], function () {
   gulp.watch(theme + 'sass/**/*.scss', ['modernizr', 'sass:development', 'lint']);
-  gulp.watch(theme + 'sass/**/*.html', ['styleguide']);
   gulp.watch(theme + 'sass/**/*.js', ['scripts']);
 });
-
-// Clean styleguide directory.
-gulp.task('clean:styleguide', del.bind(null, [styleguide + '*.html', styleguide + 'public'], {force: true}));
 
 // Clean CSS directory.
 gulp.task('clean:css', del.bind(null, [theme + '**/.sass-cache', theme + compass.css + '/**/*.map'], {force: true}));
 
 // Clean all directories.
-gulp.task('clean', ['clean:css', 'clean:styleguide']);
+gulp.task('clean', ['clean:css']);
 
 // Production build of front-end.
-gulp.task('build', ['clean', 'sass:production', 'styleguide', 'scripts', 'bower-css', 'bower-scripts', 'modernizr'],
+gulp.task('build', ['clean', 'sass:production', 'scripts', 'bower-css', 'bower-scripts', 'modernizr'],
   function (cb) {
     // Run linting last, otherwise its output gets lost.
     runSequence(['lint'], cb);

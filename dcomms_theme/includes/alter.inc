@@ -71,6 +71,19 @@ function site_feedback_webform_ajax_callback($form, &$form_state) {
   if (!empty($form_state['webform_completed']) && empty($form_state['save_draft'])) {
     $text = '<h2 class="site-feedback-thanks">Thanks for your feedback</h2>
              <p>This window will be automatically closed in <span class="site-feedback-thanks-countdown">5</span> seconds</p>';
+    $status_messages = drupal_get_messages('status', FALSE);
+    if (isset($status_messages['status'])) {
+      // This is the message we want to erase.
+      $confirmation = check_markup($form['#node']->webform['confirmation'], $form['#node']->webform['confirmation_format'], '', TRUE);
+      $index = array_search($confirmation, $status_messages['status']);
+      if ($index !== FALSE) {
+        unset($status_messages['status'][$index]);
+        drupal_get_messages('status');
+        foreach ($status_messages['status'] as $message) {
+          drupal_set_message($message);
+        }
+      }
+    }
     $output = array(
       '#type' => 'ajax',
       '#commands' => array(

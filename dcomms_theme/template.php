@@ -34,7 +34,7 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
   // Add pathToTheme to Drupal.settings in JS.
   drupal_add_js('jQuery.extend(Drupal.settings, { "pathToTheme": "' . path_to_theme() . '" });', 'inline');
 
-  drupal_add_library('system', 'jquery.form');
+  drupal_add_js(array('site_pages_feedback' => array('nid' => theme_get_setting(''))), 'setting');
 
   // Create template variables for the header menu block.
   $variables['header_search'] = _dcomms_theme_block_render('search', 'form');

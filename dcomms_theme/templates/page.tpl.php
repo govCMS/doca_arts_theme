@@ -73,28 +73,28 @@
 
   </div>
 
-  <!-- WEB-4 JZ Start -->
-  <div class="site-feedback-block" id="site-feedback-block">
-    <div class="site-feedback-block__inner">
-      <div class="site-feedback-block__content">
-        <p>Was this page helpful?</p>
-      </div>
-      <div class="site-feedback-block__simple">
-        <a href="#" class="site-feedback-action" data-option="1">Yes</a> <span class="divider">/</span> <a href="#" class="site-feedback-action" data-mfp-src="#site-feedback-form" data-option="0">No</a>
+  <?php if (theme_get_setting('feedback_enabled') == 1): ?>
+    <!-- WEB-4 JZ Start -->
+    <div class="site-feedback-block" id="site-feedback-block">
+      <div class="site-feedback-block__inner">
+        <div class="site-feedback-block__content">
+          <p>Was this page helpful?</p>
+        </div>
+        <div class="site-feedback-block__simple">
+          <a href="#" class="site-feedback-action" data-option="1">Yes</a>
+          <span class="divider">/</span>
+          <a href="#" class="site-feedback-action" data-mfp-src="#site-feedback-form" data-option="0">No</a>
+        </div>
       </div>
     </div>
-  </div>
-  <div id="site-feedback-form" class="site-feedback-form mfp-hide">
-    <div class="site-feedback-form__content">
-      <?php
-      $nid = '7401';
-      $wnode = node_load($nid);
-      $form = drupal_get_form('webform_client_form_' . $nid, $wnode, array());
-      print render($form);
-      ?>
+    <div id="site-feedback-form" class="site-feedback-form mfp-hide">
+      <div class="site-feedback-form__content">
+        <?php print render($page['site_pages_feedback_form']); ?>
+      </div>
     </div>
-  </div>
-  <!-- WEB-4 JZ End -->
+    <!-- WEB-4 JZ End -->
+  <?php endif; ?>
+
   <?php if (theme_get_setting('external_link_enable_popup') == 1): ?>
   <!-- External link popup window -->
   <div id="external-link-popup-content" class="external-link-popup mfp-hide">

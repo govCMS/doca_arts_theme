@@ -14,12 +14,12 @@
       /*
       Options object.
        */
-      var options, ref, sendData, sendPopup, sendResponse, setData;
+      var options, ref, ref1, sendData, sendPopup, sendResponse, setData;
       options = {
-        nid: 7401,
+        nid: (ref = settings.sitePagesFeedback[nid]) != null ? ref : null,
         sid: null,
         token: null,
-        url: (ref = settings.currentPath) != null ? ref : window.location.href,
+        url: (ref1 = settings.currentPath) != null ? ref1 : window.location.href,
         option: 0,
         update: false
       };
@@ -71,9 +71,7 @@
               sendPopup();
             }
           },
-          error: function(jqXHR) {
-            console.log(jqXHR);
-          }
+          error: function(jqXHR) {}
         });
       };
 
@@ -81,9 +79,9 @@
       Onclick event.
        */
       $(".site-feedback-action", context).click(function(e) {
-        var option, ref1;
+        var option, ref2;
         e.preventDefault();
-        option = (ref1 = $(this).data('option')) != null ? ref1 : 0;
+        option = (ref2 = $(this).data('option')) != null ? ref2 : 0;
         setData('option', option);
         sendData();
       });

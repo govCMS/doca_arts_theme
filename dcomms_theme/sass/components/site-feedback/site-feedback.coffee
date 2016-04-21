@@ -9,7 +9,7 @@ Drupal = @Drupal
     Options object.
     ###
     options =
-      nid: 7401
+      nid: settings.sitePagesFeedback[nid] ? null
       sid: null
       token: null
       url: settings.currentPath ? window.location.href
@@ -61,7 +61,7 @@ Drupal = @Drupal
             sendPopup()
           return
         error: (jqXHR) ->
-          console.log(jqXHR)
+          # console.log(jqXHR)
           return
       return
 

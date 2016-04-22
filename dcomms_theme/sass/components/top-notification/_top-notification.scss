@@ -7,12 +7,22 @@
 @import 'components/button/button';
 @import 'components/underline-on-hover/underline-on-hover';
 
+
+.top-notification#cookie-alert {
+  background: #0d293b;
+}
+
+.top-notification#top-announcements {
+  background: #fee73d;
+  color: #0d293b;
+  a {
+    color: #0d293b;
+  }
+}
+
 .top-notification,
 %top-notification {
   display: none;
-  visibility: hidden;
-  background: #0d293b;
-
   &,
   a {
     @include font-size-line-height(.8rem);

@@ -61,6 +61,17 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
     // Extend the theme hook suggestions to include a stripped page.
     $variables['theme_hook_suggestions'][] = 'page__stripped';
   }
+
+  // Define page top announcement variable
+  $page_top_announcement_paths = drupal_strtolower(theme_get_setting('page_top_announcement_paths'));
+  $current_path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+  $page_match = drupal_match_path($current_path, $page_top_announcement_paths);
+  if ($current_path != $_GET['q']) {
+    $page_match = $page_match || drupal_match_path($_GET['q'], $page_top_announcement_paths);
+  }
+  if ($page_match) {
+    $variables['top_announcements'] = theme_get_setting('page_top_announcement_messages');
+  }
 }
 
 /**

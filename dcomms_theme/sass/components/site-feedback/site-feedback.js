@@ -16,7 +16,7 @@
        */
       var options, ref, ref1, sendData, sendPopup, sendResponse, setData;
       options = {
-        nid: (ref = settings.sitePagesFeedback[nid]) != null ? ref : null,
+        nid: (ref = settings.sitePagesFeedback['nid']) != null ? ref : null,
         sid: null,
         token: null,
         url: (ref1 = settings.currentPath) != null ? ref1 : window.location.href,
@@ -35,7 +35,7 @@
       Response callback.
        */
       sendResponse = function() {
-        return $('.site-feedback-block__inner', context).text('Thanks for your feedback');
+        return $('.site-feedback-block__inner', context).text(settings.sitePagesFeedback['text_ok']);
       };
 
       /*

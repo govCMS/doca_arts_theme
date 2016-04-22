@@ -108,7 +108,7 @@
     <div class="site-feedback-block" id="site-feedback-block">
       <div class="site-feedback-block__inner">
         <div class="site-feedback-block__content">
-          <p>Was this page helpful?</p>
+          <p><?php print theme_get_setting('feedback_text_init'); ?></p>
         </div>
         <div class="site-feedback-block__simple">
           <a href="#" class="site-feedback-action" data-option="1">Yes</a>
@@ -119,7 +119,7 @@
     </div>
     <div id="site-feedback-form" class="site-feedback-form mfp-hide">
       <div class="site-feedback-form__content">
-        <?php print render($page['site_pages_feedback_form']); ?>
+        <?php print render($site_pages_feedback_form); ?>
       </div>
     </div>
     <!-- WEB-4 JZ End -->

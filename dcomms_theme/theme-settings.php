@@ -9,7 +9,7 @@
  * Implements hook_form_system_theme_settings_alter().
  */
 function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
-  // Horizontal tabs container
+  // Horizontal tabs container.
   $form['group_tabs'] = array(
     '#weight' => -99,
     '#type' => 'vertical_tabs',
@@ -121,10 +121,22 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
     '#default_value' => theme_get_setting('feedback_wform_nid'),
     '#description' => t('Do not change it as this is for internal reference.'),
   );
+  $form['feedback']['container']['feedback_text_init'] = array(
+    '#type' => 'textarea',
+    '#title' => t('The initial feedback form text'),
+    '#default_value' => empty(theme_get_setting('feedback_text_init')) ? t('Was this page helpful?') : theme_get_setting('feedback_text_init'),
+    '#description' => t('The initial feedback form text.'),
+  );
+  $form['feedback']['container']['feedback_text_ok'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Thank you message text'),
+    '#default_value' => empty(theme_get_setting('feedback_text_ok')) ? t('Thanks for your feedback') : theme_get_setting('feedback_text_ok'),
+    '#description' => t('Thank you message text.'),
+  );
 }
 
 /**
- * fetch webform list..
+ * fetch webform list.
  */
 function _webform_list() {
   $options = array();

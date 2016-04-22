@@ -37,7 +37,12 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
   // Site pages feedback.
   if (theme_get_setting('feedback_enabled')) {
     $wf_nid = theme_get_setting('feedback_wform_nid');
-    drupal_add_js(array('sitePagesFeedback' => array('nid' => $wf_nid)), 'setting');
+    $js_settings = array(
+      'nid' => $wf_nid,
+      'text_init' => theme_get_setting('feedback_text_init'),
+      'text_ok' => theme_get_setting('feedback_text_ok'),
+    );
+    drupal_add_js(array('sitePagesFeedback' => $js_settings), 'setting');
     $variables['site_pages_feedback_form'] = _dcomms_theme_webform_render($wf_nid);
   }
 

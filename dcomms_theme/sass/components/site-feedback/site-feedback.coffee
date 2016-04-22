@@ -5,11 +5,13 @@ Drupal = @Drupal
 @Drupal.behaviors.siteFeedback =
   attach: (context, settings) ->
 
+    # console.log(settings)
+
     ###
     Options object.
     ###
     options =
-      nid: settings.sitePagesFeedback[nid] ? null
+      nid: settings.sitePagesFeedback['nid'] ? null
       sid: null
       token: null
       url: settings.currentPath ? window.location.href
@@ -27,7 +29,7 @@ Drupal = @Drupal
     Response callback.
     ###
     sendResponse = ->
-      $('.site-feedback-block__inner', context).text('Thanks for your feedback')
+      $('.site-feedback-block__inner', context).text(settings.sitePagesFeedback['text_ok'])
 
     ###
     Open Popup window.

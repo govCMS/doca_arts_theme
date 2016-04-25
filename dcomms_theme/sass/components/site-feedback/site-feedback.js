@@ -57,22 +57,24 @@
       sendData = function() {
         var url;
         sendResponse();
-        url = location.protocol + "//" + location.host + settings.basePath + settings.pathToTheme + '/api/ajax/feedback/submit_simple.php';
-        $.ajax(url, {
-          type: 'POST',
-          data: options,
-          success: function(data) {
-            if ((data != null) && (data.sid != null) && options.option === 0) {
-              setData('sid', data.sid);
-              $("input[name~='submitted[site_feedback_page_url]']").val(options.url);
-              $("input[name~='submitted[site_feedback_helpful]']").val(0).prop("checked", true);
-              $("input[name~='details[sid]']").val(data.sid);
-              $("input[name~='site_feedback_sid']").val(data.sid);
-              sendPopup();
-            }
-          },
-          error: function(jqXHR) {}
-        });
+        if ((options != null) && (options.nid != null) && options.option) {
+          url = location.protocol + "//" + location.host + settings.basePath + settings.pathToTheme + '/api/ajax/feedback/submit_simple.php';
+          $.ajax(url, {
+            type: 'POST',
+            data: options,
+            success: function(data) {
+              if ((data != null) && (data.sid != null) && options.option === 0) {
+                setData('sid', data.sid);
+                $("input[name~='submitted[site_feedback_page_url]']").val(options.url);
+                $("input[name~='submitted[site_feedback_helpful]']").val(0).prop("checked", true);
+                $("input[name~='details[sid]']").val(data.sid);
+                $("input[name~='site_feedback_sid']").val(data.sid);
+                sendPopup();
+              }
+            },
+            error: function(jqXHR) {}
+          });
+        }
       };
 
       /*

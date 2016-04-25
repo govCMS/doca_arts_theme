@@ -16,7 +16,6 @@
 
   Drupal.behaviors.linkExternal = {
     attach: function () {
-      console.log("You are running jQuery version: " + $.fn.jquery);
       $('[data-js*="external-links"] a').each(function () {
 
         var $this = $(this);

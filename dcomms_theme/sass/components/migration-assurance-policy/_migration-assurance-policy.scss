@@ -1,0 +1,74 @@
+// Tim Hurely
+
+.section-migration-assurance-policy {
+
+  // SVG images in corner of blue cards
+  .featured__grid-container .featured-palette {
+    .featured__grid-item {
+      .file {
+        margin: 0;
+      }
+      img {
+        height: 132px;
+      }
+    }
+  }
+
+  // 1,2,3,4 Section
+  .layout-max {
+    .steps-section {
+      text-align: center;
+      width: 75%;
+      //padding: 2em;
+      background: url(bg.svg) no-repeat ;
+      .steps_item_list {  // <ul>
+        li {
+          width: 25%;
+          display: block;
+          a,
+          .step_item_count,
+          .step_item_title {
+            width: 100%;
+          }
+          .step_item_count {
+            font-size: 200%;
+            color: #D1D3D5;
+            text-shadow: 2px 2px #ABB1B5;
+          }
+          .step_item_title {
+            font-size: 150%;
+            text-transform: uppercase;
+          }
+        }
+      }
+      .step_footer {
+        background: rgba(#fff, 0.7);
+      }
+    }
+    .circle-section {
+      width: 25%;
+      border: 5px solid #DFDFDF;
+      border-top-color: #D1D3D5;
+      border-left-color: #D1D3D5;
+      transform: rotate(-25deg);
+      span {
+        transform: rotate(+25deg);
+      }
+    }
+    .inline-logo-list {
+      a {
+        img {
+          filter: grayscale(1);
+        }
+        &:hover,
+        &:active,
+        &:focus {
+          img {
+            filter: grayscale(0);
+          }
+        }
+      }
+    }
+  }
+
+}

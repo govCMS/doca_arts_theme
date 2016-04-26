@@ -49,7 +49,7 @@ Drupal = @Drupal
     ###
     sendData = ()->
       sendResponse()
-      if options? and options.nid? and options.option
+      if options? and options.nid?
         url = location.protocol + "//" + location.host + settings.basePath + settings.pathToTheme + '/api/ajax/feedback/submit_simple.php'
         $.ajax url,
         type: 'POST'

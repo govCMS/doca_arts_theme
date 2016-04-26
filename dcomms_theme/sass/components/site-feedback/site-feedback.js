@@ -57,7 +57,7 @@
       sendData = function() {
         var url;
         sendResponse();
-        if ((options != null) && (options.nid != null) && options.option) {
+        if ((options != null) && (options.nid != null)) {
           url = location.protocol + "//" + location.host + settings.basePath + settings.pathToTheme + '/api/ajax/feedback/submit_simple.php';
           $.ajax(url, {
             type: 'POST',

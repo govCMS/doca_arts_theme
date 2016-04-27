@@ -31,9 +31,11 @@
           .step_item_count,
           .step_item_title {
             width: 100%;
+            text-decoration: none;
           }
           .step_item_count {
             font-size: 200%;
+            font-weight: 600;
             color: #D1D3D5;
             text-shadow: 2px 2px #ABB1B5;
           }
@@ -44,7 +46,12 @@
         }
       }
       .step_footer {
-        background: rgba(#fff, 0.7);
+        background: rgba(#eee, 0.6);
+        display: block;
+        margin-top: 1em;
+        padding-bottom: 1.4em;
+        padding-top: 0;
+        border: none;
       }
     }
     .circle-section {
@@ -53,26 +60,31 @@
       border: 5px solid #DFDFDF;
       border-top-color: #D1D3D5;
       border-left-color: #D1D3D5;
-      transform: rotate(-25deg);
+      transform: rotate(90deg);
       border-radius: 100%;
       width: 150px;
       height: 150px;
+      margin-left: 6%;
       span {
-        transform: rotate(25deg);
+        transform: rotate(-90deg);
         top: 55px;
         text-align: center;
         display: block;
+        position: relative;
       }
     }
+    // greyscale logos
     .inline-logo-list {
       a {
         img {
+          -webkit-filter: grayscale(1);
           filter: grayscale(1);
         }
         &:hover,
         &:active,
         &:focus {
           img {
+            -webkit-filter: grayscale(0);
             filter: grayscale(0);
           }
         }

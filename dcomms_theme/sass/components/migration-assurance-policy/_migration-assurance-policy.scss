@@ -14,11 +14,13 @@
     }
   }
 
-  // 1,2,3,4 Section
-  .layout-max {
-    .steps-section {
+
+  .field-name-field-migration-assurance-menu {
+    background-color: #D7D7D7;
+    .steps-section {  // 1,2,3,4 Section
       text-align: center;
       width: 75%;
+      float: left;
       //padding: 2em;
       background: url(bg.svg) no-repeat ;
       .steps_item_list {  // <ul>
@@ -47,12 +49,19 @@
     }
     .circle-section {
       width: 25%;
+      float: left;
       border: 5px solid #DFDFDF;
       border-top-color: #D1D3D5;
       border-left-color: #D1D3D5;
       transform: rotate(-25deg);
+      border-radius: 100%;
+      width: 150px;
+      height: 150px;
       span {
-        transform: rotate(+25deg);
+        transform: rotate(25deg);
+        top: 55px;
+        text-align: center;
+        display: block;
       }
     }
     .inline-logo-list {

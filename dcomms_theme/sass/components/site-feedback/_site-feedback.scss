@@ -94,7 +94,7 @@
   .site-feedback-block {
     & {
       @include font-size-line-height($h2-font-size * .7, $heading-line-height-ratio);
-      margin: 1rem 0 0 0;
+      margin: 0;
       padding: 1rem 0;
     }
     &__simple {

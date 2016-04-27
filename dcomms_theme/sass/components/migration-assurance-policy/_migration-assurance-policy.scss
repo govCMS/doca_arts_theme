@@ -14,33 +14,27 @@ body.section-migration-assurance-policy {
     }
   }
 
-
   .field-name-field-migration-assurance-menu {
     background-color: #D7D7D7;
     .steps-section-wrapper {
       margin-bottom: 5em;
       float: left;
+      width: 100%;
     }
     .steps-section {  // 1,2,3,4 Section
       text-align: center;
       width: 75%;
       float: left;
-      //padding: 2em;
       @include background-image('bg--online-publication.svg');
       .steps_item_list {  // <ul>
         li {
-          width: 25%;
-          display: block;
-          float: left;
+          width: 24%;
           margin: 0;
           a,
           .step_item_count,
           .step_item_title {
             width: 100%;
             text-decoration: none;
-          //}
-          //.step_item_title,
-          //.step_item_count {
             display: block;
           }
           .step_item_count {
@@ -55,25 +49,28 @@ body.section-migration-assurance-policy {
             color: #12293a;
             text-transform: uppercase;
           }
-          a:after {
-            content: "";
-            border-bottom: 1px solid #DBDBDB;
-            width: 20px;
-            display: inline-block;
+          a {
+            border: none;
+            :after {
+              content: "";
+              border-bottom: 1px solid #DBDBDB;
+              width: 20px;
+              display: inline-block;
+            }
           }
         }
       }
       .step_footer {
-        background: rgba(#eee, 0.6);
+        //background: rgba(#eee, 0.6);
         display: block;
         margin-top: 1em;
-        padding: 2em 0 1.4em 0;
+        padding: 3em 0 1.4em 0;
         border: none;
+        color: #12293a;
       }
     }
     .circle-section {
       margin-top: 1.4em;
-      //width: 25%;
       float: left;
       border: 9px solid #DFDFDF;
       border-top-color: #D1D3D5;
@@ -126,12 +123,20 @@ body.section-migration-assurance-policy {
       list-style: none;
       margin: 0;
       padding: 0;
-      li a {
-        text-decoration: none;
-        &:hover,
-        &:active,
-        &:focus {
-          text-decoration: underline;
+      li {
+        margin-bottom: 0.8em;
+        a {
+          border: none;
+          display: inline-block;
+          &:hover,
+          &:active,
+          &:focus {
+            border-bottom: 1px solid currentColor;
+          }
+          svg {
+           position: relative;
+           top: -2px;
+          }
         }
       }
     }

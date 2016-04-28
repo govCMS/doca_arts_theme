@@ -104,11 +104,10 @@
   </div>
 
   <?php if (theme_get_setting('feedback_enabled') == 1): ?>
-    <!-- WEB-4 JZ Start -->
     <div class="site-feedback-block" id="site-feedback-block">
       <div class="site-feedback-block__inner">
         <div class="site-feedback-block__content">
-          <p><?php print theme_get_setting('feedback_text_init'); ?></p>
+          <p><?php print check_plain(theme_get_setting('feedback_text_init')); ?></p>
         </div>
         <div class="site-feedback-block__simple">
           <a href="#" class="site-feedback-action" data-option="1">Yes</a>
@@ -122,17 +121,14 @@
         <?php print render($site_pages_feedback_form); ?>
       </div>
     </div>
-    <!-- WEB-4 JZ End -->
   <?php endif; ?>
 
   <?php if (theme_get_setting('external_link_enable_popup') == 1): ?>
   <!-- External link popup window -->
   <div id="external-link-popup-content" class="external-link-popup mfp-hide">
-    <h2>Goodbye</h2>
+    <h2><?php print check_plain(theme_get_setting('external_link_popup_title')); ?></h2>
     <div class="external-link-popup__content">
-      <?php
-        print theme_get_setting('external_link_popup_text');
-      ?>
+      <?php print filter_xss_admin(theme_get_setting('external_link_popup_text')); ?>
       <div>
         <ul>
           <li><a href="#" id="external-link-action-cancel">Cancel</a></li>

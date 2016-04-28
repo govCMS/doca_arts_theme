@@ -30,7 +30,8 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
     '#title' => t('Theme settings'),
     '#group' => 'group_tabs',
   );
-  // Page top announcements
+
+  // Page top announcements.
   $form['page_top_announcement'] = array(
     '#type' => 'fieldset',
     '#title' => t('Announcements to appear at the top of selected pages'),
@@ -47,36 +48,19 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
     '#default_value' => theme_get_setting('page_top_announcement_paths'),
     '#description' => t('Internal paths where the announcements are displayed. Enter one path per line.'),
   );
-  // Cookie message
+  // Cookie message.
   $form['cookie_textarea'] = array(
     '#type' => 'textarea',
     '#title' => t('Cookie Message'),
     '#default_value' => theme_get_setting('cookie_textarea'),
     '#description' => t("This is the message that will appear in the cookie notification at the top of your site."),
   );
-  // RSS author
+  // RSS author.
   $form['rss_author'] = array(
     '#type' => 'textfield',
     '#title' => t('RSS Author'),
     '#default_value' => theme_get_setting('rss_author'),
     '#description' => t('Set author name to appear in the dc:creator field in RSS feeds.'),
-  );
-  // External link popup controls
-  $form['external_link_popup'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('External link popup'),
-  );
-  $form['external_link_popup']['external_link_enable_popup'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable external link popup'),
-    '#default_value' => theme_get_setting('external_link_enable_popup'),
-    '#description' => t('Display a popup modal window when an external link is clicked.'),
-  );
-  $form['external_link_popup']['external_link_popup_text'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Text in the popup window'),
-    '#default_value' => theme_get_setting('external_link_popup_text'),
-    '#description' => t('Text to be display in the external link popup.'),
   );
 
   foreach ($form as $k => $v) {
@@ -89,6 +73,33 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
       unset($form[$k]);
     }
   }
+
+  // External link popup controls.
+  $form['external_link_popup'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('External link popup'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#group' => 'group_tabs',
+  );
+  $form['external_link_popup']['external_link_enable_popup'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable external link popup'),
+    '#default_value' => theme_get_setting('external_link_enable_popup'),
+    '#description' => t('Display a popup modal window when an external link is clicked.'),
+  );
+  $form['external_link_popup']['external_link_popup_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title text in the popup window'),
+    '#default_value' => theme_get_setting('external_link_popup_title'),
+    '#description' => t('Title text to be display in the external link popup.'),
+  );
+  $form['external_link_popup']['external_link_popup_text'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Text in the popup window'),
+    '#default_value' => theme_get_setting('external_link_popup_text'),
+    '#description' => t('Text to be display in the external link popup.'),
+  );
 
   // Site pages feedback settings.
   $form['feedback'] = array(
@@ -122,13 +133,13 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
     '#description' => t('Do not change it as this is for internal reference.'),
   );
   $form['feedback']['container']['feedback_text_init'] = array(
-    '#type' => 'textarea',
+    '#type' => 'textfield',
     '#title' => t('The initial feedback form text'),
     '#default_value' => empty(theme_get_setting('feedback_text_init')) ? t('Was this page helpful?') : theme_get_setting('feedback_text_init'),
     '#description' => t('The initial feedback form text.'),
   );
   $form['feedback']['container']['feedback_text_ok'] = array(
-    '#type' => 'textarea',
+    '#type' => 'textfield',
     '#title' => t('Thank you message text'),
     '#default_value' => empty(theme_get_setting('feedback_text_ok')) ? t('Thanks for your feedback') : theme_get_setting('feedback_text_ok'),
     '#description' => t('Thank you message text.'),

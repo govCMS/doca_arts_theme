@@ -40,7 +40,9 @@
         Response callback.
          */
         sendResponse = function() {
-          return $('.site-feedback-block__inner', context).text(settings.sitePagesFeedback['text_ok']);
+          $(".site-feedback-block__inner .main", context).fadeOut("slow", function() {
+            $(".site-feedback-block__inner .message", context).fadeIn();
+          });
         };
 
         /*

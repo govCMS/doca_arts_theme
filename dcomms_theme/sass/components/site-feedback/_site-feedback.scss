@@ -24,13 +24,28 @@
   }
 
   &__inner {
-    @extend %layout-max;
-    @include display-flex;
-    align-items: center;
-    padding: 1rem;
-    > * {
-      // Invalidated by flexbox parent on newer browsers
-      float: left;
+    .main {
+      @extend %layout-max;
+      @include display-flex;
+      align-items: center;
+      padding: 1rem;
+      > * {
+        // Invalidated by flexbox parent on newer browsers
+        float: left;
+      }
+    }
+    .message {
+      @extend %layout-max;
+      @include display-flex;
+      align-items: center;
+      padding: 1rem;
+      .svg-icon {
+        padding-right: 1rem;
+        circle {
+          stroke: #ffffff;
+          stroke-width: 1;
+        }
+      }
     }
   }
 
@@ -100,7 +115,6 @@
     &__simple {
       margin-left: 4rem;
     }
-
     a {
       margin: 0 0.8rem;
     }

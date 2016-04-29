@@ -106,13 +106,18 @@
   <?php if (theme_get_setting('feedback_enabled') == 1): ?>
     <div class="site-feedback-block" id="site-feedback-block">
       <div class="site-feedback-block__inner">
-        <div class="site-feedback-block__content">
-          <p><?php print check_plain(theme_get_setting('feedback_text_init')); ?></p>
+        <div class="main">
+          <div class="site-feedback-block__content">
+            <p><?php print check_plain(theme_get_setting('feedback_text_init')); ?></p>
+          </div>
+          <div class="site-feedback-block__simple">
+            <a href="#" class="site-feedback-action" data-option="1">Yes</a>
+            <span class="divider">/</span>
+            <a href="#" class="site-feedback-action" data-mfp-src="#site-feedback-form" data-option="0">No</a>
+          </div>
         </div>
-        <div class="site-feedback-block__simple">
-          <a href="#" class="site-feedback-action" data-option="1">Yes</a>
-          <span class="divider">/</span>
-          <a href="#" class="site-feedback-action" data-mfp-src="#site-feedback-form" data-option="0">No</a>
+        <div class="message" style="display: none;">
+          <?php print theme_get_setting('feedback_text_ok'); ?>
         </div>
       </div>
     </div>

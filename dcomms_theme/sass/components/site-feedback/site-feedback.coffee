@@ -31,7 +31,11 @@ Drupal = @Drupal
       Response callback.
       ###
       sendResponse = ->
-        $('.site-feedback-block__inner', context).text(settings.sitePagesFeedback['text_ok'])
+        $(".site-feedback-block__inner .main", context).fadeOut("slow", ->
+          $(".site-feedback-block__inner .message", context).fadeIn()
+          return
+        )
+        return
 
       ###
       Open Popup window.

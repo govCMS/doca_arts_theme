@@ -139,7 +139,7 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
     '#description' => t('The initial feedback form text.'),
   );
   $form['feedback']['container']['feedback_text_ok'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t('Thank you message text'),
     '#default_value' => empty(theme_get_setting('feedback_text_ok')) ? t('Thanks for your feedback') : theme_get_setting('feedback_text_ok'),
     '#description' => t('Thank you message text.'),

@@ -87,6 +87,12 @@
       }
     }
   }
+  p {
+    margin: 0;
+  }
+  .messages {
+    margin: 2rem 1rem 0 1rem;
+  }
   .webform-component--site-feedback-page-url {
     display: none;
     visibility: hidden;
@@ -129,6 +135,9 @@
   }
   .site-feedback-form {
     .webform-client-form {
+      input[type="text"] {
+        width: 100%;
+      }
       input[type="tel"], input[type="email"] {
         min-width: 200px;
         width: 260px;
@@ -139,6 +148,14 @@
       .webform-component-phone {
         float:right;
       }
+    }
+  }
+}
+
+@media (min-width: 960px) {
+  .site-feedback-form {
+    .webform-client-form {
+      padding: 2rem 1rem;
     }
   }
 }

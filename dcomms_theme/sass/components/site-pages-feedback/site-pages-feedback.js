@@ -90,7 +90,7 @@
         $(".site-feedback-action", context).click(function(e) {
           var option, ref2;
           e.preventDefault();
-          option = (ref2 = $(this).data('option')) != null ? ref2 : 0;
+          option = (ref2 = $(this).data('spf-option')) != null ? ref2 : 0;
           setData('option', option);
           sendData();
         });
@@ -100,4 +100,4 @@
 
 }).call(this);
 
-//# sourceMappingURL=site-feedback.js.map
+//# sourceMappingURL=site-pages-feedback.js.map

@@ -79,7 +79,7 @@ Drupal = @Drupal
       ###
       $(".site-feedback-action", context).click (e)->
         e.preventDefault()
-        option = $(this).data('option') ? 0
+        option = $(this).data('spf-option') ? 0
         setData('option', option)
         sendData()
         return

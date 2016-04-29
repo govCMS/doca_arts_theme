@@ -111,9 +111,9 @@
             <p><?php print check_plain(theme_get_setting('feedback_text_init')); ?></p>
           </div>
           <div class="site-feedback-block__simple">
-            <a href="#" class="site-feedback-action" data-option="1">Yes</a>
+            <a href="#" class="site-feedback-action" data-spf-option="1">Yes</a>
             <span class="divider">/</span>
-            <a href="#" class="site-feedback-action" data-mfp-src="#site-feedback-form" data-option="0">No</a>
+            <a href="#" class="site-feedback-action" data-mfp-src="#site-feedback-form" data-spf-option="0">No</a>
           </div>
         </div>
         <div class="message" style="display: none;">

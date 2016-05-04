@@ -360,6 +360,16 @@ svg:not(:root) {
   overflow: hidden;
 }
 
+// Remove padding from bottom menu in IE 11
+div.migration-assurance-menu {
+  .field-name-field-migration-assurance-menu {
+    .steps-section {  // 1,2,3,4 Section
+      .step_footer {
+        padding: 0.4em 0 1.4em 0;
+      }
+    }
+  }
+}
 
 /* Forms
    ========================================================================== */

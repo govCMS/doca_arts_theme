@@ -1,6 +1,6 @@
 // Tim Hurely
 
-body.section-migration-assurance-policy {
+div.migration-assurance-menu {
 
   // SVG images in corner of blue cards
   .featured__grid-container .featured-palette {
@@ -49,6 +49,7 @@ body.section-migration-assurance-policy {
             font-size: 110%;
             color: #12293a;
             text-transform: uppercase;
+            min-height: 3em;
           }
           a {
             border: none;
@@ -61,7 +62,10 @@ body.section-migration-assurance-policy {
             &:hover,
             &:active,
             &:focus {
-              border-bottom: 1px solid currentColor;
+              text-decoration: none;
+              &:after {
+                border-bottom: 1px solid #007ABB;
+              }
             }
           }
         }
@@ -72,6 +76,7 @@ body.section-migration-assurance-policy {
         padding: 3em 0 1.4em 0;
         border: none;
         color: #12293a;
+        border-bottom: 1px solid transparent;
         &:hover,
         &:active,
         &:focus {
@@ -92,10 +97,20 @@ body.section-migration-assurance-policy {
       margin-left: 6%;
       span {
         transform: rotate(-80deg);
+        color: #12293a;
         top: 55px;
         text-align: center;
         display: block;
         position: relative;
+      }
+      &:hover,
+      &:active,
+      &:focus {
+        text-decoration: underline;
+        border-top-color: #ABB1B5;
+        border-left-color: #ABB1B5;
+        border-bottom-color: #efefef;
+        border-right-color: #efefef;
       }
     }
     // greyscale logos
@@ -139,6 +154,7 @@ body.section-migration-assurance-policy {
         a {
           border: none;
           display: inline-block;
+          border-bottom: 1px solid transparent;
           &:hover,
           &:active,
           &:focus {
@@ -169,34 +185,45 @@ body.section-migration-assurance-policy {
 
 // Responsive styles
 @media (max-width: 850px) {
-  .inline-logo-list {
-    h3 {
-      float: none;
-    }
-  }
-
-  .field-name-field-migration-assurance-menu {
+  div.migration-assurance-menu .field-name-field-migration-assurance-menu {
     background-color: #D7D7D7;
+    .inline-logo-list {
+      h3 {
+        float: none;
+      }
+    }
     .steps-section-wrapper {
-      margin-bottom: 5em;
+      margin-bottom: 3em;
       float: left;
       width: 100%;
     }
     .steps-section {  // 1,2,3,4 Section
       background: #EAEAEA;
+      width: 100%;
+      margin-bottom: 2.5em;
       .steps_item_list {  // <ul>
+        width: 100%;
         li {
           width: 50%;
           a {
             margin-bottom: 1em;
+            .step_item_title {
+              min-height: 5em;
+            }
           }
         }
       }
       .step_footer {
         border-top: 1px solid #D7D7D7;
+        padding-top: 1.5em;
         margin-top: 4em;
         background: rgba(#eee, 0.6);
       }
+    }
+    .circle-section {
+      margin: 0 auto;
+      float: none;
+      clear: both;
     }
   }
 }

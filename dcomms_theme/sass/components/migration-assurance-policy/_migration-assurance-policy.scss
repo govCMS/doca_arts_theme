@@ -47,9 +47,12 @@ div.migration-assurance-menu {
           }
           .step_item_title {
             font-size: 110%;
-            color: #12293a;
             text-transform: uppercase;
             min-height: 3em;
+            //color: #12293a;
+            // make 'bold' (400), revert to above colour if changing back to slimmer font weight
+            color: #3D4F5D;
+            font-weight: 400;
           }
           a {
             border: none;

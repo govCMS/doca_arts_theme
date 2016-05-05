@@ -95,6 +95,7 @@ div.migration-assurance-menu {
       width: 150px;
       height: 150px;
       margin-left: 6%;
+      transition: all 0.7s;
       span {
         transform: rotate(-80deg);
         color: #12293a;
@@ -113,7 +114,7 @@ div.migration-assurance-menu {
         border-right-color: #efefef;
       }
     }
-    // greyscale logos
+    // greyscale logos ...unless you're IE11 :/
     .inline-logo-list {
       clear: both;
       h3 {

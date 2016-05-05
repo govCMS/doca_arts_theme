@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Contains the theme's functions to manipulate Drupal's default markup.
@@ -33,6 +34,13 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
   // Add pathToTheme to Drupal.settings in JS.
   drupal_add_js('jQuery.extend(Drupal.settings, { "pathToTheme": "' . path_to_theme() . '" });', 'inline');
 
+  // Site pages feedback.
+  if (theme_get_setting('feedback_enabled')) {
+    $wf_nid = theme_get_setting('feedback_wform_nid');
+    drupal_add_js(array('sitePagesFeedback' => array('nid' => $wf_nid)), 'setting');
+    $variables['site_pages_feedback_form'] = _dcomms_theme_webform_render($wf_nid);
+  }
+
   // Create template variables for the header menu block.
   $variables['header_search'] = _dcomms_theme_block_render('search', 'form');
   $variables['header_menu'] = _dcomms_theme_block_render('system', 'main-menu');
@@ -52,6 +60,17 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
   if (array_search('page__consultations__iframe_portrait', $variables['theme_hook_suggestions']) || array_search('page__consultations__iframe_landscape', $variables['theme_hook_suggestions'])) {
     // Extend the theme hook suggestions to include a stripped page.
     $variables['theme_hook_suggestions'][] = 'page__stripped';
+  }
+
+  // Define page top announcement variable
+  $page_top_announcement_paths = drupal_strtolower(theme_get_setting('page_top_announcement_paths'));
+  $current_path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+  $page_match = drupal_match_path($current_path, $page_top_announcement_paths);
+  if ($current_path != $_GET['q']) {
+    $page_match = $page_match || drupal_match_path($_GET['q'], $page_top_announcement_paths);
+  }
+  if ($page_match) {
+    $variables['top_announcements'] = theme_get_setting('page_top_announcement_messages');
   }
 }
 
@@ -78,6 +97,7 @@ WHERE
   n.status = 1 AND
   n.type = 'page'
 ORDER BY ml.weight";
+
   return db_query($sql, array(
     ':menu_name' => $item['menu_name'],
     ':plid' => $item['mlid'],
@@ -397,8 +417,17 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   }
 
   // Variables for optional display of child links grid, 'on this page', suggested content.
-  if (in_array($variables['type'], array('alert', 'bcr_data', 'blog_article', 'consultation', 'news_article', 'policy', 'page'))
-      && $variables['view_mode'] == 'full') {
+  if (in_array($variables['type'], array(
+      'alert',
+      'bcr_data',
+      'blog_article',
+      'consultation',
+      'news_article',
+      'policy',
+      'page',
+    ))
+    && $variables['view_mode'] == 'full'
+  ) {
     $wrapped_entity = entity_metadata_wrapper('node', $variables['node']);
     if ($variables['type'] == 'page') {
       $hide_child_pages = $variables['hide_child_pages'] = $wrapped_entity->field_hide_child_pages->value();
@@ -488,7 +517,7 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     if (isset($variables['field_priority_level']) && count($variables['field_priority_level'])) {
       $priority_level = $variables['field_priority_level'][LANGUAGE_NONE][0]['tid'];
       if ($priority_level = taxonomy_term_load($priority_level)) {
-        $variables['classes_array'][] = 'alert-priority-'.strtolower(trim($priority_level->name));
+        $variables['classes_array'][] = 'alert-priority-' . strtolower(trim($priority_level->name));
         $variables['alert_priority'] = $priority_level->name;
       }
     }
@@ -559,6 +588,7 @@ function dcomms_theme_read_more_link($href, $text, $external = FALSE) {
   if (substr($href, 0, 4) != 'http' && substr($href, 0, 1) != '/') {
     $href = base_path() . $href;
   }
+
   return theme_render_template($template_file, array(
     'href' => $href,
     'text' => $text,
@@ -611,6 +641,7 @@ function _dcomms_theme_block_render($module, $delta) {
     $block_array = _block_get_renderable_array($block_content);
     $output = drupal_render($block_array);
   }
+
   return $output;
 }
 
@@ -624,7 +655,7 @@ function dcomms_theme_menu_tree__main_menu($variables) {
   }
   else {
     // Otherwise it's the system menu.
-    $output  = '<ul class="header-menu__menu">';
+    $output = '<ul class="header-menu__menu">';
     $output .= $variables['tree'];
 
     // Include the search link.
@@ -634,6 +665,7 @@ function dcomms_theme_menu_tree__main_menu($variables) {
 
     $output .= '</ul>';
   }
+
   return $output;
 }
 
@@ -664,6 +696,7 @@ function dcomms_theme_menu_link__main_menu(array $variables) {
   $element['#localized_options']['html'] = TRUE;
 
   $output = l(check_plain($element['#title']), $element['#href'], $element['#localized_options']);
+
   return '<li class="' . $item_class . '">' . $output . "</li>\n";
 }
 
@@ -695,6 +728,7 @@ function dcomms_theme_menu_link__menu_footer_menu(array $variables) {
   $element['#localized_options']['html'] = TRUE;
 
   $output = l(check_plain($element['#title']), $element['#href'], $element['#localized_options']);
+
   return '<li class="' . $item_class . '">' . $output . $sub_menu . "</li>\n";
 }
 
@@ -718,6 +752,7 @@ function dcomms_theme_menu_link__menu_footer_sub_menu(array $variables) {
   $element['#localized_options']['attributes']['class'][] = 'footer_menu__link';
   $element['#localized_options']['html'] = TRUE;
   $output = l(check_plain($element['#title']), $element['#href'], $element['#localized_options']);
+
   return '<li class="footer-menu__item">' . $output . $sub_menu . "</li>\n";
 }
 
@@ -730,6 +765,7 @@ function dcomms_theme_file_icon($variables) {
 
   $mime = check_plain($file->filemime);
   $icon_url = file_icon_path($file, $icon_directory);
+
   return '<img alt="" class="file__icon" src="' . base_path() . $icon_url . '" title="' . $mime . '" />';
 }
 
@@ -1015,7 +1051,7 @@ function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$var
       if (isset($variables['field_priority_level']) && count($variables['field_priority_level'])) {
         $priority_level = $variables['field_priority_level'][LANGUAGE_NONE][0]['tid'];
         if ($priority_level = taxonomy_term_load($priority_level)) {
-          $variables['classes_array'][] = 'alert-priority-'.strtolower(trim($priority_level->name));
+          $variables['classes_array'][] = 'alert-priority-' . strtolower(trim($priority_level->name));
           $variables['alert_priority'] = $priority_level->name;
         }
       }
@@ -1100,6 +1136,7 @@ function _consultation_days_remain($consultation) {
   else {
     $days_remain = round(($consultation['end'] - time()) / strtotime('1 day', 0));
   }
+
   return $days_remain;
 }
 
@@ -1155,6 +1192,7 @@ function _consultation_is_archived($consultation) {
   if (isset($outcomes_posted_date)) {
     $archived_date = $outcomes_posted_date + strtotime('6 months', 0);
     $is_archived = ($consultation['now'] > $archived_date);
+
     return $is_archived;
   }
 }
@@ -1166,6 +1204,7 @@ function _consultation_percentage($consultation) {
   $time_until_it_starts = ($consultation['now'] - $consultation['start']);
   $percentage = $time_until_it_starts / $consultation['duration'] * 100;
   $percentage = max(0, min(100, $percentage));
+
   return $percentage;
 }
 
@@ -1270,6 +1309,7 @@ function dcomms_theme_item_list($variables) {
     }
     $output .= "</$type>";
   }
+
   return $output;
 }
 
@@ -1382,7 +1422,7 @@ function dcomms_theme_pager($variables) {
               'element' => $element,
               'interval' => ($i - $pager_current),
               'parameters' => $parameters,
-              )),
+            )),
           );
         }
       }
@@ -1409,9 +1449,9 @@ function dcomms_theme_pager($variables) {
 
     $output = '<div class="pager__wrapper">';
     $output .= '<h2 class="element-invisible">' . t('Pages') . '</h2>' . theme('item_list', array(
-      'items' => $items,
-      'attributes' => array('class' => array('pager')),
-    ));
+        'items' => $items,
+        'attributes' => array('class' => array('pager')),
+      ));
     $output .= "</div>";
 
     return $output;
@@ -1420,6 +1460,7 @@ function dcomms_theme_pager($variables) {
 
 /**
  * Implements hook_node_view
+ *
  * @param $node
  * @param $view_mode
  * @param $langcode
@@ -1432,9 +1473,24 @@ function dcomms_theme_node_view_alter(&$build) {
       if ($priority_level = taxonomy_term_load($priority_level)) {
         $node->title = t('Alert Priority !priority: !title', array(
           '!priority' => $priority_level->name,
-          '!title'    => $node->title,
+          '!title' => $node->title,
         ));
       }
     }
   }
 }
+
+/**
+ * Clear any previously set element_info() static cache.
+ *
+ * If element_info() was invoked before the theme was fully initialized, this
+ * can cause the theme's alter hook to not be invoked.
+ *
+ * @see https://www.drupal.org/node/2351731
+ */
+drupal_static_reset('element_info');
+
+/**
+ * Include alter functions.
+ */
+include_once dirname(__FILE__) . '/includes/alter.inc';

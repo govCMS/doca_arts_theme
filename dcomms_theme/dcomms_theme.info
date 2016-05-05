@@ -57,6 +57,7 @@ stylesheets[all][] = horizontal-tabs.css
 stylesheets[all][] = panels.css
 
 ; Then we add our own stylesheet.
+stylesheets[all][] = css/bower-components.css
 stylesheets[all][] = css/styles.css
 stylesheets[all][] = css/tablesaw.css
 stylesheets[all][] = libraries/gray/css/gray.min.css
@@ -75,10 +76,10 @@ stylesheets[all][] = libraries/gray/css/gray.min.css
 
 scripts[] = js/horizontal-tabs.js
 scripts[] = js/modernizr.min.js
-scripts[] = js/bower-components.min.js
-scripts[] = js/components.min.js
 scripts[] = js/script.js
 scripts[] = js/jquery-1.11.3.min.js
+scripts[] = js/bower-components.min.js
+scripts[] = js/components.min.js
 scripts[] = js/tablesaw.js
 scripts[] = js/jquery-noconflict.js
 

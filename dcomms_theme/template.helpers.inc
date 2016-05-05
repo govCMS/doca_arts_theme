@@ -110,7 +110,7 @@ function _dcomms_admin_return_user_has_role($roles = array()) {
       'publisher',
       'site builder',
       'site editor',
-      'administrator'
+      'administrator',
     );
   }
 
@@ -146,4 +146,14 @@ function _dcomms_admin_return_end_consultation_date($node, $wrapper) {
   }
 
   return $consultation_date_end;
+}
+
+/**
+ * Render webform.
+ */
+function _dcomms_theme_webform_render($nid = NULL) {
+  $wnode = node_load($nid);
+  $form = drupal_get_form('webform_client_form_' . $nid, $wnode, array());
+
+  return render($form);
 }

@@ -20,6 +20,9 @@
     "sticky-kit": "git@github.com:rcaracaus/sticky-kit.git#ebd29306509ad6c932e588833058cc9aa8ed65dc",
     "tablesaw": "~1.0.4"
   },
+  "dependencies": {
+    "magnific-popup": "git@github.com:dimsemenov/Magnific-Popup.git#^1.1.0"
+  },
   "overrides": {
     "customize-twitter-1.1": {
       "main": "customize-twitter-1.1.min.js"
@@ -30,10 +33,13 @@
     "sticky-kit": {
       "main": "jquery.sticky-kit.js"
     },
-    "jquery": {
-      "ignore": true
+    "magnific-popup": {
+      "main": "dist/jquery.magnific-popup.min.js"
     },
     "tablesaw": {
+      "ignore": true
+    },
+    "jquery": {
       "ignore": true
     }
   }

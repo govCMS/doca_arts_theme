@@ -21,12 +21,12 @@ div.migration-assurance-menu {
       float: left;
       width: 100%;
     }
-    .steps-section {  // 1,2,3,4 Section
+    .steps-section { // 1,2,3,4 Section
       text-align: center;
       width: 75%;
       float: left;
       @include background-image('bg--online-publication.svg');
-      .steps_item_list {  // <ul>
+      .steps_item_list { // <ul>
         li {
           width: 24%;
           margin: 0;
@@ -165,8 +165,10 @@ div.migration-assurance-menu {
             border-bottom: 1px solid currentColor;
           }
           svg {
-           position: relative;
-           top: -2px;
+            position: relative;
+            top: -2px;
+            width: 10px;
+            height: 15px;
           }
         }
       }
@@ -178,14 +180,6 @@ div.migration-assurance-menu {
   }
 
 }
-
-
-
-
-
-
-
-
 
 // Responsive styles
 @media (max-width: 850px) {
@@ -201,11 +195,11 @@ div.migration-assurance-menu {
       float: left;
       width: 100%;
     }
-    .steps-section {  // 1,2,3,4 Section
+    .steps-section { // 1,2,3,4 Section
       background: #EAEAEA;
       width: 100%;
       margin-bottom: 2.5em;
-      .steps_item_list {  // <ul>
+      .steps_item_list { // <ul>
         width: 100%;
         li {
           width: 50%;

@@ -2,7 +2,7 @@
 .inline-logo-list-pillar-link {
     h3 {
         float: left;
-        margin-top: 1.9em;
+        margin-top: 1.5em;
         font-size: 110%;  
     }
     ul {
@@ -15,15 +15,16 @@
         border-bottom:0px white !important;
     }
     img {
-        height:100px !important; 
+        height:80px !important; 
         max-width:auto;
         float:left;
     }
     span{
-        width: 5em;
+        
         display: inline-block;
         line-height:normal;
-        margin-top: 32px;
+        vertical-align: middle;
+        margin-top: 19px;
         color: black;
         font-size: 11px;
     }

@@ -10,3 +10,4 @@
 .sass-cache
 .DS_Store
 .idea
+/dcomms_theme/.netbeans.xml

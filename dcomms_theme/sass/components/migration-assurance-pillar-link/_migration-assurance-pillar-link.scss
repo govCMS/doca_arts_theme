@@ -7,6 +7,8 @@
     }
     ul {
         margin-top: 0;
+        white-space: nowrap;
+        max-width: 190px;
     }
     li:hover{
         border-bottom: 1px solid #DBDBDB;

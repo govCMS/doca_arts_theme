@@ -63,7 +63,7 @@
   <?php endif; ?>
 
   <?php if ($exposed): ?>
-    <div class="view-filters">
+    <div class="view-filters" style="position: absolute;">
       <?php print $exposed; ?>
     </div>
   <?php endif; ?>
@@ -75,7 +75,7 @@
   <?php endif; ?>
 
   <?php if ($rows): ?>
-    <div class="view-count">
+    <div class="view-count" style="margin-top: 240px;">
       <p class="font__small">
         <?php echo t('Showing !count of !total results, most relevant first.', array('!count' => count($view->result), '!total' => $view->total_rows)); ?>
       </p>

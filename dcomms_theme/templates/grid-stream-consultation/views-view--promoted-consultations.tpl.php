@@ -54,6 +54,10 @@
 
     <?php if ($more): ?>
       <?php print $more; ?>
+    <?php else: ?>
+        <div class="spacer--bottom">
+            <?php print dcomms_theme_read_more_link('/have-your-say', t('View all consultations')); ?>
+        </div>
     <?php endif; ?>
 
     <?php if ($footer): ?>

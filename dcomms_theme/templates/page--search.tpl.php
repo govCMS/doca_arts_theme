@@ -96,30 +96,22 @@
       <?php if ($action_links): ?>
         <ul class="action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
-
-      <?php if (!empty($page['sidebar_right'])): ?>
       <div class="layout-max">
-        <section class="layout-sidebar__main">
-          <?php print render($page['content']); ?>
-        </section>
-        <aside class="layout-sidebar__sidebar" role="complementary">
-          <?php print render($page['sidebar_right']); ?>
-        </aside>  <!-- /#sidebar-second -->
+         <section class="layout-sidebar__main">
+           <?php print render($page['content']); ?>
+         </section>
+        <?php if (!empty($page['sidebar_right'])): ?>
+          <aside class="layout-sidebar__sidebar" role="complementary" style="margin-top: 280px;">
+            <?php print render($page['sidebar_right']); ?>
+          </aside>  <!-- /#sidebar-second -->
+        <?php endif; ?>
       </div>
-      <?php else: ?>
-        <?php print render($page['content']); ?>
-      <?php endif; ?>
 
+      <!--<a href="#skip-link" class="link-top">Back to top</a>-->
       <?php print $feed_icons; ?>
     </div>
 
   </div>
-
-  <?php if (!empty($page['sidebar_right'])): ?>
-    <aside class="col-sm-3" role="complementary">
-      <?php print render($page['sidebar_right']); ?>
-    </aside>  <!-- /#sidebar-second -->
-  <?php endif; ?>
 
   <?php if (theme_get_setting('feedback_enabled') == 1): ?>
     <div class="site-feedback-block" id="site-feedback-block">

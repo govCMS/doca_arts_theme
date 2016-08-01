@@ -102,6 +102,7 @@ scripts[] = js/jquery-noconflict.js
 regions[highlighted]    = Highlighted
 regions[help]           = Help
 regions[content]        = Content
+regions[sidebar_right]  = Sidebar right
 regions[footer_top]     = Footer top
 regions[footer_bottom]  = Footer bottom
 

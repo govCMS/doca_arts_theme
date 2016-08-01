@@ -1,14 +1,19 @@
-// Doug Courtney
+ // Doug Courtney
 .inline-logo-list-pillar-link {
     h3 {
         float: left;
-        margin-top: 1.5em;
+        margin-top: 1.5em;  
         font-size: 110%;  
     }
     ul {
         margin-top: 0;
-        white-space: nowrap;
-        max-width: 190px;
+        text-align: center;
+        display: list-item;
+        li{
+            margin:0;
+            width: 11em !important;
+        }
+        
     }
     li:hover{
         border-bottom: 1px solid #DBDBDB;
@@ -36,3 +41,19 @@
 
 
 }
+@media (max-width: 850px) {
+ .inline-logo-list-pillar-link {
+    h3 {
+        float: none;
+      }
+      ul{
+         text-align: center;
+         display: list-item;
+      }
+    }
+  }
+  @media (max-width: 720px) {
+ .inline-logo-list-pillar-link {
+     text-align: center;
+    }
+  }

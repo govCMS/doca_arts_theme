@@ -7,8 +7,8 @@
     }
     ul {
         margin-top: 0;
-        text-align: center;
-        display: list-item;
+        text-align: left;
+        display:table;        
         li{
             margin:0;
             width: 11em !important;
@@ -20,6 +20,7 @@
     }
     a {
         font-size:xx-small; 
+        text-align: left;
         width:8em;
         word-wrap: break-word;
         border-bottom:0px white !important;
@@ -48,12 +49,28 @@
       }
       ul{
          text-align: center;
-         display: list-item;
+         display:table;
+         li{
+             float:left;
+             text-align: left;
+         }
       }
     }
   }
   @media (max-width: 720px) {
  .inline-logo-list-pillar-link {
-     text-align: center;
-    }
+    h3 {
+        text-align:center;
+      }
+      ul{
+         margin: 0;
+         
+         
+         li{
+             display:inline-block;
+             float:none !important;
+             text-align: left;
+         }
+        }
+  }
   }

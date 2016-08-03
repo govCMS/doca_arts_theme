@@ -222,7 +222,8 @@ div.migration-assurance-menu {
       margin: 0 auto;
       float: none;
       clear: both;
-      border: none;
+      display:block;
+      border: inherit;
     }
   }
 }

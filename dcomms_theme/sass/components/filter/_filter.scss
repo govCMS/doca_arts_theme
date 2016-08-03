@@ -205,10 +205,10 @@ $button--yellow__palette: (
   .filter__left,
   .filter__right {
     border: none !important;
-    margin-bottom: none;
+    margin-bottom: 0;
     @include breakpoint($medium) {
       float: none;
-      margin-right: none;
+      margin-right: 0;
     }
   }
 

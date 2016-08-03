@@ -97,6 +97,12 @@
         <ul class="action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
       <div class="layout-max">
+        <div class="search-form-top">
+          <form action="#" method="get">
+            <input class="form-text" id="edit-search-api-views-fulltext" maxlength="128" name="search_api_views_fulltext" size="30" type="text" value="" placeholder="Search phone policies">
+            <input class="form-submit" id="edit-submit-full-site-search" name="" type="submit" value="Search">
+          </form>
+        </div>
          <section class="layout-sidebar__main">
            <?php print render($page['content']); ?>
          </section>

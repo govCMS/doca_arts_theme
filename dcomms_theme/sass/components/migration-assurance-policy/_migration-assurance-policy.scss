@@ -30,11 +30,11 @@ div.migration-assurance-menu {
         li {
           width: 24%;
           margin: 0;
-          display: inline-flex;
+          
           a,
           .step_item_count,
           .step_item_title {
-            width: 100%;
+            //width: 100%;
             text-decoration: none;
             display: block;
           }
@@ -75,11 +75,13 @@ div.migration-assurance-menu {
       }
       .step_footer {
         display: block;
-        margin-top: 1em;
-        padding: 3em 0 1.4em 0;
+        //margin-top: 1em;
+        //padding: 3em 0 1.4em 0;
         border: none;
         color: #12293a;
         border-bottom: 1px solid transparent;
+        background-color:#f0f0f0;
+        height:50px;
         &:hover,
         &:active,
         &:focus {

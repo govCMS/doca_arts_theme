@@ -4,8 +4,6 @@
  * Contains the theme's helper functions.
  */
 
-define("LATE_SUBMISSION_SALT", 'kj804-6FPBpmm4r');
-
 /*
  * Helper function: Return the 'External source' field value.
  */
@@ -71,7 +69,7 @@ function _dcomms_admin_accept_late_submission($node) {
  * Helper function: Return salted hash for a given node ID.
  */
 function _dcomms_admin_return_salted_hash($nid) {
-  return crc32(LATE_SUBMISSION_SALT + $nid);
+  return crc32(variable_get('dcomms_late_submission_salt') . $nid);
 }
 
 /**

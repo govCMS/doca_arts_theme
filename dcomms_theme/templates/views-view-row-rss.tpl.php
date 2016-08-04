@@ -16,7 +16,6 @@ if (!empty(theme_get_setting('rss_author'))) {
       if (!empty($rss_author_setting[1])) {
         $rss_author = check_plain($rss_author_setting[1]);
       }
-      var_dump($rss_author);
       break;
     }
   }

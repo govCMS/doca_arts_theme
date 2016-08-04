@@ -57,10 +57,12 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
   );
   // RSS author.
   $form['rss_author'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t('RSS Author'),
     '#default_value' => theme_get_setting('rss_author'),
-    '#description' => t('Set author name to appear in the dc:creator field in RSS feeds.'),
+    '#description' => t('Set author for each RSS feed. Enter one feed per line as <strong>path to feed,author name</strong> 
+            separated by a comma. For example: <strong>news/feed,The Media Team</strong>. If no value is provided, the site 
+            name will be used as the default author name.'),
   );
 
   foreach ($form as $k => $v) {

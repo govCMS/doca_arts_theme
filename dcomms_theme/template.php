@@ -1497,3 +1497,48 @@ drupal_static_reset('element_info');
  * Include alter functions.
  */
 include_once dirname(__FILE__) . '/includes/alter.inc';
+
+
+
+
+
+/**
+ * Returns HTML for an active facet item (in search)
+ *
+ * @param $variables
+ *   An associative array containing the keys 'text', 'path', and 'options'. See
+ *   the l() function for information about these variables.
+ *
+ * @see l()
+ *
+ * @ingroup themeable
+ */
+function dcomms_theme_facetapi_link_active($variables) {
+
+  // Sanitizes the link text if necessary.
+  $sanitize = empty($variables['options']['html']);
+  $link_text = ($sanitize) ? check_plain($variables['text']) : $variables['text'];
+
+  // Theme function variables fro accessible markup.
+  // @see http://drupal.org/node/1316580
+  $accessible_vars = array(
+    'text' => $variables['text'],
+    'active' => TRUE,
+  );
+
+  // Builds link, passes through t() which gives us the ability to change the
+  // position of the widget on a per-language basis.
+  $replacements = array(
+    '!facetapi_deactivate_widget' => theme('facetapi_deactivate_widget', $variables),
+    '!facetapi_accessible_markup' => theme('facetapi_accessible_markup', $accessible_vars),
+  );
+  $variables['text'] = t('!facetapi_deactivate_widget !facetapi_accessible_markup', $replacements);
+  $variables['options']['html'] = TRUE;
+  // return theme_link($variables) . $link_text;
+  return $link_text . '<a href="' . check_plain(url($variables['path'], $variables['options'])) . '"'
+         . drupal_attributes($variables['options']['attributes']) . '>'
+        //  . ($variables['options']['html'] ? $variables['text'] : check_plain($variables['text']))
+         . '    <img src="' . drupal_get_path('theme', 'dcomms_theme') . '/images/close.svg"'
+         . '         alt="Remove ' . $link_text . ' filter">'
+         . '</a>';
+}

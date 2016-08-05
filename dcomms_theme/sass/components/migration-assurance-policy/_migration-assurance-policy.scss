@@ -30,11 +30,12 @@ div.migration-assurance-menu {
         li {
           width: 24%;
           margin: 0;
-          display: inline-flex;
+          display: inline-table;
+         
           a,
           .step_item_count,
           .step_item_title {
-            width: 100%;
+            //width: 100%;
             text-decoration: none;
             display: block;
           }
@@ -75,8 +76,8 @@ div.migration-assurance-menu {
       }
       .step_footer {
         display: block;
-        margin-top: 1em;
-        padding: 3em 0 1.4em 0;
+        //margin-top: 1em;
+        //padding: 3em 0 1.4em 0;
         border: none;
         color: #12293a;
         border-bottom: 1px solid transparent;
@@ -84,6 +85,7 @@ div.migration-assurance-menu {
         &:active,
         &:focus {
           border-bottom: 1px solid currentColor;
+          border-bottom-width: 70%;
         }
       }
     }
@@ -181,6 +183,17 @@ div.migration-assurance-menu {
 
 }
 
+@media (max-width: 1100px) {
+.step_footer {
+background-color: none;
+}
+@media (max-width: 1050px) {
+.step_footer {
+background-color:#f0f0f0;
+}
+}
+
+}
 // Responsive styles
 @media (max-width: 850px) {
   div.migration-assurance-menu .field-name-field-migration-assurance-menu {
@@ -203,6 +216,7 @@ div.migration-assurance-menu {
         width: 100%;
         li {
           width: 50%;
+          display:inline-block;
           a {
             margin-bottom: 1em;
             .step_item_title {

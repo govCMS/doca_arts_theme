@@ -27,6 +27,16 @@ body.page-search {
             position: relative;
             margin-left: 0.2em;
           }
+          &:hover,
+          &:active,
+          &:focus {
+            img {
+              //filter:brightness(200%);  // 😒 existing '@function brightness($color)' kills this 😒
+              // similar result, just more complicated:
+              -webkit-filter: contrast(200%) saturate(200%) hue-rotate(315deg) opacity(80%) sepia(0.1);
+              filter: contrast(200%) saturate(200%) hue-rotate(315deg) opacity(80%) sepia(0.1);
+            }
+          }
         }
       }
     }

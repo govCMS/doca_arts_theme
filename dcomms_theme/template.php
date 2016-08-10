@@ -1538,7 +1538,7 @@ function dcomms_theme_facetapi_link_active($variables) {
   return $link_text . '<a href="' . check_plain(url($variables['path'], $variables['options'])) . '"'
          . drupal_attributes($variables['options']['attributes']) . '>'
         //  . ($variables['options']['html'] ? $variables['text'] : check_plain($variables['text']))
-         . '    <img src="' . drupal_get_path('theme', 'dcomms_theme') . '/images/close.svg"'
+         . '    <img src="' . drupal_get_path('theme', 'dcomms_theme') . '/images/close--blue.svg"'
          . '         alt="Remove ' . $link_text . ' filter">'
          . '</a>';
 }

@@ -8,6 +8,17 @@
   @extend %clearfix__overflow;
   @include background-image('bg--footer.svg', 50%);
   background-color: color(grey-off-white);
+  .bean-basic-content {
+    ul {
+      li {
+        padding: 1.5rem;
+        margin: 0.5rem;
+      }
+      li:first-child {
+        padding-left: 0;
+      }
+    }
+  }
 }
 
 .footer__border,
@@ -20,6 +31,7 @@
 .footer__heading,
 %footer__heading {
   @extend %font__medium;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0;
   color: color(dark);
 }

@@ -1,0 +1,61 @@
+// Footer
+//
+// Markup: footer.html
+//
+// Styleguide components.footer
+.footer__wrapper {
+  @extend %clearfix__overflow;
+  background-color: color(grey-off-white);
+}
+
+.footer__border, %footer__border {
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-color: color(grey-light);
+}
+
+.footer__heading, %footer__heading {
+  @extend %font__medium;
+  margin-bottom: 1rem;
+  color: color(dark);
+}
+
+.footer-bottom__wrapper, %footer-bottom__wrapper {
+  ul li {
+    margin: 0.5rem !important;
+  }
+  @include breakpoint($large) {
+    margin-bottom: 1rem;
+    ul {
+      li {
+        a {
+          div {
+            padding: 0 1.5rem;
+          }
+          &.underline-on-hover__never.link-external:after {
+            display: none;
+          }
+        }
+        &:first-child a div {
+          padding-left: 0;
+        }
+        &:last-child a div {
+          padding-right: 0;
+        }
+      }
+    }
+    ul:first-child {
+      margin-bottom: 3.25rem !important;
+    }
+  }
+  img {
+    vertical-align: middle;
+  }
+}
+
+img.iefix {
+  height: 0px;
+  width: 0px;
+  visibility: hidden;
+  display: block;
+}

@@ -147,26 +147,3 @@ function dcomms_theme_form_system_theme_settings_alter(&$form, $form_state) {
     '#description' => t('Thank you message text.'),
   );
 }
-
-/**
- * fetch webform list.
- */
-function _webform_list() {
-  $options = array();
-  $webform_types = webform_node_types();
-  if (empty($webform_types)) {
-    return $options;
-  }
-
-  $query = db_select('webform', 'w');
-  $query->innerJoin('node', 'n', 'n.nid = w.nid');
-  $query->fields('n', array('nid', 'title'));
-  $query->condition('n.type', $webform_types, 'IN');
-  $result = $query->execute();
-
-  foreach ($result as $node) {
-    $options[$node->nid] = check_plain($node->title);
-  }
-
-  return $options;
-}

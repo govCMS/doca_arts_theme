@@ -38,10 +38,10 @@
       }
 
       if ($('body.node-type-consultation').length) {
-        var webform_nid = Drupal.settings.doca_theme.webform_nid;
+        var webform_nid = Drupal.settings.doca_common.webform_nid;
       }
       else {
-        var webform_nid = Drupal.settings.doca_theme.fund_webform_nid;
+        var webform_nid = Drupal.settings.doca_common.fund_webform_nid;
       }
 
       $('#formal-submission-webform #webform-client-form-' + webform_nid + ' input[id*="remain-anonymous"]').change(function() {
@@ -77,17 +77,17 @@
 
   Drupal.behaviors.formalSubmissionValidation = {
     attach: function(context) {
-      var fileUploadsEnabled = Drupal.settings.doca_theme.fileUploadsEnabled;
-      var shortCommentsEnabled = Drupal.settings.doca_theme.shortCommentsEnabled;
+      var fileUploadsEnabled = Drupal.settings.doca_common.fileUploadsEnabled;
+      var shortCommentsEnabled = Drupal.settings.doca_common.shortCommentsEnabled;
       var message = 'It looks like you haven\'t added a submission. Please add a submission to have your say.';
       var shortCommentSelector = 'textarea[name$="[short_comments]"]';
       var firstFileSelector = 'input[name$="formal_uploads_hys_formal_upload_file_1]"]';
       var submittedFileSelector = 'div[id$="formal-uploads-hys-formal-upload-file-1-upload"] > .file';
       if ($('body.node-type-consultation').length) {
-        var webform_nid = Drupal.settings.doca_theme.webform_nid;
+        var webform_nid = Drupal.settings.doca_common.webform_nid;
       }
       else {
-        var webform_nid = Drupal.settings.doca_theme.fund_webform_nid;
+        var webform_nid = Drupal.settings.doca_common.fund_webform_nid;
       }
       var $forms = $('#webform-client-form-' + webform_nid, context);
 

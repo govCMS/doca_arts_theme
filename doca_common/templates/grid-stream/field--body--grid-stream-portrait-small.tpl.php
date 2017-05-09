@@ -6,6 +6,6 @@
 ?>
 <div class="show-at__large">
   <?php foreach ($items as $delta => $item): ?>
-    <?php print doca_theme_trim(render($item), 130); ?>
+    <?php print doca_common_trim(render($item), 130); ?>
   <?php endforeach; ?>
 </div>

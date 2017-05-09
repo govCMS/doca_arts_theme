@@ -8,7 +8,7 @@
 /**
  * Implements hook_form_system_theme_settings_alter().
  */
-function doca_theme_form_system_theme_settings_alter(&$form, $form_state) {
+function doca_common_form_system_theme_settings_alter(&$form, $form_state) {
   // Horizontal tabs container
   $form['group_tabs'] = array(
     '#weight' => -99,
@@ -203,8 +203,8 @@ function doca_theme_form_system_theme_settings_alter(&$form, $form_state) {
     '#type' => 'hidden',
     '#default_value' => theme_get_setting('sub_theme_4_title'),
   );
-  $form['#validate'][] = '_doca_theme_form_system_theme_settings_alter_validate';
-  $form['#submit'][] = '_doca_theme_form_system_theme_settings_alter_submit';
+  $form['#validate'][] = '_doca_common_form_system_theme_settings_alter_validate';
+  $form['#submit'][] = '_doca_common_form_system_theme_settings_alter_submit';
 }
 
 /**

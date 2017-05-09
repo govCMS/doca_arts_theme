@@ -77,11 +77,11 @@
           <ul class="list-inline">
             <li class="list-inline__item"><a href="https://twitter.com/artsculturegov" target="_blank"
                                              class="underline-on-hover__never"><img
-                  src="<?php print base_path() . drupal_get_path('theme', 'doca_theme'); ?>/images/social/twitter.svg"
+                  src="<?php print base_path() . drupal_get_path('theme', 'doca_common'); ?>/images/social/twitter.svg"
                   alt="Follow @artsculturegov on Twitter"/></a></li>
             <li class="list-inline__item"><a href="https://www.youtube.com/user/deptcommsau" target="_blank"
                                              class="underline-on-hover__never"><img
-                  src="<?php print base_path() . drupal_get_path('theme', 'doca_theme'); ?>/images/social/youtube.svg"
+                  src="<?php print base_path() . drupal_get_path('theme', 'doca_common'); ?>/images/social/youtube.svg"
                   alt="Watch deptcommsau on YouTube"/></a></li>
           </ul>
         </div>

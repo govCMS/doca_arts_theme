@@ -33,7 +33,7 @@
   </div>
   <div class="layout-two-column__item show-at__medium">
     <img class="alert-signup__svg"
-         src="<?php print base_path() . drupal_get_path('theme', 'doca_theme'); ?>/images/SSO-alert-service.svg"/>
+         src="<?php print base_path() . drupal_get_path('theme', 'doca_common'); ?>/images/SSO-alert-service.svg"/>
   </div>
 </div>
 

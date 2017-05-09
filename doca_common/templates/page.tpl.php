@@ -181,11 +181,11 @@
           <ul class="list-inline">
             <li class="list-inline__item"><a href="https://twitter.com/artsculturegov" target="_blank"
                                              class="underline-on-hover__never"><img
-                  src="<?php print base_path() . drupal_get_path('theme', 'doca_theme'); ?>/dist/images/social/twitter.svg"
+                  src="<?php print base_path() . drupal_get_path('theme', 'doca_common'); ?>/dist/images/social/twitter.svg"
                   alt="Follow @artsculturegov on Twitter"/></a></li>
             <li class="list-inline__item"><a href="https://www.youtube.com/user/deptcommsau" target="_blank"
                                              class="underline-on-hover__never"><img
-                  src="<?php print base_path() . drupal_get_path('theme', 'doca_theme'); ?>/dist/images/social/youtube.svg"
+                  src="<?php print base_path() . drupal_get_path('theme', 'doca_common'); ?>/dist/images/social/youtube.svg"
                   alt="Watch deptcommsau on YouTube"/></a></li>
           </ul>
         </div>
@@ -198,7 +198,7 @@
               <div class="copyright__item">
                 <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">
                   <img class="copyright__icon"
-                       src="<?php print base_path() . drupal_get_path('theme', 'doca_theme'); ?>/dist/images/cc_logo.png"
+                       src="<?php print base_path() . drupal_get_path('theme', 'doca_common'); ?>/dist/images/cc_logo.png"
                        alt="Attribution CC BY"/>
                 </a>
               </div>

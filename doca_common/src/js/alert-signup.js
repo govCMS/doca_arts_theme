@@ -15,8 +15,8 @@
 
         // Custom fields.
         var customFields = {};
-        if (Drupal.settings.doca_theme.alertHideName === '0') {
-          if (Drupal.settings.doca_theme.alertFullName === '0') {
+        if (Drupal.settings.doca_common.alertHideName === '0') {
+          if (Drupal.settings.doca_common.alertFullName === '0') {
             standardFields.FIRST_NAME = $('#st_FIRST_NAME').val();
             standardFields.LAST_NAME = $('#st_LAST_NAME').val();
           }
@@ -24,15 +24,15 @@
             customFields.cu_FULL_NAME = $('#cu_FULL_NAME').val();
           }
         }
-        if (!Drupal.settings.doca_theme.alertHideNumber) {
+        if (!Drupal.settings.doca_common.alertHideNumber) {
           customFields.cu_CONTACT_NUMBER = $('#cu_CONTACT_NUMBER').val();
         }
         customFields.cu_DEPARTMENT_ID = $('#cu_DEPARTMENT_ID').val();
 
-        var mailGroups = Drupal.settings.doca_theme.alertMailGroup.split(',');
-        var microSite = Drupal.settings.doca_theme.microSite;
-        var apicall = Drupal.settings.doca_theme.apicall;
-        var errorMessage = Drupal.settings.doca_theme.errorMessage;
+        var mailGroups = Drupal.settings.doca_common.alertMailGroup.split(',');
+        var microSite = Drupal.settings.doca_common.microSite;
+        var apicall = Drupal.settings.doca_common.apicall;
+        var errorMessage = Drupal.settings.doca_common.errorMessage;
 
         $.getJSON(microSite + "/scripts/subscribe/subscribe.php?callback=?", {
           st: standardFields,
@@ -46,7 +46,7 @@
           // Show response message.
           switch (response.code) {
             case '000':
-              $(messageArea).addClass('messages--status').html(Drupal.settings.doca_theme.alertSuccessMessage);
+              $(messageArea).addClass('messages--status').html(Drupal.settings.doca_common.alertSuccessMessage);
               break;
 
             case '101':

@@ -18,7 +18,7 @@
 
   <a class="twitter-account" href="https://twitter.com/artsculturegov">
     <img class="twitter-account__avatar"
-         src="<?php print base_path() . drupal_get_path('theme', 'doca_theme'); ?>/sass/components/twitter-account/twitter-avatar.png"
+         src="<?php print base_path() . drupal_get_path('theme', 'doca_common'); ?>/sass/components/twitter-account/twitter-avatar.png"
          alt="@artsculturegov avatar"/>
     <b class="twitter-account__title">Dept. Communications</b>
     <i class="twitter-account__icon">on Twitter</i> @artsculturegov

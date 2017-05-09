@@ -8,9 +8,6 @@
  * @see https://drupal.org/node/1728096
  */
 
-// Include the helper functions to make sharing between the main and admin themes easier.
-require_once drupal_get_path('theme', 'dcomms_theme') . '/template.helpers.inc';
-
 /**
  * Implements hook_preprocess_page().
  */
@@ -37,10 +34,10 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
   // Site pages feedback.
   if (theme_get_setting('feedback_enabled') && !empty(theme_get_setting('feedback_wform_nid'))) {
     $wf_nid = theme_get_setting('feedback_wform_nid');
-    $js_settings = array(
+    $js_settings = [
       'nid' => $wf_nid,
-    );
-    drupal_add_js(array('sitePagesFeedback' => $js_settings), 'setting');
+    ];
+    drupal_add_js(['sitePagesFeedback' => $js_settings], 'setting');
     $variables['site_pages_feedback_form'] = _dcomms_theme_webform_render($wf_nid);
   }
 
@@ -88,7 +85,7 @@ function dcomms_theme_preprocess_page(&$variables, $hook) {
  */
 function dcomms_theme_get_standard_page_menu_children($item) {
   if ($item === FALSE || empty($item['menu_name']) || !isset($item['mlid'])) {
-    return array();
+    return [];
   }
   $sql = "SELECT SUBSTR(ml.link_path, 6) AS nid
 FROM {menu_links} ml
@@ -101,10 +98,10 @@ WHERE
   n.type = 'page'
 ORDER BY ml.weight";
 
-  return db_query($sql, array(
+  return db_query($sql, [
     ':menu_name' => $item['menu_name'],
     ':plid' => $item['mlid'],
-  ))->fetchCol();
+  ])->fetchCol();
 }
 
 /**
@@ -119,33 +116,33 @@ function dcomms_theme_preprocess_entity(&$variables, $hook) {
     $nids = dcomms_theme_get_standard_page_menu_children($item);
 
     // Render the nodes in coloured grid view mode.
-    $node_elements = array();
+    $node_elements = [];
     foreach ($nids as $nid) {
       $node = node_load($nid);
-      $node_elements[] = array(
+      $node_elements[] = [
         '#type' => 'container',
-        '#attributes' => array(
-          'class' => array('featured__grid-item'),
-        ),
+        '#attributes' => [
+          'class' => ['featured__grid-item'],
+        ],
         'node' => node_view($node, 'coloured_links_grid'),
-      );
+      ];
     }
 
     // Render content.
     if (!empty($node_elements)) {
-      $variables['content'] = array(
+      $variables['content'] = [
         '#type' => 'container',
-        '#attributes' => array(
-          'class' => array('featured-palette__wrapper'),
-        ),
-        'content' => array(
+        '#attributes' => [
+          'class' => ['featured-palette__wrapper'],
+        ],
+        'content' => [
           '#type' => 'container',
-          '#attributes' => array(
-            'class' => array('featured__grid-container', 'featured-palette'),
-          ),
+          '#attributes' => [
+            'class' => ['featured__grid-container', 'featured-palette'],
+          ],
           'nodes' => $node_elements,
-        ),
-      );
+        ],
+      ];
     }
 
     if ($variables['elements']['#bundle'] == 'accordion_item') {
@@ -162,14 +159,14 @@ function dcomms_theme_preprocess_entity(&$variables, $hook) {
 
   if ($variables['entity_type'] === 'paragraphs_item') {
     if ($variables['elements']['#bundle'] === 'subscribe_block') {
-      drupal_add_js(array(
-        'dcomms_theme' => array(
+      drupal_add_js([
+        'dcomms_theme' => [
           'alertHideName' => $variables['field_hide_name_field'][0]['value'],
           'alertHideNumber' => $variables['field_hide_contact_number_field'][0]['value'],
           'alertMailGroup' => $variables['field_mail_groups'][0]['value'],
           'alertSuccessMessage' => $variables['field_success_message'][0]['value'],
-        ),
-      ), 'setting');
+        ],
+      ], 'setting');
     }
   }
 }
@@ -189,7 +186,7 @@ function dcomms_theme_preprocess_entity(&$variables, $hook) {
 function _dcomms_theme_related_content_category_term(&$related_content_nids, $limit, $node, $field_name) {
   if (count($related_content_nids) < $limit && isset($node->{$field_name}[LANGUAGE_NONE][0]['tid'])) {
     $query = db_select('node', 'n')
-      ->fields('n', array('nid'));
+      ->fields('n', ['nid']);
     $query->join('field_data_' . $field_name, 'tags', 'n.nid = tags.entity_id AND n.vid = tags.revision_id');
     $query->condition('n.status', 1, '=')
       ->condition('n.type', $node->type, '=')
@@ -219,11 +216,11 @@ function _dcomms_theme_related_content_category_term(&$related_content_nids, $li
  */
 function _dcomms_theme_related_content($node) {
   $limit = 4;
-  $related_content_nids = array();
+  $related_content_nids = [];
 
   // First fill related content with content of same type with highest number
   // of the same tags.
-  $tids = array();
+  $tids = [];
   $tags = field_get_items('node', $node, 'field_tags');
   if ($tags) {
     foreach ($tags as $term) {
@@ -231,7 +228,7 @@ function _dcomms_theme_related_content($node) {
     }
   }
   if (!empty($tids)) {
-    $query = db_select('node', 'n')->fields('n', array('nid'));
+    $query = db_select('node', 'n')->fields('n', ['nid']);
     $query->join('field_data_field_tags', 'tags', 'n.nid = tags.entity_id AND n.vid = tags.revision_id');
     $query->condition('n.status', 1, '=')
       ->condition('n.nid', $node->nid, '<>')
@@ -260,7 +257,7 @@ function _dcomms_theme_related_content($node) {
   // Finally fill related content with content of same type.
   if (count($related_content_nids) < $limit) {
     $query = db_select('node', 'n')
-      ->fields('n', array('nid'))
+      ->fields('n', ['nid'])
       ->condition('n.status', 1, '=')
       ->condition('n.type', $node->type, '=')
       ->condition('n.nid', $node->nid, '<>');
@@ -277,15 +274,15 @@ function _dcomms_theme_related_content($node) {
   }
 
   // Get list of links from related content nodes.
-  $items = array();
+  $items = [];
   foreach (node_load_multiple($related_content_nids) as $related_nid => $related_node) {
     $items[] = l($related_node->title, 'node/' . $related_nid);
   }
 
-  return array(
+  return [
     '#theme' => 'list_arrow',
     '#items' => $items,
-  );
+  ];
 }
 
 /**
@@ -296,7 +293,7 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   // Adjust the submitted date format.
   $variables['pubdate'] = '<time pubdate datetime="' . format_date($variables['node']->created, 'custom', 'c') . '">' . format_date($variables['node']->created, 'custom', 'jS M Y') . '</time>';
   if ($variables['display_submitted']) {
-    $variables['submitted'] = t('Published !datetime', array('!datetime' => $variables['pubdate']));
+    $variables['submitted'] = t('Published !datetime', ['!datetime' => $variables['pubdate']]);
   }
 
   // Add a theme hook suggestion for type and view mode.
@@ -315,14 +312,14 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   if ($variables['type'] == 'consultation' && $variables['view_mode'] == 'full') {
 
     // Include Consultation specific script.
-    drupal_add_js(path_to_theme() . '/js/script-consultation.js', array('file'));
+    drupal_add_js(path_to_theme() . '/js/script-consultation.js', ['file']);
 
     _consultation_vars($variables, $variables['node']);
     $consultation = $variables['consultation'];
 
     // Return if formal submissions are not accepted.
     if (!empty($consultation['hide_form'])) {
-      field_group_hide_field_groups($variables['elements'], array('group_formal_submission_form'));
+      field_group_hide_field_groups($variables['elements'], ['group_formal_submission_form']);
       hide($variables['content']['formal_submission_webform']);
       // Only hide inro/outro if there is no embedded webform.
       if (empty($variables['content']['field_other_embedded_webform'])) {
@@ -337,11 +334,11 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
 
     // Add formal submission field to JS Drupal.settings if a value is present.
     if (isset($variables['content']['field_formal_submission_notify']['#items'][0]['value'])) {
-      drupal_add_js(array(
-        'dcomms_theme' => array(
+      drupal_add_js([
+        'dcomms_theme' => [
           'formalSubmissionNotify' => check_plain($variables['content']['field_formal_submission_notify']['#items'][0]['value']),
-        ),
-      ), 'setting');
+        ],
+      ], 'setting');
     }
     hide($variables['content']['field_formal_submission_notify']);
 
@@ -356,7 +353,7 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     $consultation = $variables['consultation'];
 
     if ($consultation['date_status'] === 'upcoming') {
-      field_group_hide_field_groups($variables['elements'], array('group_formal_submissions'));
+      field_group_hide_field_groups($variables['elements'], ['group_formal_submissions']);
       hide($variables['content']['hys_progress_bar']);
       hide($variables['content']['formal_submission_webform']);
       hide($variables['content']['field_formal_submission_cta_1']);
@@ -380,12 +377,12 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
     }
 
     // Add the above results to javascript.
-    drupal_add_js(array(
-      'dcomms_theme' => array(
+    drupal_add_js([
+      'dcomms_theme' => [
         'shortCommentsEnabled' => $short_comments_enabled,
         'fileUploadsEnabled' => $file_uploads_enabled,
-      ),
-    ), 'setting');
+      ],
+    ], 'setting');
 
     // Get the end consultation date.
     $end_consultation_date = _dcomms_admin_return_end_consultation_date($node, $wrapper);
@@ -420,7 +417,7 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   }
 
   // Variables for optional display of child links grid, 'on this page', suggested content.
-  if (in_array($variables['type'], array(
+  if (in_array($variables['type'], [
       'alert',
       'bcr_data',
       'blog_article',
@@ -428,7 +425,7 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
       'news_article',
       'policy',
       'page',
-    ))
+    ])
     && $variables['view_mode'] == 'full'
   ) {
     $wrapped_entity = entity_metadata_wrapper('node', $variables['node']);
@@ -465,22 +462,22 @@ function dcomms_theme_preprocess_node(&$variables, $hook) {
   if (!isset($variables['field_social_links'][LANGUAGE_NONE]) || $variables['field_social_links'][LANGUAGE_NONE][0]['value'] == 0) {
     // And it's the full view mode.
     if ($variables['view_mode'] === 'full') {
-      $options = array('absolute' => TRUE);
-      $variables['service_links'] = theme('share_row', array(
+      $options = ['absolute' => TRUE];
+      $variables['service_links'] = theme('share_row', [
         'title' => $node->title,
         'url' => url('node/' . $node->nid, $options),
-      ));
+      ]);
     }
   }
 
   // Check to see if $user has the administrator role then show form.
   global $user;
-  $submit_formal_submission_roles = array(
+  $submit_formal_submission_roles = [
     "Site builder",
     "Site editor",
     "Publisher",
     "administrator",
-  );
+  ];
 
   if (array_intersect($submit_formal_submission_roles, array_values($user->roles))) {
     $variables['formal_submission_block'] = module_invoke('webform', 'block_view', 'client-block-15');
@@ -592,11 +589,11 @@ function dcomms_theme_read_more_link($href, $text, $external = FALSE) {
     $href = base_path() . $href;
   }
 
-  return theme_render_template($template_file, array(
+  return theme_render_template($template_file, [
     'href' => $href,
     'text' => $text,
     'external' => $external,
-  ));
+  ]);
 }
 
 /**
@@ -607,19 +604,19 @@ function dcomms_theme_preprocess_block(&$variables) {
   switch ($variables['block_html_id']) {
     case 'block-system-main-menu':
       $variables['classes_array'][] = 'header-menu';
-      $variables['title_attributes_array']['class'] = array('element-invisible');
+      $variables['title_attributes_array']['class'] = ['element-invisible'];
       break;
 
     case 'block-menu-menu-footer-menu':
       $variables['classes_array'][] = 'layout-centered';
       $variables['classes_array'][] = 'clearfix';
-      $variables['title_attributes_array']['class'] = array('element-invisible');
+      $variables['title_attributes_array']['class'] = ['element-invisible'];
       break;
 
     case 'block-menu-menu-footer-sub-menu':
       $variables['classes_array'][] = 'layout-centered';
       $variables['classes_array'][] = 'clearfix';
-      $variables['title_attributes_array']['class'] = array('element-invisible');
+      $variables['title_attributes_array']['class'] = ['element-invisible'];
       break;
   }
 
@@ -640,7 +637,7 @@ function _dcomms_theme_block_render($module, $delta) {
   $output = '';
   $block = block_load($module, $delta);
   if (isset($block->bid)) {
-    $block_content = _block_render_blocks(array($block));
+    $block_content = _block_render_blocks([$block]);
     $block_array = _block_get_renderable_array($block_content);
     $output = drupal_render($block_array);
   }
@@ -663,7 +660,7 @@ function dcomms_theme_menu_tree__main_menu($variables) {
 
     // Include the search link.
     $output .= '<li class="header-search__icon-wrapper">';
-    $output .= l(t('Search'), 'search', array('attributes' => array('class' => array('header-search__icon--link'))));
+    $output .= l(t('Search'), 'search', ['attributes' => ['class' => ['header-search__icon--link']]]);
     $output .= '</li>';
 
     $output .= '</ul>';
@@ -844,119 +841,11 @@ function dcomms_theme_trim($markup, $trim_length) {
 }
 
 /**
- * Implements template_preprocess_field().
- */
-function dcomms_theme_preprocess_field(&$variables, $hook) {
-  $element =& $variables['element'];
-  $variables['theme_hook_suggestions'][] = 'field__' . $element['#field_name'] . '__' . $element['#view_mode'];
-  $variables['theme_hook_suggestions'][] = 'field__' . $element['#bundle'] . '__' . $element['#view_mode'];
-  $variables['theme_hook_suggestions'][] = 'field__' . $element['#bundle'] . '__' . $element['#view_mode'] . '__' . $element['#field_name'];
-
-  if (($element['#field_type'] === 'text_with_summary' || $element['#field_type'] === 'text_long') && ($element['#formatter'] === 'text_summary_or_trimmed' || $element['#formatter'] === 'text_trimmed')) {
-    $instance = field_info_instance($element['#entity_type'], $element['#field_name'], $element['#bundle']);
-    $display = $instance['display'][$element['#view_mode']];
-    $trim_length = $display['settings']['trim_length'];
-    $use_summary = $element['#formatter'] === 'text_summary_or_trimmed';
-    foreach ($element['#items'] as $delta => $item) {
-      $markup = ($use_summary && !empty($item['safe_summary'])) ? $item['safe_summary'] : $item['safe_value'];
-      $variables['items'][$delta]['#markup'] = dcomms_theme_trim($markup, $trim_length);
-    }
-  }
-
-  if ($element['#field_name'] === 'node_link') {
-    $variables['read_more_text'] = t('Learn more');
-    $node = $element['#object'];
-    if (!empty($node->field_read_more_text[LANGUAGE_NONE][0]['safe_value'])) {
-      $variables['read_more_text'] = $node->field_read_more_text[LANGUAGE_NONE][0]['safe_value'];
-    }
-  }
-
-  if ($element['#field_type'] === 'image') {
-    foreach ($variables['items'] as $delta => $item) {
-      if (isset($item['#item'])) {
-        if ($item['#item']['filemime'] === 'image/svg+xml') {
-          unset($variables['items'][$delta]['#image_style']);
-        }
-      }
-
-      if (isset($item['#file'])) {
-        if ($item['#file']->filemime) {
-          if ($item['#file']->filemime === 'image/svg+xml') {
-            $variables['items'][$delta]['file']['#theme'] = 'image';
-          }
-        }
-      }
-
-    }
-  }
-
-  // Add consultation vars to relevant fields.
-  $consultation_fields = array(
-    'hys_progress_bar',
-    'field_formal_submission_cta_1',
-    'field_consultation_date',
-  );
-  $is_consultation_field = in_array($variables['element']['#field_name'], $consultation_fields);
-  if ($is_consultation_field) {
-    _consultation_vars($variables, $element['#object']);
-  }
-
-  // Replace title with promotional one-liner in non-full view modes.
-  if ($element['#field_name'] == 'title' && $element['#view_mode'] != 'full') {
-    if (isset($element['#object']->field_promotional_one_liner) && !empty($element['#object']->field_promotional_one_liner)) {
-      $variables['one_liner'] = truncate_utf8($element['#object']->field_promotional_one_liner[LANGUAGE_NONE][0]['value'], 35, TRUE, TRUE);
-    }
-  }
-
-  // Strip certain characters for Swift RSS integration.
-  if ($element['#view_mode'] == 'rss_feed') {
-    if ($element['#formatter'] == 'text_plain' && $element['#bundle'] == 'alert') {
-      // Manually control markup for Alert content.
-      $allowed_tags = '<p><br><h1><h2><h3><h4><h5><h6><a><b><strong><i><em><img>';
-      $clean = strip_tags($element['#items'][0]['value'], $allowed_tags);
-      $variables['items'][0]['#markup'] = check_markup($clean, 'rich_text');
-    }
-
-    // Replace incompatible characters.
-    $variables['items'][0]['#markup'] = str_replace(
-      array(
-        '—',
-        '–',
-        '“',
-        '”',
-        '’',
-        '&nbsp;',
-      ),
-      array(
-        '-',
-        '-',
-        '"',
-        '"',
-        '\'',
-        ' ',
-      ),
-      $variables['items'][0]['#markup']
-    );
-
-  }
-
-  // Get the node.
-  $node = $element['#object'];
-  // Return whether a node has the 'External source' field filled in.
-  $external_source = _dcomms_admin_return_node_has_external_source($node);
-  $variables['external_source'] = $external_source;
-
-  if ($variables['element']['#field_name'] == 'field_stackla_embed_para') {
-    drupal_add_js(path_to_theme() . '/js/stackla.js', array('file'));
-  }
-}
-
-/**
  * Implements hook_ds_pre_render_alter().
  */
 function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$variables) {
   if (isset($variables['type'])) {
-    $feature_types = array('page', 'blog_article', 'alert', 'news_article');
+    $feature_types = ['page', 'blog_article', 'alert', 'news_article'];
     if ($variables['type'] === 'consultation' || $variables['type'] === 'poll') {
       // If viewed in iframe mode - add additional class.
       if ($variables['view']->name === 'consultations_iframe') {
@@ -1101,21 +990,21 @@ function dcomms_theme_preprocess_views_view(&$variables) {
  * Implements hook_theme().
  */
 function dcomms_theme_theme($existing, $type, $theme, $path) {
-  return array(
-    'share_row' => array(
+  return [
+    'share_row' => [
       'template' => 'templates/share-row',
-      'variables' => array(
+      'variables' => [
         'title' => NULL,
         'url' => NULL,
-      ),
-    ),
-    'list_arrow' => array(
+      ],
+    ],
+    'list_arrow' => [
       'template' => 'templates/list-arrow',
-      'variables' => array(
+      'variables' => [
         'items' => NULL,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 }
 
 /**
@@ -1140,8 +1029,8 @@ function dcomms_theme_item_list($variables) {
     $num_items = count($items);
     $i = 0;
     foreach ($items as $item) {
-      $attributes = array();
-      $children = array();
+      $attributes = [];
+      $children = [];
       $data = '';
       $i++;
       if (is_array($item)) {
@@ -1162,12 +1051,12 @@ function dcomms_theme_item_list($variables) {
       }
       if (count($children) > 0) {
         // Render nested list.
-        $data .= theme_item_list(array(
+        $data .= theme_item_list([
           'items' => $children,
           'title' => NULL,
           'type' => $type,
           'attributes' => $attributes,
-        ));
+        ]);
       }
       if ($i == 1) {
         $attributes['class'][] = 'first';
@@ -1220,108 +1109,108 @@ function dcomms_theme_pager($variables) {
   }
   // End of generation loop preparation.
 
-  $li_first = theme('pager_first', array(
+  $li_first = theme('pager_first', [
     'text' => (isset($tags[0]) ? $tags[0] : t('« first')),
     'element' => $element,
     'parameters' => $parameters,
-  ));
-  $li_previous = theme('pager_previous', array(
+  ]);
+  $li_previous = theme('pager_previous', [
     'text' => (isset($tags[1]) ? $tags[1] : t('‹ previous')),
     'element' => $element,
     'interval' => 1,
     'parameters' => $parameters,
-  ));
-  $li_next = theme('pager_next', array(
+  ]);
+  $li_next = theme('pager_next', [
     'text' => (isset($tags[3]) ? $tags[3] : t('next ›')),
     'element' => $element,
     'interval' => 1,
     'parameters' => $parameters,
-  ));
-  $li_last = theme('pager_last', array(
+  ]);
+  $li_last = theme('pager_last', [
     'text' => (isset($tags[4]) ? $tags[4] : t('last »')),
     'element' => $element,
     'parameters' => $parameters,
-  ));
+  ]);
 
   if ($pager_total[$element] > 1) {
     if ($li_first) {
-      $items[] = array(
-        'class' => array('pager-first'),
+      $items[] = [
+        'class' => ['pager-first'],
         'data' => $li_first,
-      );
+      ];
     }
     if ($li_previous) {
-      $items[] = array(
-        'class' => array('pager-previous'),
+      $items[] = [
+        'class' => ['pager-previous'],
         'data' => $li_previous,
-      );
+      ];
     }
 
     // When there is more than one page, create the pager list.
     if ($i != $pager_max) {
       if ($i > 1) {
-        $items[] = array(
-          'class' => array('pager-ellipsis'),
+        $items[] = [
+          'class' => ['pager-ellipsis'],
           'data' => '…',
-        );
+        ];
       }
       // Now generate the actual pager piece.
       for (; $i <= $pager_last && $i <= $pager_max; $i++) {
         if ($i < $pager_current) {
-          $items[] = array(
-            'class' => array('pager-item'),
-            'data' => theme('pager_previous', array(
+          $items[] = [
+            'class' => ['pager-item'],
+            'data' => theme('pager_previous', [
               'text' => $i,
               'element' => $element,
               'interval' => ($pager_current - $i),
               'parameters' => $parameters,
-            )),
-          );
+            ]),
+          ];
         }
         if ($i == $pager_current) {
-          $items[] = array(
-            'class' => array('pager-current'),
+          $items[] = [
+            'class' => ['pager-current'],
             'data' => '<span>' . $i . '</span>',
-          );
+          ];
         }
         if ($i > $pager_current) {
-          $items[] = array(
-            'class' => array('pager-item'),
-            'data' => theme('pager_next', array(
+          $items[] = [
+            'class' => ['pager-item'],
+            'data' => theme('pager_next', [
               'text' => $i,
               'element' => $element,
               'interval' => ($i - $pager_current),
               'parameters' => $parameters,
-            )),
-          );
+            ]),
+          ];
         }
       }
       if ($i < $pager_max) {
-        $items[] = array(
-          'class' => array('pager-ellipsis'),
+        $items[] = [
+          'class' => ['pager-ellipsis'],
           'data' => '…',
-        );
+        ];
       }
     }
     // End generation.
     if ($li_next) {
-      $items[] = array(
-        'class' => array('pager-next'),
+      $items[] = [
+        'class' => ['pager-next'],
         'data' => $li_next,
-      );
+      ];
     }
     if ($li_last) {
-      $items[] = array(
-        'class' => array('pager-last'),
+      $items[] = [
+        'class' => ['pager-last'],
         'data' => $li_last,
-      );
+      ];
     }
 
     $output = '<div class="pager__wrapper">';
-    $output .= '<h2 class="element-invisible">' . t('Pages') . '</h2>' . theme('item_list', array(
+    $output .= '<h2 class="element-invisible">' . t('Pages') . '</h2>' . theme('item_list', [
         'items' => $items,
-        'attributes' => array('class' => array('pager')),
-      ));
+        'attributes' => ['class' => ['pager']],
+      ]);
     $output .= "</div>";
 
     return $output;
@@ -1341,13 +1230,53 @@ function dcomms_theme_node_view_alter(&$build) {
     if (!empty($node->field_priority_level[LANGUAGE_NONE][0]['tid'])) {
       $priority_level = $node->field_priority_level[LANGUAGE_NONE][0]['tid'];
       if ($priority_level = taxonomy_term_load($priority_level)) {
-        $node->title = t('Alert Priority !priority: !title', array(
+        $node->title = t('Alert Priority !priority: !title', [
           '!priority' => $priority_level->name,
           '!title' => $node->title,
-        ));
+        ]);
       }
     }
   }
+}
+
+/**
+ * Returns HTML for an active facet item (in search).
+ *
+ * @param $variables
+ *   An associative array containing the keys 'text', 'path', and 'options'.
+ *
+ * @return string
+ *   A HTML string.
+ */
+function dcomms_theme_facetapi_link_active($variables) {
+
+  // Sanitizes the link text if necessary.
+  $sanitize = empty($variables['options']['html']);
+  $link_text = ($sanitize) ? check_plain($variables['text']) : $variables['text'];
+
+  // Theme function variables fro accessible markup.
+  // @see http://drupal.org/node/1316580
+  $accessible_vars = [
+    'text' => $variables['text'],
+    'active' => TRUE,
+  ];
+
+  // Builds link, passes through t() which gives us the ability to change the
+  // position of the widget on a per-language basis.
+  $replacements = [
+    '!facetapi_deactivate_widget' => theme('facetapi_deactivate_widget', $variables),
+    '!facetapi_accessible_markup' => theme('facetapi_accessible_markup', $accessible_vars),
+  ];
+  $variables['text'] = t('!facetapi_deactivate_widget !facetapi_accessible_markup', $replacements);
+  $variables['options']['html'] = TRUE;
+
+  // return theme_link($variables) . $link_text;
+  return $link_text . '<a href="' . check_plain(url($variables['path'], $variables['options'])) . '"'
+    . drupal_attributes($variables['options']['attributes']) . '>'
+    //  . ($variables['options']['html'] ? $variables['text'] : check_plain($variables['text']))
+    . '    <img src="' . drupal_get_path('theme', 'dcomms_theme') . '/images/close--blue.svg"'
+    . '         alt="Remove ' . $link_text . ' filter">'
+    . '</a>';
 }
 
 /**
@@ -1359,53 +1288,3 @@ function dcomms_theme_node_view_alter(&$build) {
  * @see https://www.drupal.org/node/2351731
  */
 drupal_static_reset('element_info');
-
-/**
- * Include alter functions.
- */
-include_once dirname(__FILE__) . '/includes/alter.inc';
-
-
-
-
-
-/**
- * Returns HTML for an active facet item (in search)
- *
- * @param $variables
- *   An associative array containing the keys 'text', 'path', and 'options'. See
- *   the l() function for information about these variables.
- *
- * @see l()
- *
- * @ingroup themeable
- */
-function dcomms_theme_facetapi_link_active($variables) {
-
-  // Sanitizes the link text if necessary.
-  $sanitize = empty($variables['options']['html']);
-  $link_text = ($sanitize) ? check_plain($variables['text']) : $variables['text'];
-
-  // Theme function variables fro accessible markup.
-  // @see http://drupal.org/node/1316580
-  $accessible_vars = array(
-    'text' => $variables['text'],
-    'active' => TRUE,
-  );
-
-  // Builds link, passes through t() which gives us the ability to change the
-  // position of the widget on a per-language basis.
-  $replacements = array(
-    '!facetapi_deactivate_widget' => theme('facetapi_deactivate_widget', $variables),
-    '!facetapi_accessible_markup' => theme('facetapi_accessible_markup', $accessible_vars),
-  );
-  $variables['text'] = t('!facetapi_deactivate_widget !facetapi_accessible_markup', $replacements);
-  $variables['options']['html'] = TRUE;
-  // return theme_link($variables) . $link_text;
-  return $link_text . '<a href="' . check_plain(url($variables['path'], $variables['options'])) . '"'
-         . drupal_attributes($variables['options']['attributes']) . '>'
-        //  . ($variables['options']['html'] ? $variables['text'] : check_plain($variables['text']))
-         . '    <img src="' . drupal_get_path('theme', 'dcomms_theme') . '/images/close--blue.svg"'
-         . '         alt="Remove ' . $link_text . ' filter">'
-         . '</a>';
-}

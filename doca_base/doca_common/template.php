@@ -2,15 +2,13 @@
 
 /**
  * @file
- * Contains the theme's functions to manipulate Drupal's default markup.
- *
- * Complete documentation for this file is available online.
- *
- * @see https://drupal.org/node/1728096
+ * Doca common base theme.
  */
 
-// Include the helper functions to make sharing between the main and admin themes easier.
-require_once drupal_get_path('theme', 'doca_common') . '/template.helpers.inc';
+/**
+ * Include common theme functions.
+ */
+include_once dirname(__FILE__) . '/includes/common_functions.inc';
 
 /**
  * Implements hook_preprocess_page().

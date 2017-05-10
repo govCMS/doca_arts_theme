@@ -14,11 +14,11 @@ require 'singularitygs'
 require 'compass/import-once/activate'
 
 # Location of the theme's resources.
-css_dir         = "css"
-sass_dir        = "sass"
-fonts_dir       = "fonts"
-images_dir      = "images"
-javascripts_dir = "js"
+css_dir         = "dist/css"
+sass_dir        = "src/sass"
+fonts_dir       = "src/fonts"
+images_dir      = "src/images"
+javascripts_dir = "src/js"
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed

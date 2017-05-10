@@ -1,6 +1,6 @@
 {
-  "name": "govcms-comms-front",
-  "author": "GovCMS Finance Dev Team",
+  "name": "govcms-front",
+  "author": "GovCMS DoF Dev Team",
   "description": "The node.js requirements to build this project.",
   "version": "1.0.0",
   "repository": {},

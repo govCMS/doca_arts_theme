@@ -1,8 +1,8 @@
-screenshot  = screenshot.png
-name        = Department of Communications Theme
-description = The Department of Communications theme for govCMS
-core        = 7.x
-base theme  = doca_common
+screenshot = screenshot.png
+name = DoCA Site Theme
+description = The Department of Communications and Arts theme for the govCMS website
+core = 7.x
+base theme = doca_common
 
 ; Then we add our own stylesheet.
 stylesheets[all][] = dist/css/styles.css
@@ -10,14 +10,14 @@ stylesheets[all][] = dist/css/styles.css
 ; Optionally add some JavaScripts to your theme.
 ; scripts[] = dist/js/script.js
 
-regions[highlighted]    = Highlighted
-regions[help]           = Help
-regions[content]        = Content
-regions[sidebar_right]  = Sidebar right
-regions[footer_top]     = Footer top
-regions[footer_bottom]  = Footer bottom
-regions[page_top]       = Page top
-regions[page_bottom]    = Page bottom
+regions[highlighted] = Highlighted
+regions[help] = Help
+regions[content] = Content
+regions[sidebar_right] = Sidebar right
+regions[footer_top] = Footer top
+regions[footer_bottom] = Footer bottom
+regions[page_top] = Page top
+regions[page_bottom] = Page bottom
 
 features[] = logo
 features[] = name

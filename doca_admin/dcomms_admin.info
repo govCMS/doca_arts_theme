@@ -1,4 +1,4 @@
-name = Dcomms Admin
+name = DoCA Admin
 description = A shiny subtheme admin theme with Dcomms customizations.
 core = 7.x
 base theme  = shiny

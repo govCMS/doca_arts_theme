@@ -1,13 +1,48 @@
+# Ignore bundler config
 .bundle
-/govcms
-/vendor
-/bin
-/app
-/.vagrant
-/dcomms_theme/node_modules
-/dcomms_theme/bower_components
-/dcomms_theme/styleguide
-.sass-cache
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# SaSS
+.sass-cache/
+
+# Dependency directories
+node_modules/
+styleguide/
+
+# Logs
+npm-debug.log*
+
+# IDE
+.idea/
+
+# Editor swapfiles
+.*.sw?
+*~
+
+# Vagrant stuff
+.vagrant
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# OS generated files #
+######################
 .DS_Store
-.idea
-/dcomms_theme/.netbeans.xml
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

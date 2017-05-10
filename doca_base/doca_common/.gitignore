@@ -15,7 +15,7 @@ styleguide/
 npm-debug.log*
 
 # IDE
-../.idea
+.idea/
 
 # Editor swapfiles
 .*.sw?

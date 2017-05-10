@@ -15,14 +15,14 @@
 @import 'init';
 
 // Lib
-@import 'library/*';
+@import 'library/rhythm-off';
 
 // Base
 //
 // These are the base styles applied to HTML elements.
 //
 // Styleguide: base
-@import 'base/**/*';
+@import 'base/links/links';
 
 // Layouts
 //
@@ -31,7 +31,7 @@
 // and are not documented.
 //
 // Styleguide: layouts
-@import 'layouts/**/*';
+@import 'layouts/layout-sidebar/layout-sidebar';
 
 // Components
 //
@@ -41,7 +41,7 @@
 // Weight: 1
 //
 // Styleguide: components
-@import 'components/**/*';
+@import 'components/grid-stream/grid-stream';
 
 // Templates
 //
@@ -50,7 +50,7 @@
 // Weight: 2
 //
 // Styleguide: templates
-@import 'templates/**/*';
+@import 'templates/promotion-grid-item/promotion-grid-item';
 
 
 // Sprint 2 search result styles

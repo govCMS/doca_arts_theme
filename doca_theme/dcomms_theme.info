@@ -4,27 +4,10 @@ description = The Department of Communications theme for govCMS
 core        = 7.x
 base theme  = doca_common
 
-stylesheets[all][] = system.menus.css
-stylesheets[all][] = system.messages.css
-stylesheets[all][] = system.theme.css
-; Remove the govcms_zen base theme styles.
-stylesheets[all][] = govcms_zen.css
-stylesheets[all][] = govcms_styles.css
-; Remove views module css
-stylesheets[all][] = views.css
-; Remove field group horizontal tabs css
-stylesheets[all][] = horizontal-tabs.css
-; Remove panels module css
-stylesheets[all][] = panels.css
-
 ; Then we add our own stylesheet.
-stylesheets[all][] = css/bower-components.css
-stylesheets[all][] = css/styles.css
-stylesheets[all][] = css/tablesaw.css
-stylesheets[all][] = libraries/gray/css/gray.min.css
+stylesheets[all][] = dist/css/styles.css
 
 ; Optionally add some JavaScripts to your theme.
-
 ; scripts[] = dist/js/script.js
 
 regions[highlighted]    = Highlighted

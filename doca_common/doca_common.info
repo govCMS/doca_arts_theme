@@ -13,7 +13,7 @@
 
 screenshot  = screenshot.png
 name        = DoCA Common Theme
-description = The Department of Communications and Arts theme for the govCMS Arts website
+description = The Department of Communications and Arts common theme for the govCMS website
 
 ; This theme is compatible with Drupal 7 core. And it is a sub-theme of Zen.
 

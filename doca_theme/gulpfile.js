@@ -36,7 +36,7 @@ gulp.task('scripts', function () {
   return gulp.src([theme + '/src/sass/components/**/*.js'])
     .pipe(plugins.concat('components.min.js'))
     .pipe(plugins.uglify())
-    .pipe(gulp.dest(theme + '/js'));
+    .pipe(gulp.dest(theme + '/dist/js'));
 });
 
 gulp.task('bower-scripts', function () {

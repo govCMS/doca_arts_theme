@@ -8,7 +8,7 @@ base theme = doca_common
 stylesheets[all][] = dist/css/site.css
 
 ; Optionally add some JavaScripts to your theme.
-; scripts[] = dist/js/script.js
+scripts[] = dist/js/site.min.js
 
 regions[highlighted] = Highlighted
 regions[help] = Help

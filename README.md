@@ -20,6 +20,7 @@ doca_base is managed by `git subtree` and belong to another project [https://git
 * [Git](http://git-scm.com/)
 * [Node](https://nodejs.org/en/), which includes the NPM package manager
 * [bundler](http://bundler.io/), install all the required gems
+* [Bower](https://bower.io/)
 
 ### Settings
 

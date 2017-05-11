@@ -2,16 +2,16 @@
 
 var theme = __dirname + '/';
 
+var gulp = require('gulp');
+var runSequence = require('run-sequence');
 var del = require('del');
 var path = require('path');
-var runSequence = require('run-sequence');
-var exec = require('child_process').exec;
-var compass = require('compass-options').dirs({'config': theme + 'config.rb'});
-var mainBowerFiles = require('main-bower-files');
 
-var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var rubySass = require('gulp-ruby-sass');
+
+var compass = require('compass-options').dirs({'config': theme + 'config.rb'});
+var mainBowerFiles = require('main-bower-files');
 
 // Lint JavaScript.
 gulp.task('lint:js', function () {

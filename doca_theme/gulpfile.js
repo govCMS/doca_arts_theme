@@ -48,12 +48,12 @@ gulp.task('bower-scripts', function () {
   return gulp.src(mainBowerFiles({
     includeDev: true,
     paths: {
-      bowerDirectory: __dirname + '/bower_components',
+      bowerDirectory: __dirname + '/vendor',
       bowerJson: __dirname + '/bower.json'
     },
     filter: '**/*.js'
   }))
-      .pipe(plugins.concat('bower-components.min.js'))
+      .pipe(plugins.concat('vendors.min.js'))
       .pipe(plugins.uglify())
       .pipe(gulp.dest(theme + 'dist/js'));
 });
@@ -62,12 +62,12 @@ gulp.task('bower-css', function () {
   return gulp.src(mainBowerFiles({
     includeDev: true,
     paths: {
-      bowerDirectory: __dirname + '/bower_components',
+      bowerDirectory: __dirname + '/vendor',
       bowerJson: __dirname + '/bower.json'
     },
     filter: '**/*.css'
   }))
-      .pipe(plugins.concat('bower-components.css'))
+      .pipe(plugins.concat('vendors.css'))
       .pipe(gulp.dest(theme + 'dist/css'));
 });
 

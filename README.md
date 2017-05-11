@@ -21,6 +21,14 @@ doca_base is managed by `git subtree` and belong to another project [https://git
 * [Node](https://nodejs.org/en/), which includes the NPM package manager
 * [bundler](http://bundler.io/), install all the required gems
 
+### Settings
+
+* bower.json - to be removed soon
+* config.rb - `Compass` configuration
+* Gemfile - provides required Gems for `gulp` and `compass`
+* gulpfile - gulp configuration
+* package.json - install required node libraries for `gulp`
+
 ### Set up local environment
 
 Run following commands under theme folder

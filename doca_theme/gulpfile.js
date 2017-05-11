@@ -15,7 +15,7 @@ var mainBowerFiles = require('main-bower-files');
 
 // Lint JavaScript.
 gulp.task('lint:js', function () {
-  return gulp.src(theme + '/**/*.js')
+  return gulp.src(theme + '/src/js/*.js')
     .pipe(plugins.jshint())
     .pipe(plugins.jshint.reporter('jshint-stylish'));
 });
@@ -23,7 +23,7 @@ gulp.task('lint:js', function () {
 // Lint Sass.
 gulp.task('lint:sass', function () {
   return gulp.src(theme + compass.sass + '/**/*.scss')
-    .pipe(plugins.scssLint({'bundleExec': true}));
+    .pipe(plugins.scssLint({'bundleExec': true, 'maxBuffer': Infinity}));
 });
 
 // Lint Sass and JavaScript.
@@ -33,7 +33,7 @@ gulp.task('lint', function (cb) {
 
 // Concat and minify JavaScript.
 gulp.task('scripts', function () {
-  return gulp.src([theme + '/sass/components/**/*.js'])
+  return gulp.src([theme + '/src/sass/components/**/*.js'])
     .pipe(plugins.concat('components.min.js'))
     .pipe(plugins.uglify())
     .pipe(gulp.dest(theme + '/js'));
@@ -66,8 +66,10 @@ gulp.task('bower-css', function () {
     .pipe(gulp.dest(theme + 'css'));
 });
 
+gulp.task('bower', ['bower-scripts', 'bower-css']);
+
 gulp.task('modernizr', function () {
-  gulp.src(theme + './sass/components/**/*.{js,scss}')
+  gulp.src(theme + './src/sass/components/**/*.{js,scss}')
     .pipe(plugins.modernizr("modernizr.min.js", {
       "options": [
         "setClasses"
@@ -79,7 +81,7 @@ gulp.task('modernizr', function () {
 
 process.chdir(theme);
 gulp.task('sass:development', function () {
-  return rubySass(theme + 'sass/', {
+  return rubySass(theme + 'src/sass/', {
     compass: true,
     bundleExec: true,
     sourcemap: true,
@@ -94,7 +96,7 @@ gulp.task('sass:development', function () {
 });
 
 gulp.task('sass:production', function () {
-  return rubySass(theme + 'sass/', {
+  return rubySass(theme + 'src/sass/', {
     compass: true,
     bundleExec: true,
     style: 'compressed'
@@ -108,18 +110,18 @@ gulp.task('sass:production', function () {
 
 // Styles
 gulp.task('watch', ['modernizr', 'sass:development', 'lint'], function () {
-  gulp.watch(theme + 'sass/**/*.scss', ['modernizr', 'sass:development', 'lint']);
-  gulp.watch(theme + 'sass/**/*.js', ['scripts']);
+  gulp.watch(theme + 'src/sass/**/*.scss', ['modernizr', 'sass:development', 'lint']);
+  gulp.watch(theme + 'src/sass/**/*.js', ['scripts']);
 });
 
 // Clean CSS directory.
-gulp.task('clean:css', del.bind(null, [theme + '**/.sass-cache', theme + compass.css + '/**/*.map'], {force: true}));
+gulp.task('clean:css', del.bind(null, [theme + 'src/**/.sass-cache', theme + compass.css + '/**/*.map'], {force: true}));
 
 // Clean all directories.
 gulp.task('clean', ['clean:css']);
 
 // Production build of front-end.
-gulp.task('build', ['clean', 'sass:production', 'scripts', 'bower-css', 'bower-scripts', 'modernizr'],
+gulp.task('build', ['clean', 'sass:production', 'scripts', 'modernizr'],
   function (cb) {
     // Run linting last, otherwise its output gets lost.
     runSequence(['lint'], cb);
@@ -127,8 +129,3 @@ gulp.task('build', ['clean', 'sass:production', 'scripts', 'bower-css', 'bower-s
 
 // The default task.
 gulp.task('default', ['build']);
-
-
-// Resources used to create this gulpfile.js:
-// - https://github.com/google/web-starter-kit/blob/master/gulpfile.js
-// - https://github.com/north/generator-north/blob/master/app/templates/Gulpfile.js

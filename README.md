@@ -32,10 +32,38 @@ doca_base is managed by `git subtree` and belong to another project [https://git
 
 ### Set up local environment
 
+Run following commands to install global libraries
+
+```
+
+sudo gem update --system
+
+```
+
 Run following commands under theme folder
 
 ```
 
 bundle
+
+npm install
+
+```
+
+#### For Mac developers
+
+```
+
+Installing sass 
+Operation not permitted - /usr/bin/sass
+
+```
+
+If you have above issues, try
+
+```
+
+brew install ruby
+
 
 ```

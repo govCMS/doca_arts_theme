@@ -36,13 +36,13 @@ function doca_common_preprocess_page(&$variables, $hook) {
   // Site pages feedback.
   if (theme_get_setting('feedback_enabled')) {
     $wf_nid = theme_get_setting('feedback_wform_nid');
-    drupal_add_js(array('sitePagesFeedback' => array('nid' => $wf_nid)), 'setting');
+    drupal_add_js(['sitePagesFeedback' => ['nid' => $wf_nid]], 'setting');
     $variables['site_pages_feedback_form'] = _doca_common_webform_render($wf_nid);
   }
 
   // Add the correct google analytics code for the active environment.
   $ga_code = variable_get('googleanalytics_account');
-  drupal_add_js(array('gaSettings' => array('gaCode' => $ga_code)), 'setting');
+  drupal_add_js(['gaSettings' => ['gaCode' => $ga_code]], 'setting');
 
   // Create template variables for the header menu block.
   $variables['header_search'] = _doca_common_block_render('search', 'form');
@@ -52,6 +52,17 @@ function doca_common_preprocess_page(&$variables, $hook) {
   $variables['footer_auxilary_menu'] = _doca_common_block_render('menu', 'menu-footer-sub-menu');
 
   $header = drupal_get_http_header("status");
+  if ($header === "404 Not Found") {
+    $variables['theme_hook_suggestions'][] = 'page__404';
+    $element = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'http-equiv' => 'refresh',
+        'content' => '10;url=/',
+      ],
+    ];
+    drupal_add_html_head($element, 'page_404_redirect');
+  }
 
   if ($header === "403 Forbidden") {
     $variables['theme_hook_suggestions'][] = 'page__403';
@@ -86,7 +97,7 @@ function doca_common_preprocess_page(&$variables, $hook) {
  */
 function doca_common_get_standard_page_menu_children($item) {
   if ($item === FALSE || empty($item['menu_name']) || !isset($item['mlid'])) {
-    return array();
+    return [];
   }
   $sql = "SELECT SUBSTR(ml.link_path, 6) AS nid
 FROM {menu_links} ml
@@ -99,10 +110,10 @@ WHERE
   n.type = 'page'
 ORDER BY ml.weight";
 
-  return db_query($sql, array(
+  return db_query($sql, [
     ':menu_name' => $item['menu_name'],
     ':plid' => $item['mlid'],
-  ))->fetchCol();
+  ])->fetchCol();
 }
 
 /**
@@ -117,33 +128,33 @@ function doca_common_preprocess_entity(&$variables, $hook) {
     $nids = doca_common_get_standard_page_menu_children($item);
 
     // Render the nodes in coloured grid view mode.
-    $node_elements = array();
+    $node_elements = [];
     foreach ($nids as $nid) {
       $node = node_load($nid);
-      $node_elements[] = array(
+      $node_elements[] = [
         '#type' => 'container',
-        '#attributes' => array(
-          'class' => array('featured__grid-item'),
-        ),
+        '#attributes' => [
+          'class' => ['featured__grid-item'],
+        ],
         'node' => node_view($node, 'coloured_links_grid'),
-      );
+      ];
     }
 
     // Render content.
     if (!empty($node_elements)) {
-      $variables['content'] = array(
+      $variables['content'] = [
         '#type' => 'container',
-        '#attributes' => array(
-          'class' => array('featured-palette__wrapper'),
-        ),
-        'content' => array(
+        '#attributes' => [
+          'class' => ['featured-palette__wrapper'],
+        ],
+        'content' => [
           '#type' => 'container',
-          '#attributes' => array(
-            'class' => array('featured__grid-container', 'featured-palette'),
-          ),
+          '#attributes' => [
+            'class' => ['featured__grid-container', 'featured-palette'],
+          ],
           'nodes' => $node_elements,
-        ),
-      );
+        ],
+      ];
     }
 
     if ($variables['elements']['#bundle'] == 'accordion_item') {
@@ -151,7 +162,6 @@ function doca_common_preprocess_entity(&$variables, $hook) {
       if (isset($variables['elements']['field_pbundle_image'])) {
         $variables['classes_array'][] = 'accordion__item--with-image';
       }
-
       else {
         $variables['classes_array'][] = 'accordion__item';
       }
@@ -160,8 +170,8 @@ function doca_common_preprocess_entity(&$variables, $hook) {
 
   if ($variables['entity_type'] === 'paragraphs_item') {
     if ($variables['elements']['#bundle'] === 'subscribe_block') {
-      drupal_add_js(array(
-        'doca_common' => array(
+      drupal_add_js([
+        'doca_common' => [
           'alertHideName' => $variables['field_hide_name_field'][0]['value'],
           'alertFullName' => $variables['field_single_full_name'][0]['value'],
           'alertHideNumber' => $variables['field_hide_contact_number_field'][0]['value'],
@@ -170,8 +180,8 @@ function doca_common_preprocess_entity(&$variables, $hook) {
           'apicall' => variable_get('doca_common_api_call', 'updateall'),
           'errorMessage' => variable_get('doca_common_error_message', t('Please check your email address and try again, if you are still having issues please <a href="mailto:media@communications.gov.au?Subject=Arts website newsletter subscriber">email us</a> your details.')),
           'alertSuccessMessage' => $variables['field_success_message'][0]['value'],
-        ),
-      ), 'setting');
+        ],
+      ], 'setting');
     }
   }
 }
@@ -213,7 +223,7 @@ function doca_common_media_wysiwyg_token_to_markup_alter(&$element, &$tag_info, 
 function _doca_common_related_content_category_term(&$related_content_nids, $limit, $node, $field_name) {
   if (count($related_content_nids) < $limit && isset($node->{$field_name}[LANGUAGE_NONE][0]['tid'])) {
     $query = db_select('node', 'n')
-      ->fields('n', array('nid'));
+      ->fields('n', ['nid']);
     $query->join('field_data_' . $field_name, 'tags', 'n.nid = tags.entity_id AND n.vid = tags.revision_id');
     $query->condition('n.status', 1, '=')
       ->condition('n.type', $node->type, '=')
@@ -243,11 +253,11 @@ function _doca_common_related_content_category_term(&$related_content_nids, $lim
  */
 function _doca_common_related_content($node) {
   $limit = 4;
-  $related_content_nids = array();
+  $related_content_nids = [];
 
   // First fill related content with content of same type with highest number
   // of the same tags.
-  $tids = array();
+  $tids = [];
   $tags = field_get_items('node', $node, 'field_tags');
   if ($tags) {
     foreach ($tags as $term) {
@@ -255,7 +265,7 @@ function _doca_common_related_content($node) {
     }
   }
   if (!empty($tids)) {
-    $query = db_select('node', 'n')->fields('n', array('nid'));
+    $query = db_select('node', 'n')->fields('n', ['nid']);
     $query->join('field_data_field_tags', 'tags', 'n.nid = tags.entity_id AND n.vid = tags.revision_id');
     $query->condition('n.status', 1, '=')
       ->condition('n.nid', $node->nid, '<>')
@@ -284,7 +294,7 @@ function _doca_common_related_content($node) {
   // Finally fill related content with content of same type.
   if (count($related_content_nids) < $limit) {
     $query = db_select('node', 'n')
-      ->fields('n', array('nid'))
+      ->fields('n', ['nid'])
       ->condition('n.status', 1, '=')
       ->condition('n.type', $node->type, '=')
       ->condition('n.nid', $node->nid, '<>');
@@ -301,15 +311,15 @@ function _doca_common_related_content($node) {
   }
 
   // Get list of links from related content nodes.
-  $items = array();
+  $items = [];
   foreach (node_load_multiple($related_content_nids) as $related_nid => $related_node) {
     $items[] = l($related_node->title, 'node/' . $related_nid);
   }
 
-  return array(
+  return [
     '#theme' => 'list_arrow',
     '#items' => $items,
-  );
+  ];
 }
 
 /**
@@ -320,7 +330,7 @@ function doca_common_preprocess_node(&$variables, $hook) {
   // Adjust the submitted date format.
   $variables['pubdate'] = '<time pubdate datetime="' . format_date($variables['node']->created, 'custom', 'c') . '">' . format_date($variables['node']->created, 'custom', 'jS M Y') . '</time>';
   if ($variables['display_submitted']) {
-    $variables['submitted'] = t('Published !datetime', array('!datetime' => $variables['pubdate']));
+    $variables['submitted'] = t('Published !datetime', ['!datetime' => $variables['pubdate']]);
   }
 
   // Add a theme hook suggestion for type and view mode.
@@ -341,15 +351,15 @@ function doca_common_preprocess_node(&$variables, $hook) {
     if ($variables['view_mode'] == 'full') {
 
       // Include Consultation specific script.
-      drupal_add_js(path_to_theme() . '/dist/js/script-consultation.js', array('file'));
-      drupal_add_js(array('doca_common' => array('webform_nid' => theme_get_setting('have_your_say_wform_nid'))), 'setting');
+      drupal_add_js(path_to_theme() . '/dist/js/script-consultation.js', ['file']);
+      drupal_add_js(['doca_common' => ['webform_nid' => theme_get_setting('have_your_say_wform_nid')]], 'setting');
 
       _consultation_vars($variables, $variables['node']);
       $consultation = $variables['consultation'];
 
       // Return if formal submissions are not accepted.
       if (!empty($consultation['hide_form'])) {
-        field_group_hide_field_groups($variables['elements'], array('group_formal_submission_form'));
+        field_group_hide_field_groups($variables['elements'], ['group_formal_submission_form']);
         hide($variables['content']['formal_submission_webform']);
         // Only hide inro/outro if there is no embedded webform.
         if (empty($variables['content']['field_other_embedded_webform'])) {
@@ -364,11 +374,11 @@ function doca_common_preprocess_node(&$variables, $hook) {
 
       // Add formal submission field to JS Drupal.settings if a value is present.
       if (isset($variables['content']['field_formal_submission_notify']['#items'][0]['value'])) {
-        drupal_add_js(array(
-          'doca_common' => array(
+        drupal_add_js([
+          'doca_common' => [
             'formalSubmissionNotify' => check_plain($variables['content']['field_formal_submission_notify']['#items'][0]['value']),
-          ),
-        ), 'setting');
+          ],
+        ], 'setting');
       }
       hide($variables['content']['field_formal_submission_notify']);
 
@@ -381,7 +391,7 @@ function doca_common_preprocess_node(&$variables, $hook) {
     $consultation = $variables['consultation'];
 
     if ($consultation['date_status'] === 'upcoming') {
-      field_group_hide_field_groups($variables['elements'], array('group_formal_submissions'));
+      field_group_hide_field_groups($variables['elements'], ['group_formal_submissions']);
       hide($variables['content']['hys_progress_bar']);
       hide($variables['content']['formal_submission_webform']);
       hide($variables['content']['field_formal_submission_cta_1']);
@@ -405,12 +415,12 @@ function doca_common_preprocess_node(&$variables, $hook) {
     }
 
     // Add the above results to javascript.
-    drupal_add_js(array(
-      'doca_common' => array(
+    drupal_add_js([
+      'doca_common' => [
         'shortCommentsEnabled' => $short_comments_enabled,
         'fileUploadsEnabled' => $file_uploads_enabled,
-      ),
-    ), 'setting');
+      ],
+    ], 'setting');
 
     // Get the end consultation date.
     $end_consultation_date = _doca_admin_return_end_consultation_date($node, $wrapper);
@@ -435,8 +445,7 @@ function doca_common_preprocess_node(&$variables, $hook) {
           // Output the status message.
           $variables['status_message'] = $message;
         }
-      }
-      // If the 'Enable late submissions' value is not TRUE and the end consultation date is less than now.
+      } // If the 'Enable late submissions' value is not TRUE and the end consultation date is less than now.
       elseif (isset($node->field_enable_late_submissions) && $wrapper->field_enable_late_submissions->value() !== TRUE && $end_consultation_date < $time) {
         // Redirect the user to the custom 404 page.
         drupal_goto('page-404-consultations');
@@ -472,12 +481,12 @@ function doca_common_preprocess_node(&$variables, $hook) {
 
     // Check to see if $user has the administrator role then show form.
     global $user;
-    $submit_formal_submission_roles = array(
+    $submit_formal_submission_roles = [
       "Site builder",
       "Site editor",
       "Publisher",
       "administrator",
-    );
+    ];
 
     if (array_intersect($submit_formal_submission_roles, array_values($user->roles))) {
       $variables['formal_submission_block'] = module_invoke('webform', 'block_view', 'client-block-' . theme_get_setting('have_your_say_wform_nid'));
@@ -507,8 +516,8 @@ function doca_common_preprocess_node(&$variables, $hook) {
       // Include Funding specific script.
       hide($variables['content']['field_funding_app_webform']);
       if (isset($variables['field_funding_app_webform'][0]) && isset($variables['field_funding_app_webform'][0]['target_id'])) {
-        drupal_add_js(path_to_theme() . '/dist/js/script-consultation.js', array('file'));
-        drupal_add_js(array('doca_common' => array('fund_webform_nid' => $variables['field_funding_app_webform'][0]['target_id'])), 'setting');
+        drupal_add_js(path_to_theme() . '/dist/js/script-consultation.js', ['file']);
+        drupal_add_js(['doca_common' => ['fund_webform_nid' => $variables['field_funding_app_webform'][0]['target_id']]], 'setting');
       }
       else {
         hide($variables['content']['formal_submission_webform']);
@@ -519,7 +528,7 @@ function doca_common_preprocess_node(&$variables, $hook) {
 
       // Return if formal submissions are not accepted.
       if (!empty($funding['hide_form'])) {
-        field_group_hide_field_groups($variables['elements'], array('group_formal_submission_form'));
+        field_group_hide_field_groups($variables['elements'], ['group_formal_submission_form']);
         hide($variables['content']['formal_submission_webform']);
         // Only hide inro/outro if there is no embedded webform.
         if (empty($variables['content']['field_other_embedded_webform'])) {
@@ -534,11 +543,11 @@ function doca_common_preprocess_node(&$variables, $hook) {
 
       // Add formal submission field to JS Drupal.settings if a value is present.
       if (isset($variables['content']['field_formal_submission_notify']['#items'][0]['value'])) {
-        drupal_add_js(array(
-          'doca_common' => array(
+        drupal_add_js([
+          'doca_common' => [
             'formalSubmissionNotify' => check_plain($variables['content']['field_formal_submission_notify']['#items'][0]['value']),
-          ),
-        ), 'setting');
+          ],
+        ], 'setting');
       }
       hide($variables['content']['field_formal_submission_notify']);
 
@@ -553,7 +562,7 @@ function doca_common_preprocess_node(&$variables, $hook) {
     $hide_progress = $wrapper->field_hide_progress_bar->value();
     $hide_cta = $wrapper->field_hide_cta->value();
     if ($funding['date_status'] === 'upcoming' || ($hide_progress && $hide_cta)) {
-      field_group_hide_field_groups($variables['elements'], array('group_formal_submissions'));
+      field_group_hide_field_groups($variables['elements'], ['group_formal_submissions']);
       hide($variables['content']['formal_submission_webform']);
       hide($variables['content']['field_formal_submission_cta_1']);
       hide($variables['content']['field_formal_submission_cta_2']);
@@ -571,12 +580,12 @@ function doca_common_preprocess_node(&$variables, $hook) {
     $short_comments_enabled = $file_uploads_enabled = FALSE;
 
     // Add the above results to javascript.
-    drupal_add_js(array(
-      'doca_common' => array(
+    drupal_add_js([
+      'doca_common' => [
         'shortCommentsEnabled' => $short_comments_enabled,
         'fileUploadsEnabled' => $file_uploads_enabled,
-      ),
-    ), 'setting');
+      ],
+    ], 'setting');
 
     // Get the end funding date.
     $end_consultation_date = _doca_admin_return_end_consultation_date($node, $wrapper);
@@ -605,16 +614,16 @@ function doca_common_preprocess_node(&$variables, $hook) {
   }
 
   // Variables for optional display of child links grid, 'on this page', suggested content.
-  if (in_array($variables['type'], array(
-    'alert',
-    'bcr_data',
-    'blog_article',
-    'consultation',
-    'funding',
-    'news_article',
-    'policy',
-    'page',
-  ))
+  if (in_array($variables['type'], [
+      'alert',
+      'bcr_data',
+      'blog_article',
+      'consultation',
+      'funding',
+      'news_article',
+      'policy',
+      'page',
+    ])
     && $variables['view_mode'] == 'full'
   ) {
     $wrapped_entity = entity_metadata_wrapper('node', $variables['node']);
@@ -651,11 +660,11 @@ function doca_common_preprocess_node(&$variables, $hook) {
   if (!isset($variables['field_social_links'][LANGUAGE_NONE]) || $variables['field_social_links'][LANGUAGE_NONE][0]['value'] == 0) {
     // And it's the full view mode.
     if ($variables['view_mode'] === 'full') {
-      $options = array('absolute' => TRUE);
-      $variables['service_links'] = theme('share_row', array(
+      $options = ['absolute' => TRUE];
+      $variables['service_links'] = theme('share_row', [
         'title' => $node->title,
         'url' => url('node/' . $node->nid, $options),
-      ));
+      ]);
     }
   }
 
@@ -772,11 +781,11 @@ function doca_common_read_more_link($href, $text, $external = FALSE) {
     $href = base_path() . $href;
   }
 
-  return theme_render_template($template_file, array(
+  return theme_render_template($template_file, [
     'href' => $href,
     'text' => $text,
     'external' => $external,
-  ));
+  ]);
 }
 
 /**
@@ -787,19 +796,19 @@ function doca_common_preprocess_block(&$variables) {
   switch ($variables['block_html_id']) {
     case 'block-system-main-menu':
       $variables['classes_array'][] = 'header-menu';
-      $variables['title_attributes_array']['class'] = array('element-invisible');
+      $variables['title_attributes_array']['class'] = ['element-invisible'];
       break;
 
     case 'block-menu-menu-footer-menu':
       $variables['classes_array'][] = 'layout-centered';
       $variables['classes_array'][] = 'clearfix';
-      $variables['title_attributes_array']['class'] = array('element-invisible');
+      $variables['title_attributes_array']['class'] = ['element-invisible'];
       break;
 
     case 'block-menu-menu-footer-sub-menu':
       $variables['classes_array'][] = 'layout-centered';
       $variables['classes_array'][] = 'clearfix';
-      $variables['title_attributes_array']['class'] = array('element-invisible');
+      $variables['title_attributes_array']['class'] = ['element-invisible'];
       break;
   }
 
@@ -820,7 +829,7 @@ function _doca_common_block_render($module, $delta) {
   $output = '';
   $block = block_load($module, $delta);
   if (isset($block->bid)) {
-    $block_content = _block_render_blocks(array($block));
+    $block_content = _block_render_blocks([$block]);
     $block_array = _block_get_renderable_array($block_content);
     $output = drupal_render($block_array);
   }
@@ -843,7 +852,7 @@ function doca_common_menu_tree__main_menu($variables) {
 
     // Include the search link.
     $output .= '<li class="header-search__icon-wrapper">';
-    $output .= l(t('Search'), 'search', array('attributes' => array('class' => array('header-search__icon--link'))));
+    $output .= l(t('Search'), 'search', ['attributes' => ['class' => ['header-search__icon--link']]]);
     $output .= '</li>';
 
     $output .= '</ul>';
@@ -1088,11 +1097,11 @@ function doca_common_preprocess_field(&$variables, $hook) {
   }
 
   // Add consultation vars to relevant fields.
-  $consultation_fields = array(
+  $consultation_fields = [
     'hys_progress_bar',
     'field_formal_submission_cta_1',
     'field_consultation_date',
-  );
+  ];
   $is_consultation_field = in_array($variables['element']['#field_name'], $consultation_fields);
   if ($is_consultation_field) {
     _consultation_vars($variables, $element['#object']);
@@ -1122,22 +1131,22 @@ function doca_common_preprocess_field(&$variables, $hook) {
 
     // Replace incompatible characters.
     $variables['items'][0]['#markup'] = str_replace(
-      array(
+      [
         '—',
         '–',
         '“',
         '”',
         '’',
         '&nbsp;',
-      ),
-      array(
+      ],
+      [
         '-',
         '-',
         '"',
         '"',
         '\'',
         ' ',
-      ),
+      ],
       $variables['items'][0]['#markup']
     );
 
@@ -1150,7 +1159,7 @@ function doca_common_preprocess_field(&$variables, $hook) {
   $variables['external_source'] = $external_source;
 
   if ($variables['element']['#field_name'] == 'field_stackla_embed_para') {
-    drupal_add_js(path_to_theme() . '/vendor/js/stackla.js', array('file'));
+    drupal_add_js(path_to_theme() . '/vendor/js/stackla.js', ['file']);
   }
   if ($element['#field_name'] === 'formal_submission_webform') {
     if ($element['#bundle'] == 'funding') {
@@ -1213,7 +1222,7 @@ function doca_common_preprocess_field(&$variables, $hook) {
  */
 function doca_common_ds_pre_render_alter(&$layout_render_array, $context, &$variables) {
   if (isset($variables['type'])) {
-    $feature_types = array('page', 'blog_article', 'alert', 'news_article');
+    $feature_types = ['page', 'blog_article', 'alert', 'news_article'];
     if ($variables['type'] === 'consultation' || $variables['type'] === 'poll' || $variables['type'] === 'funding') {
       // If viewed in iframe mode - add additional class.
       if (isset($variables['view']) && $variables['view']->name === 'consultations_iframe') {
@@ -1358,6 +1367,7 @@ function _consultation_vars(&$variables, $element_object) {
   if ($element_object->type == 'funding') {
     $variables['funding'] = $consultation;
   }
+
   return $variables;
 }
 
@@ -1497,21 +1507,21 @@ function doca_common_preprocess_views_view(&$variables) {
  * Implements hook_theme().
  */
 function doca_common_theme($existing, $type, $theme, $path) {
-  return array(
-    'share_row' => array(
+  return [
+    'share_row' => [
       'template' => 'templates/share-row',
-      'variables' => array(
+      'variables' => [
         'title' => NULL,
         'url' => NULL,
-      ),
-    ),
-    'list_arrow' => array(
+      ],
+    ],
+    'list_arrow' => [
       'template' => 'templates/list-arrow',
-      'variables' => array(
+      'variables' => [
         'items' => NULL,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 }
 
 /**
@@ -1536,8 +1546,8 @@ function doca_common_item_list($variables) {
     $num_items = count($items);
     $i = 0;
     foreach ($items as $item) {
-      $attributes = array();
-      $children = array();
+      $attributes = [];
+      $children = [];
       $data = '';
       $i++;
       if (is_array($item)) {
@@ -1558,12 +1568,12 @@ function doca_common_item_list($variables) {
       }
       if (count($children) > 0) {
         // Render nested list.
-        $data .= theme_item_list(array(
+        $data .= theme_item_list([
           'items' => $children,
           'title' => NULL,
           'type' => $type,
           'attributes' => $attributes,
-        ));
+        ]);
       }
       if ($i == 1) {
         $attributes['class'][] = 'first';
@@ -1616,109 +1626,109 @@ function doca_common_pager($variables) {
   }
   // End of generation loop preparation.
 
-  $li_first = theme('pager_first', array(
+  $li_first = theme('pager_first', [
     'text' => (isset($tags[0]) ? $tags[0] : t('« first')),
     'element' => $element,
     'parameters' => $parameters,
-  ));
-  $li_previous = theme('pager_previous', array(
+  ]);
+  $li_previous = theme('pager_previous', [
     'text' => (isset($tags[1]) ? $tags[1] : t('‹ previous')),
     'element' => $element,
     'interval' => 1,
     'parameters' => $parameters,
-  ));
-  $li_next = theme('pager_next', array(
+  ]);
+  $li_next = theme('pager_next', [
     'text' => (isset($tags[3]) ? $tags[3] : t('next ›')),
     'element' => $element,
     'interval' => 1,
     'parameters' => $parameters,
-  ));
-  $li_last = theme('pager_last', array(
+  ]);
+  $li_last = theme('pager_last', [
     'text' => (isset($tags[4]) ? $tags[4] : t('last »')),
     'element' => $element,
     'parameters' => $parameters,
-  ));
+  ]);
 
   if ($pager_total[$element] > 1) {
     if ($li_first) {
-      $items[] = array(
-        'class' => array('pager-first'),
+      $items[] = [
+        'class' => ['pager-first'],
         'data' => $li_first,
-      );
+      ];
     }
     if ($li_previous) {
-      $items[] = array(
-        'class' => array('pager-previous'),
+      $items[] = [
+        'class' => ['pager-previous'],
         'data' => $li_previous,
-      );
+      ];
     }
 
     // When there is more than one page, create the pager list.
     if ($i != $pager_max) {
       if ($i > 1) {
-        $items[] = array(
-          'class' => array('pager-ellipsis'),
+        $items[] = [
+          'class' => ['pager-ellipsis'],
           'data' => '…',
-        );
+        ];
       }
       // Now generate the actual pager piece.
       for (; $i <= $pager_last && $i <= $pager_max; $i++) {
         if ($i < $pager_current) {
-          $items[] = array(
-            'class' => array('pager-item'),
-            'data' => theme('pager_previous', array(
+          $items[] = [
+            'class' => ['pager-item'],
+            'data' => theme('pager_previous', [
               'text' => $i,
               'element' => $element,
               'interval' => ($pager_current - $i),
               'parameters' => $parameters,
-            )),
-          );
+            ]),
+          ];
         }
         if ($i == $pager_current) {
-          $items[] = array(
-            'class' => array('pager-current'),
+          $items[] = [
+            'class' => ['pager-current'],
             'data' => '<span>' . $i . '</span>',
-          );
+          ];
         }
         if ($i > $pager_current) {
-          $items[] = array(
-            'class' => array('pager-item'),
-            'data' => theme('pager_next', array(
+          $items[] = [
+            'class' => ['pager-item'],
+            'data' => theme('pager_next', [
               'text' => $i,
               'element' => $element,
               'interval' => ($i - $pager_current),
               'parameters' => $parameters,
-            )),
-          );
+            ]),
+          ];
         }
       }
       if ($i < $pager_max) {
-        $items[] = array(
-          'class' => array('pager-ellipsis'),
+        $items[] = [
+          'class' => ['pager-ellipsis'],
           'data' => '…',
-        );
+        ];
       }
     }
     // End generation.
     if ($li_next) {
-      $items[] = array(
-        'class' => array('pager-next'),
+      $items[] = [
+        'class' => ['pager-next'],
         'data' => $li_next,
-      );
+      ];
     }
     if ($li_last) {
-      $items[] = array(
-        'class' => array('pager-last'),
+      $items[] = [
+        'class' => ['pager-last'],
         'data' => $li_last,
-      );
+      ];
     }
 
     $output = '<div class="pager__wrapper">';
-    $output .= '<h2 class="element-invisible">' . t('Pages') . '</h2>' . theme('item_list', array(
-      'items' => $items,
-      'attributes' => array('class' => array('pager')),
-    )
-    );
+    $output .= '<h2 class="element-invisible">' . t('Pages') . '</h2>' . theme('item_list', [
+          'items' => $items,
+          'attributes' => ['class' => ['pager']],
+        ]
+      );
     $output .= "</div>";
 
     return $output;
@@ -1737,10 +1747,10 @@ function doca_common_node_view_alter(&$build) {
     if (!empty($node->field_priority_level[LANGUAGE_NONE][0]['tid'])) {
       $priority_level = $node->field_priority_level[LANGUAGE_NONE][0]['tid'];
       if ($priority_level = taxonomy_term_load($priority_level)) {
-        $node->title = t('Alert Priority !priority: !title', array(
+        $node->title = t('Alert Priority !priority: !title', [
           '!priority' => $priority_level->name,
           '!title' => $node->title,
-        ));
+        ]);
       }
     }
   }
@@ -1755,13 +1765,14 @@ function doca_common_node_view_alter(&$build) {
 function _doca_common_get_subsites() {
   $subsites = &drupal_static(__FUNCTION__);
   if (!isset($subsites)) {
-    $subsites = array(
+    $subsites = [
       theme_get_setting('sub_theme_1') => 'sub-theme-1',
       theme_get_setting('sub_theme_2') => 'sub-theme-2',
       theme_get_setting('sub_theme_3') => 'sub-theme-3',
       theme_get_setting('sub_theme_4') => 'sub-theme-4',
-    );
+    ];
   }
+
   return $subsites;
 
 }

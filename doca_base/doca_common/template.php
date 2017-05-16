@@ -52,17 +52,6 @@ function doca_common_preprocess_page(&$variables, $hook) {
   $variables['footer_auxilary_menu'] = _doca_common_block_render('menu', 'menu-footer-sub-menu');
 
   $header = drupal_get_http_header("status");
-  if ($header === "404 Not Found") {
-    $variables['theme_hook_suggestions'][] = 'page__404';
-    $element = array(
-      '#tag' => 'meta',
-      '#attributes' => array(
-        'http-equiv' => 'refresh',
-        'content' => '10;url=/',
-      ),
-    );
-    drupal_add_html_head($element, 'page_404_redirect');
-  }
 
   if ($header === "403 Forbidden") {
     $variables['theme_hook_suggestions'][] = 'page__403';

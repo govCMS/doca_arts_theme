@@ -351,7 +351,7 @@ function doca_common_preprocess_node(&$variables, $hook) {
     if ($variables['view_mode'] == 'full') {
 
       // Include Consultation specific script.
-      drupal_add_js(path_to_theme() . '/dist/js/script-consultation.js', ['file']);
+      drupal_add_js(drupal_get_path('theme', 'doca_common') . '/dist/js/script-consultation.js', ['file']);
       drupal_add_js(['doca_common' => ['webform_nid' => theme_get_setting('have_your_say_wform_nid')]], 'setting');
 
       _consultation_vars($variables, $variables['node']);
@@ -516,7 +516,7 @@ function doca_common_preprocess_node(&$variables, $hook) {
       // Include Funding specific script.
       hide($variables['content']['field_funding_app_webform']);
       if (isset($variables['field_funding_app_webform'][0]) && isset($variables['field_funding_app_webform'][0]['target_id'])) {
-        drupal_add_js(path_to_theme() . '/dist/js/script-consultation.js', ['file']);
+        drupal_add_js(drupal_get_path('theme', 'doca_common') . '/dist/js/script-consultation.js', ['file']);
         drupal_add_js(['doca_common' => ['fund_webform_nid' => $variables['field_funding_app_webform'][0]['target_id']]], 'setting');
       }
       else {
@@ -1159,7 +1159,7 @@ function doca_common_preprocess_field(&$variables, $hook) {
   $variables['external_source'] = $external_source;
 
   if ($variables['element']['#field_name'] == 'field_stackla_embed_para') {
-    drupal_add_js(path_to_theme() . '/vendor/js/stackla.js', ['file']);
+    drupal_add_js(drupal_get_path('theme', 'doca_common') . '/vendor/js/stackla.js', ['file']);
   }
   if ($element['#field_name'] === 'formal_submission_webform') {
     if ($element['#bundle'] == 'funding') {

@@ -8,7 +8,7 @@
 /**
  * Include common theme functions.
  */
-include_once dirname(__FILE__) . '/includes/common_functions.inc';
+include_once dirname(__FILE__) . '/includes/common_templates.func.inc';
 
 /**
  * Implements hook_preprocess_page().

@@ -9,7 +9,7 @@
  */
 
 // Include the helper functions to make sharing between the main and admin themes easier.
-require_once drupal_get_path('theme', 'doca_common') . '/includes/common_functions.inc';
+require_once drupal_get_path('theme', 'doca_common') . '/includes/common_templates.func.inc';
 
 /**
  * Implements hook_form_alter().

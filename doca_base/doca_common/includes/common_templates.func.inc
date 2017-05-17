@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @file
- * Contains the theme's helper functions.
+ * Common templates functions.
  */
-
 
 /*
  * Helper function: Return the 'External source' field value.

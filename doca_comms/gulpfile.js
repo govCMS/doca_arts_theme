@@ -39,7 +39,7 @@ gulp.task('scripts', function () {
   var components = gulp.src([theme + '/src/sass/components/**/*.js'])
       .pipe(plugins.concat('components.min.js'))
       .pipe(plugins.uglify())
-      .pipe(gulp.dest(theme + '/dist/js'));
+      .pipe(gulp.dest(theme + 'dist/js'));
 
   return merge(site, components);
 });
@@ -83,13 +83,13 @@ gulp.task('modernizr', function () {
         ]
       }))
       .pipe(plugins.uglify())
-      .pipe(gulp.dest(theme + "/dist/js/"))
+      .pipe(gulp.dest(theme + "dist/js/"))
 });
 
 process.chdir(theme);
 
 gulp.task('sass:development', function () {
-  return rubySass(theme + 'src/sass/', {
+  return rubySass(theme + 'src/sass/site.scss', {
     compass: true,
     bundleExec: true,
     sourcemap: true,
@@ -100,11 +100,11 @@ gulp.task('sass:development', function () {
       })
       .pipe(plugins.pixrem())
       .pipe(plugins.sourcemaps.write())
-      .pipe(gulp.dest('css'));
+      .pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('sass:production', function () {
-  return rubySass(theme + 'src/sass/', {
+  return rubySass(theme + 'src/sass/site.scss', {
     compass: true,
     bundleExec: true,
     style: 'compressed'
@@ -113,7 +113,7 @@ gulp.task('sass:production', function () {
         console.error('Error!', err.message);
       })
       .pipe(plugins.pixrem())
-      .pipe(gulp.dest('css'));
+      .pipe(gulp.dest('dist/css'));
 });
 
 // Styles

@@ -81,27 +81,6 @@ function doca_common_file_icon($variables) {
 /**
  * Implements hook_theme().
  */
-function doca_common_theme($existing, $type, $theme, $path) {
-  return [
-    'share_row' => [
-      'template' => 'templates/share-row',
-      'variables' => [
-        'title' => NULL,
-        'url' => NULL,
-      ],
-    ],
-    'list_arrow' => [
-      'template' => 'templates/list-arrow',
-      'variables' => [
-        'items' => NULL,
-      ],
-    ],
-  ];
-}
-
-/**
- * Implements hook_theme().
- */
 function doca_common_item_list($variables) {
   $items = $variables['items'];
   $title = $variables['title'];
@@ -308,4 +287,25 @@ function doca_common_pager($variables) {
 
     return $output;
   }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function doca_common_theme($existing, $type, $theme, $path) {
+  return [
+    'share_row' => [
+      'template' => 'templates/share-row',
+      'variables' => [
+        'title' => NULL,
+        'url' => NULL,
+      ],
+    ],
+    'list_arrow' => [
+      'template' => 'templates/list-arrow',
+      'variables' => [
+        'items' => NULL,
+      ],
+    ],
+  ];
 }

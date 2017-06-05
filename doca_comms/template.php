@@ -547,24 +547,6 @@ function dcomms_theme_block_view_alter(&$data, $block) {
 }
 
 /**
- * Implements template_preprocess_views_view().
- */
-function dcomms_theme_preprocess_views_view(&$variables) {
-  if ($variables['name'] === 'formal_submissions') {
-    $node = menu_get_object();
-    if (isset($node->field_hide_submission_filters[LANGUAGE_NONE][0]['value']) && $node->field_hide_submission_filters[LANGUAGE_NONE][0]['value'] === '1') {
-      $variables['exposed'] = FALSE;
-    }
-  }
-
-  if ($variables['name'] === 'consultations_other') {
-    if ($variables['view']->total_rows >= '3' && $variables['display_id'] == 'block') {
-      $variables['classes_array'][] = 'grid-stream--grid-at-three';
-    }
-  }
-}
-
-/**
  * Returns HTML for an active facet item (in search).
  *
  * @param $variables

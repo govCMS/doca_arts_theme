@@ -797,28 +797,6 @@ function dcomms_theme_pager($variables) {
 }
 
 /**
- * Implements hook_node_view
- *
- * @param $node
- * @param $view_mode
- * @param $langcode
- */
-function dcomms_theme_node_view_alter(&$build) {
-  if ($build['#node']->type == 'alert' && $build['#view_mode'] == 'rss_feed') {
-    $node = $build['#node'];
-    if (!empty($node->field_priority_level[LANGUAGE_NONE][0]['tid'])) {
-      $priority_level = $node->field_priority_level[LANGUAGE_NONE][0]['tid'];
-      if ($priority_level = taxonomy_term_load($priority_level)) {
-        $node->title = t('Alert Priority !priority: !title', [
-          '!priority' => $priority_level->name,
-          '!title' => $node->title,
-        ]);
-      }
-    }
-  }
-}
-
-/**
  * Returns HTML for an active facet item (in search).
  *
  * @param $variables

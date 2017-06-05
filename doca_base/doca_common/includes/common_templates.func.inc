@@ -35,6 +35,26 @@ ORDER BY ml.weight";
   ])->fetchCol();
 }
 
+/**
+ * Helper function to get the theme settings for mini sites by term ID.
+ *
+ * @return array
+ *         An array of Theme minisite settings by term ID.
+ */
+function doca_common_get_subsites() {
+  $subsites = &drupal_static(__FUNCTION__);
+  if (!isset($subsites)) {
+    $subsites = [
+      theme_get_setting('sub_theme_1') => 'sub-theme-1',
+      theme_get_setting('sub_theme_2') => 'sub-theme-2',
+      theme_get_setting('sub_theme_3') => 'sub-theme-3',
+      theme_get_setting('sub_theme_4') => 'sub-theme-4',
+    ];
+  }
+
+  return $subsites;
+}
+
 /*
  * Helper function: Return the 'External source' field value.
  */
@@ -126,7 +146,7 @@ function _doca_admin_return_late_submission_url($node) {
 /**
  * Helper function: Return whether a user has a given role.
  */
-function _doca_admin_return_user_has_role($roles = array()) {
+function _doca_admin_return_user_has_role($roles = []) {
   global $user;
 
   // Set default access value.
@@ -135,12 +155,12 @@ function _doca_admin_return_user_has_role($roles = array()) {
   // If no roles are provided.
   if (empty($roles)) {
     // Set some default roles.
-    $roles = array(
+    $roles = [
       'publisher',
       'site builder',
       'site editor',
       'administrator',
-    );
+    ];
   }
 
   // Loop through the user roles.
@@ -182,7 +202,7 @@ function _doca_admin_return_end_consultation_date($node, $wrapper) {
  */
 function _doca_common_webform_render($nid = NULL) {
   $wnode = node_load($nid);
-  $form = drupal_get_form('webform_client_form_' . $nid, $wnode, array());
+  $form = drupal_get_form('webform_client_form_' . $nid, $wnode, []);
 
   return render($form);
 }

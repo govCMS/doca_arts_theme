@@ -6,6 +6,27 @@
  */
 
 /**
+ * Implements hook_node_view.
+ *
+ * @param array &$build
+ *        A renderable array representing the node content.
+ */
+function doca_common_node_view_alter(&$build) {
+  if ($build['#node']->type == 'alert' && $build['#view_mode'] == 'rss_feed') {
+    $node = $build['#node'];
+    if (!empty($node->field_priority_level[LANGUAGE_NONE][0]['tid'])) {
+      $priority_level = $node->field_priority_level[LANGUAGE_NONE][0]['tid'];
+      if ($priority_level = taxonomy_term_load($priority_level)) {
+        $node->title = t('Alert Priority !priority: !title', [
+          '!priority' => $priority_level->name,
+          '!title' => $node->title,
+        ]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function doca_common_form_webform_client_form_alter(&$form, &$form_state, $form_id) {
@@ -19,14 +40,14 @@ function doca_common_form_webform_client_form_alter(&$form, &$form_state, $form_
 
     // Add sid.
     // Add wrapper id.
-    $form['site_feedback_sid'] = array(
+    $form['site_feedback_sid'] = [
       '#type' => 'hidden',
-    );
+    ];
 
     // Add wrapper id.
-    $form['site_feedback_ajax_wrapper_id'] = array(
+    $form['site_feedback_ajax_wrapper_id'] = [
       '#type' => 'hidden',
-    );
+    ];
 
     // Set wrapper value.
     $form['site_feedback_ajax_wrapper_id']['#value'] = drupal_html_id('site-feedback-ajax-wrapper-' . $form['#node']->nid);
@@ -36,17 +57,17 @@ function doca_common_form_webform_client_form_alter(&$form, &$form_state, $form_
     $form['#suffix'] = (isset($form['#suffix']) ? $form['#suffix'] : '') . '</div>';
 
     // Ajax button.
-    foreach (array('previous', 'next', 'submit', 'draft') as $button) {
+    foreach (['previous', 'next', 'submit', 'draft'] as $button) {
       if (isset($form['actions'][$button])) {
-        $form['actions'][$button]['#ajax'] = array(
+        $form['actions'][$button]['#ajax'] = [
           'callback' => 'site_feedback_webform_ajax_callback',
           'wrapper' => $form['site_feedback_ajax_wrapper_id']['#value'],
-          'progress' => array(
+          'progress' => [
             'message' => '',
             'type' => 'throbber',
-          ),
-        );
-        if (in_array($button, array('next', 'submit'))) {
+          ],
+        ];
+        if (in_array($button, ['next', 'submit'])) {
           $form['actions'][$button]['#ajax']['event'] = 'click';
         }
         // Workaround for Drupal core bug http://drupal.org/node/1548976.
@@ -68,7 +89,7 @@ function doca_common_form_webform_client_form_alter(&$form, &$form_state, $form_
  * AJAX callback for Webform.
  */
 function site_feedback_webform_ajax_callback($form, &$form_state) {
-  $output = array();
+  $output = [];
   // If user completed his submission, determine what to do.
   if (!empty($form_state['webform_completed']) && empty($form_state['save_draft'])) {
     $text = '<h2 class="site-feedback-thanks">Thanks for your feedback</h2>
@@ -86,13 +107,13 @@ function site_feedback_webform_ajax_callback($form, &$form_state) {
         }
       }
     }
-    $output = array(
+    $output = [
       '#type' => 'ajax',
-      '#commands' => array(
+      '#commands' => [
         ajax_command_replace('.site-feedback-form__content', $text),
-        ajax_command_invoke('.site-feedback-thanks', 'trigger', array('click')),
-      ),
-    );
+        ajax_command_invoke('.site-feedback-thanks', 'trigger', ['click']),
+      ],
+    ];
   }
   // Else, we're just switching page, or saving draft.
   else {

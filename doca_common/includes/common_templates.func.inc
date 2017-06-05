@@ -55,6 +55,157 @@ function doca_common_get_subsites() {
   return $subsites;
 }
 
+/**
+ * Helper function to add consultation variables to template files.
+ */
+function _consultation_vars(&$variables, $element_object) {
+  $consultation['now'] = time();
+  $consultation['wrapped_entity'] = entity_metadata_wrapper('node', $element_object);
+  $date = $consultation['wrapped_entity']->field_consultation_date->value();
+  $consultation['start'] = $date['value'];
+  $consultation['end'] = $date['value2'];
+  $consultation['duration'] = ($consultation['end'] - $consultation['start']);
+  $consultation['date_status'] = $consultation['wrapped_entity']->field_consultation_date_status->value();
+  $consultation['archived'] = _consultation_is_archived($consultation);
+  $consultation['in_review'] = ($consultation['end'] < $consultation['now']) && !$consultation['archived'];
+  $consultation['started_text'] = 'Started';
+  if ($consultation['start'] > $consultation['now']) {
+    $consultation['started_text'] = 'Starts';
+  }
+  $consultation['ended_text'] = 'Ends';
+  if ($consultation['end'] < $consultation['now']) {
+    $consultation['ended_text'] = 'Ended';
+  }
+  $consultation['percentage'] = _consultation_percentage($consultation);
+  $consultation['days_total'] = round($consultation['duration'] / strtotime('1 day', 0));
+  $consultation['days_remain'] = _consultation_days_remain($consultation);
+  $consultation['submission_enabled'] = $consultation['wrapped_entity']->field_formal_submission_enabled->value();
+  $consultation['status_class'] = ($consultation['percentage'] === 100 ? 'progress-bar--complete' : '');
+  if ($element_object->type == 'consultation') {
+    _consultation_status_message($consultation);
+  }
+  else {
+    _consultation_status_message($consultation, 'Applications under consideration', 'Funding round finalised');
+  }
+  $consultation['status_msg_class'] = strtolower($consultation['status_msg_class']);
+  $consultation['hide_form'] = !$consultation['submission_enabled'] || ($consultation['start'] > $consultation['now']) || ($consultation['end'] < $consultation['now']);
+  $variables['consultation'] = $consultation;
+  if ($element_object->type == 'funding') {
+    $variables['funding'] = $consultation;
+  }
+
+  return $variables;
+}
+
+/**
+ * Helper function - days_remain for progress bar.
+ */
+function _consultation_days_remain($consultation) {
+
+  $days_total = round($consultation['duration'] / strtotime('1 day', 0));
+
+  if ($consultation['percentage'] === 0) {
+    $days_remain = $days_total;
+  }
+  elseif ($consultation['percentage'] === 100) {
+    $days_remain = "0";
+  }
+  elseif (($consultation['end'] > $consultation['now']) && ($consultation['end'] - $consultation['now'] < strtotime('1 day', 0))) {
+    $days_remain = "< 1";
+  }
+  else {
+    $days_remain = round(($consultation['end'] - time()) / strtotime('1 day', 0));
+  }
+
+  return $days_remain;
+}
+
+/**
+ * Helper function for the consultation status message.
+ */
+function _consultation_status_message(&$consultation, $in_review = 'Now under review', $public = 'Submissions now public') {
+
+  $status_message = t('Open');
+  $consultation['ongoing'] = FALSE;
+  $node_wrapper = $consultation['wrapped_entity'];
+  $is_funding = $node_wrapper->getBundle() == 'funding';
+
+  if ($consultation['in_review']) {
+    $status_message = t($in_review);
+  }
+
+  $formal_submission_public = isset($node_wrapper->field_formal_submission_public) && $node_wrapper->field_formal_submission_public->value();
+  if ($formal_submission_public) {
+    $status_message = t($public);
+  }
+
+  if (!$is_funding && $consultation['archived']) {
+    $status_message = t('Archived');
+  }
+
+  if ($consultation['start'] > $consultation['now'] && $node_wrapper->field_consultation_date_status->value() == 'current') {
+    $status_message = 'Upcoming';
+  }
+
+  if ($is_funding && !empty($node_wrapper->field_funding_type->value()) && $node_wrapper->field_funding_type->value()->name == 'Ongoing') {
+    $status_message = 'Open';
+    $consultation['ongoing'] = TRUE;
+  }
+
+  if ($is_funding && !is_null($node_wrapper->field_outcomes_posted->value())) {
+    $status_message = 'This program has closed';
+  }
+
+  $consultation['status_msg_class'] = str_replace(' ', '-', $status_message);
+
+  $consultation['status_message'] = $status_message;
+
+}
+
+/**
+ * Helper function for hide form message.
+ */
+function _consultation_submissions_closed_message($consultation) {
+
+  $submissions_closed_message = NULL;
+
+  if ($consultation['in_review']) {
+    $submissions_closed_message = t('Submissions are now closed for this consultation and are now under review');
+  }
+
+  $formal_submission_public = $consultation['wrapped_entity']->field_formal_submission_public->value();
+  if ($formal_submission_public) {
+    $submissions_closed_message = t('Submissions are now closed for this consultation and have been made public');
+  }
+
+  return $submissions_closed_message;
+
+}
+
+/**
+ * Helper function to determine if consultation is archived.
+ */
+function _consultation_is_archived($consultation) {
+  $outcomes_posted_date = $consultation['wrapped_entity']->field_outcomes_posted->value();
+  if (isset($outcomes_posted_date)) {
+    $archived_date = $outcomes_posted_date + strtotime('6 months', 0);
+    $is_archived = ($consultation['now'] > $archived_date);
+
+    return $is_archived;
+  }
+}
+
+/**
+ * Helper function to determine percentage complete.
+ */
+function _consultation_percentage($consultation) {
+  $time_until_it_starts = ($consultation['now'] - $consultation['start']);
+  $percentage = $time_until_it_starts / $consultation['duration'] * 100;
+  $percentage = max(0, min(100, $percentage));
+
+  return $percentage;
+}
+
 /*
  * Helper function: Return the 'External source' field value.
  */

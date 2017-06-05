@@ -17,7 +17,7 @@
  */
 $nid = $variables['form']['#node']->nid;
 ?>
-<div class="poll-form poll-form--<?php print _dcomms_poll_type($nid); ?>">
+<div class="poll-form poll-form--<?php print doca_common_get_poll_type($nid); ?>">
   <?php if ($block): ?>
     <div class="poll-form__title" id="poll_<?php print $nid; ?>__title"><?php print $title; ?></div>
   <?php endif; ?>

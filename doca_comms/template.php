@@ -526,27 +526,6 @@ function dcomms_theme_preprocess_poll_results(&$variables) {
 }
 
 /**
- * Implements hook_block_view_alter().
- */
-function dcomms_theme_block_view_alter(&$data, $block) {
-  if ($block->module === 'search' && $block->delta === 'form') {
-    $contexts = context_active_contexts();
-    if (array_key_exists('display_sso_nav', $contexts) || array_key_exists('clone_of_display_sso_nav', $contexts)) {
-      $data['subsite'] = '15';
-      $data['subsite_name'] = 'Stay Smart Online';
-    }
-    if (array_key_exists('display_digitalbusiness_nav', $contexts) || array_key_exists('display_digitalbusiness_nav', $contexts)) {
-      $data['subsite'] = '20';
-      $data['subsite_name'] = 'Digital Business';
-    }
-    if (array_key_exists('display_bcr_nav', $contexts) || array_key_exists('clone_of_display_bcr_nav', $contexts)) {
-      $data['subsite'] = '40';
-      $data['subsite_name'] = 'Bureau of Communications Research';
-    }
-  }
-}
-
-/**
  * Returns HTML for an active facet item (in search).
  *
  * @param $variables
@@ -595,3 +574,24 @@ function dcomms_theme_facetapi_link_active($variables) {
  * @see https://www.drupal.org/node/2351731
  */
 drupal_static_reset('element_info');
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function dcomms_theme_block_view_alter(&$data, $block) {
+  if ($block->module === 'search' && $block->delta === 'form') {
+    $contexts = context_active_contexts();
+    if (array_key_exists('display_sso_nav', $contexts) || array_key_exists('clone_of_display_sso_nav', $contexts)) {
+      $data['subsite'] = '15';
+      $data['subsite_name'] = 'Stay Smart Online';
+    }
+    if (array_key_exists('display_digitalbusiness_nav', $contexts) || array_key_exists('display_digitalbusiness_nav', $contexts)) {
+      $data['subsite'] = '20';
+      $data['subsite_name'] = 'Digital Business';
+    }
+    if (array_key_exists('display_bcr_nav', $contexts) || array_key_exists('clone_of_display_bcr_nav', $contexts)) {
+      $data['subsite'] = '40';
+      $data['subsite_name'] = 'Bureau of Communications Research';
+    }
+  }
+}

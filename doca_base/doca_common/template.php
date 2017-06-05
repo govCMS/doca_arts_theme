@@ -87,36 +87,6 @@ function doca_common_preprocess_page(&$variables, $hook) {
 }
 
 /**
- * Get standard page node ids that are menu children of a given menu link.
- *
- * @param array $item
- *   A fully translated menu link.
- *
- * @return array
- *   Node ids that are menu children of $item.
- */
-function doca_common_get_standard_page_menu_children($item) {
-  if ($item === FALSE || empty($item['menu_name']) || !isset($item['mlid'])) {
-    return [];
-  }
-  $sql = "SELECT SUBSTR(ml.link_path, 6) AS nid
-FROM {menu_links} ml
-JOIN {node} n ON (n.nid = SUBSTR(ml.link_path, 6))
-WHERE
-  ml.link_path LIKE 'node/%' AND
-  ml.menu_name = :menu_name AND
-  plid = :plid AND
-  n.status = 1 AND
-  n.type = 'page'
-ORDER BY ml.weight";
-
-  return db_query($sql, [
-    ':menu_name' => $item['menu_name'],
-    ':plid' => $item['mlid'],
-  ])->fetchCol();
-}
-
-/**
  * Implements hook_preprocess_entity().
  */
 function doca_common_preprocess_entity(&$variables, $hook) {

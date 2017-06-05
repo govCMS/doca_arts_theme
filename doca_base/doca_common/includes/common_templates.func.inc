@@ -99,6 +99,20 @@ function doca_common_trim($markup, $trim_length) {
 }
 
 /**
+ * Returns the poll type based on number of choices.
+ */
+function doca_common_get_poll_type($nid) {
+  $node = node_load($nid);
+  $choices = count($node->choice);
+  $poll_type = 'binary';
+  if ($choices > '2') {
+    $poll_type = 'multiple';
+  }
+
+  return $poll_type;
+}
+
+/**
  * Helper function to add consultation variables to template files.
  */
 function _consultation_vars(&$variables, $element_object) {

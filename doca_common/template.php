@@ -1111,7 +1111,7 @@ function doca_common_ds_pre_render_alter(&$layout_render_array, $context, &$vari
         $business_area_tid = $variables['field_business_area'][0]['tid'];
       }
 
-      $subsites = _doca_common_get_subsites();
+      $subsites = doca_common_get_subsites();
       $business_area_name = isset($subsites[$business_area_tid]) ? $subsites[$business_area_tid] : $business_area_tid;
 
       $variables['classes_array'][] = 'grid-stream__item--business-area';
@@ -1570,48 +1570,6 @@ function doca_common_pager($variables) {
 
     return $output;
   }
-}
-
-/**
- * Implements hook_node_view.
- *
- * @param array &$build
- *        A renderable array representing the node content.
- */
-function doca_common_node_view_alter(&$build) {
-  if ($build['#node']->type == 'alert' && $build['#view_mode'] == 'rss_feed') {
-    $node = $build['#node'];
-    if (!empty($node->field_priority_level[LANGUAGE_NONE][0]['tid'])) {
-      $priority_level = $node->field_priority_level[LANGUAGE_NONE][0]['tid'];
-      if ($priority_level = taxonomy_term_load($priority_level)) {
-        $node->title = t('Alert Priority !priority: !title', [
-          '!priority' => $priority_level->name,
-          '!title' => $node->title,
-        ]);
-      }
-    }
-  }
-}
-
-/**
- * Helper function to get the theme settings for mini sites by term ID.
- *
- * @return array
- *         An array of Theme minisite settings by term ID.
- */
-function _doca_common_get_subsites() {
-  $subsites = &drupal_static(__FUNCTION__);
-  if (!isset($subsites)) {
-    $subsites = [
-      theme_get_setting('sub_theme_1') => 'sub-theme-1',
-      theme_get_setting('sub_theme_2') => 'sub-theme-2',
-      theme_get_setting('sub_theme_3') => 'sub-theme-3',
-      theme_get_setting('sub_theme_4') => 'sub-theme-4',
-    ];
-  }
-
-  return $subsites;
-
 }
 
 /**

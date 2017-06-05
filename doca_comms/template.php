@@ -2,77 +2,8 @@
 
 /**
  * @file
- * Contains the theme's functions to manipulate Drupal's default markup.
- *
- * Complete documentation for this file is available online.
- * @see https://drupal.org/node/1728096
+ * Doca communication site custom theme.
  */
-
-/**
- * Implements hook_preprocess_page().
- */
-function dcomms_theme_preprocess_html(&$variables, $hook) {
-  // Add offscreen class to body for mobile navigation.
-  $variables['classes_array'][] = 'offscreen';
-}
-
-/**
- * Implements hook_js_alter().
- */
-function dcomms_theme_js_alter(&$javascript) {
-  $tabs_js_path = drupal_get_path('module', 'field_group') . '/horizontal-tabs/horizontal-tabs.js';
-  unset($javascript[$tabs_js_path]);
-}
-
-/**
- * Implements hook_preprocess_page().
- */
-function dcomms_theme_preprocess_page(&$variables, $hook) {
-  // Add pathToTheme to Drupal.settings in JS.
-  drupal_add_js('jQuery.extend(Drupal.settings, { "pathToTheme": "' . path_to_theme() . '" });', 'inline');
-
-  // Site pages feedback.
-  if (theme_get_setting('feedback_enabled') && !empty(theme_get_setting('feedback_wform_nid'))) {
-    $wf_nid = theme_get_setting('feedback_wform_nid');
-    $js_settings = [
-      'nid' => $wf_nid,
-    ];
-    drupal_add_js(['sitePagesFeedback' => $js_settings], 'setting');
-    $variables['site_pages_feedback_form'] = _dcomms_theme_webform_render($wf_nid);
-  }
-
-  // Create template variables for the header menu block.
-  $variables['header_search'] = _dcomms_theme_block_render('search', 'form');
-  $variables['header_menu'] = _dcomms_theme_block_render('system', 'main-menu');
-  // Create template variables for the footer menu blocks.
-  $variables['footer_menu'] = _dcomms_theme_block_render('menu', 'menu-footer-menu');
-  $variables['footer_auxilary_menu'] = _dcomms_theme_block_render('menu', 'menu-footer-sub-menu');
-
-  $header = drupal_get_http_header("status");
-  if ($header === "404 Not Found") {
-    $variables['theme_hook_suggestions'][] = 'page__404';
-  }
-  if ($header === "403 Forbidden") {
-    $variables['theme_hook_suggestions'][] = 'page__403';
-  }
-
-  // If this is the 'iframe_portrait' or 'iframe_landscape' Consultation page.
-  if (array_search('page__consultations__iframe_portrait', $variables['theme_hook_suggestions']) || array_search('page__consultations__iframe_landscape', $variables['theme_hook_suggestions'])) {
-    // Extend the theme hook suggestions to include a stripped page.
-    $variables['theme_hook_suggestions'][] = 'page__stripped';
-  }
-
-  // Define page top announcement variable
-  $page_top_announcement_paths = drupal_strtolower(theme_get_setting('page_top_announcement_paths'));
-  $current_path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
-  $page_match = drupal_match_path($current_path, $page_top_announcement_paths);
-  if ($current_path != $_GET['q']) {
-    $page_match = $page_match || drupal_match_path($_GET['q'], $page_top_announcement_paths);
-  }
-  if ($page_match) {
-    $variables['top_announcements'] = theme_get_setting('page_top_announcement_messages');
-  }
-}
 
 /**
  * Get standard page node ids that are menu children of a given menu link.
@@ -388,21 +319,6 @@ function dcomms_theme_preprocess_block(&$variables) {
     // Add template suggestions for bean types.
     $variables['theme_hook_suggestions'][] = 'block__bean__' . $bean['#bundle'];
   }
-}
-
-/**
- * Returns HTML for a menu with a heading and wrapper.
- */
-function _dcomms_theme_block_render($module, $delta) {
-  $output = '';
-  $block = block_load($module, $delta);
-  if (isset($block->bid)) {
-    $block_content = _block_render_blocks([$block]);
-    $block_array = _block_get_renderable_array($block_content);
-    $output = drupal_render($block_array);
-  }
-
-  return $output;
 }
 
 /**

@@ -507,38 +507,6 @@ function doca_common_preprocess_panels_pane(&$variables) {
 }
 
 /**
- * Implements hook_form_alter().
- */
-function doca_common_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'webform_client_form_' . theme_get_setting('have_your_say_wform_nid')) {
-    $component_key = "privacy";
-    if (isset($form['field_short_comments_enabled'][$component_key])) {
-      $form['actions'][$component_key] = $form['field_short_comments_enabled'][$component_key];
-      unset($form['submitted'][$component_key]);
-    }
-    // Check if the 'Short comments' field is available.
-    if (isset($form['submitted']['short_comments'])) {
-      // Update the attributes and set the maxlength.
-      $form['submitted']['short_comments']['#attributes']['maxlength'] = 500;
-    }
-  }
-
-  if ($form_id == 'workbench_moderation_moderate_form' && !empty($form['node']['#value'])) {
-    $node = $form['node']['#value'];
-    if (!empty($node->nid) && isset($node->workbench_moderation['published']->vid)) {
-      unset($form['state']['#options']['archive']);
-    }
-  }
-
-  if (($form_id == 'views_exposed_form') && ($form['#id'] == 'views-exposed-form-book-search-default') || $form['#id'] == 'views-exposed-form-book-search-book-search') {
-    // Change label for winners all.
-    $form['field_winner_value']['#options']['All'] = 'Shortlists';
-    $form['field_winner_value']['#options'][1] = 'Winners';
-    unset($form['field_winner_value']['#options'][0]);
-  }
-}
-
-/**
  * Implements hook_preprocess_block().
  */
 function doca_common_preprocess_block(&$variables) {

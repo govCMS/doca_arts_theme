@@ -1318,29 +1318,6 @@ function _consultation_percentage($consultation) {
 }
 
 /**
- * Implements template_preprocess_views_view().
- */
-function doca_common_preprocess_views_view(&$variables) {
-  if ($variables['name'] === 'formal_submissions') {
-    $node = menu_get_object();
-    if (isset($node->field_hide_submission_filters[LANGUAGE_NONE][0]['value']) && $node->field_hide_submission_filters[LANGUAGE_NONE][0]['value'] === '1') {
-      $variables['exposed'] = FALSE;
-    }
-  }
-
-  if ($variables['name'] === 'consultations_other') {
-    if ($variables['view']->total_rows >= '3' && $variables['display_id'] == 'block') {
-      $variables['classes_array'][] = 'grid-stream--grid-at-three';
-    }
-  }
-  if ($variables['name'] == 'whats_new_grid' && $variables['display_id'] == 'block_1') {
-    if (count($variables['view']->result) == 2) {
-      $variables['classes_array'][] = 'grid-stream__2-col';
-    }
-  }
-}
-
-/**
  * Clear any previously set element_info() static cache.
  *
  * If element_info() was invoked before the theme was fully initialized, this

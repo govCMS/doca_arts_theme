@@ -167,13 +167,22 @@ function doca_common_preprocess_views_view(&$variables) {
 }
 
 /**
- * Implements template_preprocess_poll_results().
+ * Implements template_preprocess_views_view_fields().
  */
-function doca_common_preprocess_poll_results(&$variables) {
-  $node = node_load($variables['nid']);
-  $keys = array_keys($node->choice);
-  $variables['votes_1'] = $node->choice[$keys[0]]['chvotes'];
-  $variables['votes_2'] = $node->choice[$keys[1]]['chvotes'];
+function doca_common_preprocess_views_view_field(&$variables) {
+  if ($variables["field"]->options["id"] == "value_2") {
+    $nid = $variables['field']->options['webform_nid'];
+    $sid = $variables['row']->sid;
+    $full_submission = webform_get_submission($nid, $sid);
+    if (isset($full_submission->data[24]) && ($full_submission->data[24][0] === 'anonymous')) {
+      // If anonymous (component 24) checked title should be "Anonymous".
+      $variables["output"] = "Anonymous";
+    }
+    elseif (isset($full_submission->data[2]) && !empty($full_submission->data[2][0])) {
+      // If anonymous not checked but organisation is set, it displays as title.
+      $variables["output"] = $full_submission->data[2][0];
+    }
+  }
 }
 
 /**
@@ -341,4 +350,14 @@ function doca_common_preprocess_field(&$variables, $hook) {
     }
     $variables['img_class'] = $img_class;
   }
+}
+
+/**
+ * Implements template_preprocess_poll_results().
+ */
+function doca_common_preprocess_poll_results(&$variables) {
+  $node = node_load($variables['nid']);
+  $keys = array_keys($node->choice);
+  $variables['votes_1'] = $node->choice[$keys[0]]['chvotes'];
+  $variables['votes_2'] = $node->choice[$keys[1]]['chvotes'];
 }

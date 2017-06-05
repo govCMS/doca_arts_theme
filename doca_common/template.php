@@ -522,25 +522,6 @@ function doca_common_field_group_build_pre_render_alter(&$element) {
 }
 
 /**
- * Implements template_preprocess_views_view_fields().
- */
-function doca_common_preprocess_views_view_field(&$variables) {
-  if ($variables["field"]->options["id"] == "value_2") {
-    $nid = $variables['field']->options['webform_nid'];
-    $sid = $variables['row']->sid;
-    $full_submission = webform_get_submission($nid, $sid);
-    if (isset($full_submission->data[24]) && ($full_submission->data[24][0] === 'anonymous')) {
-      // If anonymous (component 24) checked title should be "Anonymous".
-      $variables["output"] = "Anonymous";
-    }
-    elseif (isset($full_submission->data[2]) && !empty($full_submission->data[2][0])) {
-      // If anonymous not checked but organisation is set, it displays as title.
-      $variables["output"] = $full_submission->data[2][0];
-    }
-  }
-}
-
-/**
  * Implements hook_form_alter().
  */
 function doca_common_form_alter(&$form, &$form_state, $form_id) {

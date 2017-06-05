@@ -56,6 +56,21 @@ function doca_common_get_subsites() {
 }
 
 /**
+ * Trim HTML into plain text of the given length.
+ *
+ * @param string $markup
+ *   HTML to trim.
+ * @param int $trim_length
+ *   The trim length.
+ *
+ * @return string
+ *   Plain text trimmed version of the HTML.
+ */
+function doca_common_trim($markup, $trim_length) {
+  return truncate_utf8(strip_tags($markup), $trim_length, TRUE, TRUE);
+}
+
+/**
  * Helper function to add consultation variables to template files.
  */
 function _consultation_vars(&$variables, $element_object) {

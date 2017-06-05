@@ -873,21 +873,6 @@ function doca_common_breadcrumb($variables) {
 }
 
 /**
- * Trim HTML into plain text of the given length.
- *
- * @param string $markup
- *   HTML to trim.
- * @param int $trim_length
- *   The trim length.
- *
- * @return string
- *   Plain text trimmed version of the HTML.
- */
-function doca_common_trim($markup, $trim_length) {
-  return truncate_utf8(strip_tags($markup), $trim_length, TRUE, TRUE);
-}
-
-/**
  * Implements template_preprocess_field().
  */
 function doca_common_preprocess_field(&$variables, $hook) {

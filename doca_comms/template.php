@@ -120,30 +120,6 @@ function _dcomms_theme_related_content($node) {
 }
 
 /**
- * Implements hook_form_alter().
- */
-function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'webform_client_form_15') {
-    $component_key = "privacy";
-    $form['actions'][$component_key] = $form['submitted'][$component_key];
-    unset($form['submitted'][$component_key]);
-
-    // Check if the 'Short comments' field is available.
-    if (isset($form['submitted']['short_comments'])) {
-      // Update the attributes and set the maxlength.
-      $form['submitted']['short_comments']['#attributes']['maxlength'] = 500;
-    }
-  }
-
-  if ($form_id == 'workbench_moderation_moderate_form' && !empty($form['node']['#value'])) {
-    $node = $form['node']['#value'];
-    if (!empty($node->nid) && isset($node->workbench_moderation['published']->vid)) {
-      unset($form['state']['#options']['archive']);
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_block().
  */
 function dcomms_theme_preprocess_block(&$variables) {
@@ -337,6 +313,30 @@ function dcomms_theme_facetapi_link_active($variables) {
  * @see https://www.drupal.org/node/2351731
  */
 drupal_static_reset('element_info');
+
+/**
+ * Implements hook_form_alter().
+ */
+function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'webform_client_form_15') {
+    $component_key = "privacy";
+    $form['actions'][$component_key] = $form['submitted'][$component_key];
+    unset($form['submitted'][$component_key]);
+
+    // Check if the 'Short comments' field is available.
+    if (isset($form['submitted']['short_comments'])) {
+      // Update the attributes and set the maxlength.
+      $form['submitted']['short_comments']['#attributes']['maxlength'] = 500;
+    }
+  }
+
+  if ($form_id == 'workbench_moderation_moderate_form' && !empty($form['node']['#value'])) {
+    $node = $form['node']['#value'];
+    if (!empty($node->nid) && isset($node->workbench_moderation['published']->vid)) {
+      unset($form['state']['#options']['archive']);
+    }
+  }
+}
 
 /**
  * Implements hook_block_view_alter().

@@ -752,7 +752,7 @@ function doca_common_file_icon($variables) {
 /**
  * Returns the poll type based on number of choices.
  */
-function _dcomms_poll_type($nid) {
+function doca_common_get_poll_type($nid) {
   $node = node_load($nid);
   $choices = count($node->choice);
   $poll_type = 'binary';

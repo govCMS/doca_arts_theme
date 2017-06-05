@@ -19,10 +19,10 @@
  * @ingroup themeable
  */
 ?>
-<div class="poll-results poll-results--<?php print _dcomms_poll_type($variables['nid']); ?>">
+<div class="poll-results poll-results--<?php print doca_common_get_poll_type($variables['nid']); ?>">
   <?php print $results; ?>
   <div class="poll-results__total">
-    <?php if (_dcomms_poll_type($variables['nid']) == 'binary'): ?>
+    <?php if (doca_common_get_poll_type($variables['nid']) == 'binary'): ?>
       <?php print t('@votes_1 people agree with you, @votes_2 had a different opinion', array(
         '@votes_1' => $votes_1,
         '@votes_2' => $votes_2,

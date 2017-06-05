@@ -165,3 +165,13 @@ function doca_common_preprocess_views_view(&$variables) {
     }
   }
 }
+
+/**
+ * Implements template_preprocess_poll_results().
+ */
+function doca_common_preprocess_poll_results(&$variables) {
+  $node = node_load($variables['nid']);
+  $keys = array_keys($node->choice);
+  $variables['votes_1'] = $node->choice[$keys[0]]['chvotes'];
+  $variables['votes_2'] = $node->choice[$keys[1]]['chvotes'];
+}

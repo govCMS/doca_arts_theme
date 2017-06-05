@@ -1136,16 +1136,6 @@ function doca_common_ds_pre_render_alter(&$layout_render_array, $context, &$vari
 }
 
 /**
- * Implements template_preprocess_poll_results().
- */
-function doca_common_preprocess_poll_results(&$variables) {
-  $node = node_load($variables['nid']);
-  $keys = array_keys($node->choice);
-  $variables['votes_1'] = $node->choice[$keys[0]]['chvotes'];
-  $variables['votes_2'] = $node->choice[$keys[1]]['chvotes'];
-}
-
-/**
  * Clear any previously set element_info() static cache.
  *
  * If element_info() was invoked before the theme was fully initialized, this

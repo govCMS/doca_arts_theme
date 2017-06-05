@@ -750,20 +750,6 @@ function doca_common_file_icon($variables) {
 }
 
 /**
- * Returns the poll type based on number of choices.
- */
-function doca_common_get_poll_type($nid) {
-  $node = node_load($nid);
-  $choices = count($node->choice);
-  $poll_type = 'binary';
-  if ($choices > '2') {
-    $poll_type = 'multiple';
-  }
-
-  return $poll_type;
-}
-
-/**
  * Implements hook_ds_pre_render_alter().
  */
 function doca_common_ds_pre_render_alter(&$layout_render_array, $context, &$variables) {

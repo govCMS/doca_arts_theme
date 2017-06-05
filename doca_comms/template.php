@@ -308,6 +308,77 @@ function dcomms_theme_menu_link__menu_footer_sub_menu(array $variables) {
 }
 
 /**
+ * Returns HTML for an active facet item (in search).
+ *
+ * @param $variables
+ *   An associative array containing the keys 'text', 'path', and 'options'.
+ *
+ * @return string
+ *   A HTML string.
+ */
+function dcomms_theme_facetapi_link_active($variables) {
+
+  // Sanitizes the link text if necessary.
+  $sanitize = empty($variables['options']['html']);
+  $link_text = ($sanitize) ? check_plain($variables['text']) : $variables['text'];
+
+  // Theme function variables fro accessible markup.
+  // @see http://drupal.org/node/1316580
+  $accessible_vars = [
+    'text' => $variables['text'],
+    'active' => TRUE,
+  ];
+
+  // Builds link, passes through t() which gives us the ability to change the
+  // position of the widget on a per-language basis.
+  $replacements = [
+    '!facetapi_deactivate_widget' => theme('facetapi_deactivate_widget', $variables),
+    '!facetapi_accessible_markup' => theme('facetapi_accessible_markup', $accessible_vars),
+  ];
+  $variables['text'] = t('!facetapi_deactivate_widget !facetapi_accessible_markup', $replacements);
+  $variables['options']['html'] = TRUE;
+
+  // return theme_link($variables) . $link_text;
+  return $link_text . '<a href="' . check_plain(url($variables['path'], $variables['options'])) . '"'
+    . drupal_attributes($variables['options']['attributes']) . '>'
+    //  . ($variables['options']['html'] ? $variables['text'] : check_plain($variables['text']))
+    . '    <img src="' . drupal_get_path('theme', 'dcomms_theme') . '/dist/images/close--blue.svg"'
+    . '         alt="Remove ' . $link_text . ' filter">'
+    . '</a>';
+}
+
+/**
+ * Clear any previously set element_info() static cache.
+ *
+ * If element_info() was invoked before the theme was fully initialized, this
+ * can cause the theme's alter hook to not be invoked.
+ *
+ * @see https://www.drupal.org/node/2351731
+ */
+drupal_static_reset('element_info');
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function dcomms_theme_block_view_alter(&$data, $block) {
+  if ($block->module === 'search' && $block->delta === 'form') {
+    $contexts = context_active_contexts();
+    if (array_key_exists('display_sso_nav', $contexts) || array_key_exists('clone_of_display_sso_nav', $contexts)) {
+      $data['subsite'] = '15';
+      $data['subsite_name'] = 'Stay Smart Online';
+    }
+    if (array_key_exists('display_digitalbusiness_nav', $contexts) || array_key_exists('display_digitalbusiness_nav', $contexts)) {
+      $data['subsite'] = '20';
+      $data['subsite_name'] = 'Digital Business';
+    }
+    if (array_key_exists('display_bcr_nav', $contexts) || array_key_exists('clone_of_display_bcr_nav', $contexts)) {
+      $data['subsite'] = '40';
+      $data['subsite_name'] = 'Bureau of Communications Research';
+    }
+  }
+}
+
+/**
  * Implements hook_ds_pre_render_alter().
  */
 function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$variables) {
@@ -399,77 +470,6 @@ function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$var
           $variables['alert_priority'] = $priority_level->name;
         }
       }
-    }
-  }
-}
-
-/**
- * Returns HTML for an active facet item (in search).
- *
- * @param $variables
- *   An associative array containing the keys 'text', 'path', and 'options'.
- *
- * @return string
- *   A HTML string.
- */
-function dcomms_theme_facetapi_link_active($variables) {
-
-  // Sanitizes the link text if necessary.
-  $sanitize = empty($variables['options']['html']);
-  $link_text = ($sanitize) ? check_plain($variables['text']) : $variables['text'];
-
-  // Theme function variables fro accessible markup.
-  // @see http://drupal.org/node/1316580
-  $accessible_vars = [
-    'text' => $variables['text'],
-    'active' => TRUE,
-  ];
-
-  // Builds link, passes through t() which gives us the ability to change the
-  // position of the widget on a per-language basis.
-  $replacements = [
-    '!facetapi_deactivate_widget' => theme('facetapi_deactivate_widget', $variables),
-    '!facetapi_accessible_markup' => theme('facetapi_accessible_markup', $accessible_vars),
-  ];
-  $variables['text'] = t('!facetapi_deactivate_widget !facetapi_accessible_markup', $replacements);
-  $variables['options']['html'] = TRUE;
-
-  // return theme_link($variables) . $link_text;
-  return $link_text . '<a href="' . check_plain(url($variables['path'], $variables['options'])) . '"'
-    . drupal_attributes($variables['options']['attributes']) . '>'
-    //  . ($variables['options']['html'] ? $variables['text'] : check_plain($variables['text']))
-    . '    <img src="' . drupal_get_path('theme', 'dcomms_theme') . '/dist/images/close--blue.svg"'
-    . '         alt="Remove ' . $link_text . ' filter">'
-    . '</a>';
-}
-
-/**
- * Clear any previously set element_info() static cache.
- *
- * If element_info() was invoked before the theme was fully initialized, this
- * can cause the theme's alter hook to not be invoked.
- *
- * @see https://www.drupal.org/node/2351731
- */
-drupal_static_reset('element_info');
-
-/**
- * Implements hook_block_view_alter().
- */
-function dcomms_theme_block_view_alter(&$data, $block) {
-  if ($block->module === 'search' && $block->delta === 'form') {
-    $contexts = context_active_contexts();
-    if (array_key_exists('display_sso_nav', $contexts) || array_key_exists('clone_of_display_sso_nav', $contexts)) {
-      $data['subsite'] = '15';
-      $data['subsite_name'] = 'Stay Smart Online';
-    }
-    if (array_key_exists('display_digitalbusiness_nav', $contexts) || array_key_exists('display_digitalbusiness_nav', $contexts)) {
-      $data['subsite'] = '20';
-      $data['subsite_name'] = 'Digital Business';
-    }
-    if (array_key_exists('display_bcr_nav', $contexts) || array_key_exists('clone_of_display_bcr_nav', $contexts)) {
-      $data['subsite'] = '40';
-      $data['subsite_name'] = 'Bureau of Communications Research';
     }
   }
 }

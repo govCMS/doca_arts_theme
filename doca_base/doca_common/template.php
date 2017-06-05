@@ -11,6 +11,11 @@
 include_once dirname(__FILE__) . '/includes/common_templates.func.inc';
 
 /**
+ * Include internal helper functions.
+ */
+include_once dirname(__FILE__) . '/includes/helper.inc';
+
+/**
  * Include preprocess functions.
  */
 include_once dirname(__FILE__) . '/includes/preprocess.inc';

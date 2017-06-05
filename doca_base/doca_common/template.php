@@ -16,6 +16,11 @@ include_once dirname(__FILE__) . '/includes/common_templates.func.inc';
 include_once dirname(__FILE__) . '/includes/preprocess.inc';
 
 /**
+ * Include theme hook functions.
+ */
+include_once dirname(__FILE__) . '/includes/theme.inc';
+
+/**
  * Implements hook_js_alter().
  */
 function doca_common_js_alter(&$javascript) {

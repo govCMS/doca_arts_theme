@@ -140,21 +140,6 @@ function _doca_common_related_content($node) {
 }
 
 /**
- * Implements hook_preprocess_panels_pane().
- */
-function doca_common_preprocess_panels_pane(&$variables) {
-  if (isset($variables['content']['bean'])) {
-    $bean = reset($variables['content']['bean']);
-    if ($bean['#bundle'] == 'qna_pair_alt') {
-      $variables['theme_hook_suggestions'][] = 'panels_pane__qna_pair_alt';
-    }
-    elseif ($bean['#bundle'] == 'qna_pair') {
-      $variables['theme_hook_suggestions'][] = 'panels_pane__qna_pair';
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_block().
  */
 function doca_common_preprocess_block(&$variables) {

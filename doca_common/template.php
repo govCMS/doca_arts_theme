@@ -16,34 +16,9 @@ include_once dirname(__FILE__) . '/includes/common_templates.func.inc';
 include_once dirname(__FILE__) . '/includes/preprocess.inc';
 
 /**
- * Implements hook_js_alter().
+ * Include theme hook functions.
  */
-function doca_common_js_alter(&$javascript) {
-  $tabs_js_path = drupal_get_path('module', 'field_group') . '/horizontal-tabs/horizontal-tabs.js';
-  unset($javascript[$tabs_js_path]);
-}
-
-/**
- * Implements hook_media_wysiwyg_token_to_markup_alter().
- */
-function doca_common_media_wysiwyg_token_to_markup_alter(&$element, &$tag_info, $settings) {
-  // Add the relevant styles to the generated media wysiwyg dom elements. This
-  // needs to be done in slightly different ways for certain view modes.
-  if (isset($element['content']['file']['#attributes']['style'])) {
-    $styles = $element['content']['file']['#attributes']['style'];
-    $parts = explode(";", $styles);
-    for ($i = 0; $i < count($parts); $i++) {
-      if (substr(trim($parts[$i]), 0, 5) == 'float') {
-        // Move the float to the parent element.
-        $element['content']['#attributes']['class'][] = 'doca-media-' . trim(explode(':', $parts[$i])[1]);
-        $element['content']['#attributes']['style'] = $parts[$i];
-        unset($parts[$i]);
-        $element['content']['file']['#attributes']['style'] = implode(";", $parts);
-        break;
-      }
-    }
-  }
-}
+include_once dirname(__FILE__) . '/includes/theme.inc';
 
 /**
  * Fill related content with content from a category term.
@@ -772,76 +747,6 @@ function doca_common_file_icon($variables) {
   }
 
   return '<img alt="" class="file__icon" src="' . base_path() . $icon_url . '" title="' . $mime . '" />';
-}
-
-/**
- * Returns the poll type based on number of choices.
- */
-function _dcomms_poll_type($nid) {
-  $node = node_load($nid);
-  $choices = count($node->choice);
-  $poll_type = 'binary';
-  if ($choices > '2') {
-    $poll_type = 'multiple';
-  }
-
-  return $poll_type;
-}
-
-/**
- * Implements theme_breadcrumb().
- */
-function doca_common_breadcrumb($variables) {
-  $breadcrumb = $variables['breadcrumb'];
-  $output = '';
-
-  // Determine if we are to display the breadcrumb.
-  $show_breadcrumb = theme_get_setting('zen_breadcrumb');
-  if ($show_breadcrumb == 'yes' || $show_breadcrumb == 'admin' && arg(0) == 'admin') {
-
-    // Optionally get rid of the homepage link.
-    $show_breadcrumb_home = theme_get_setting('zen_breadcrumb_home');
-    if (!$show_breadcrumb_home) {
-      array_shift($breadcrumb);
-    }
-
-    // Return the breadcrumb with separators.
-    if (!empty($breadcrumb)) {
-      $breadcrumb_separator = "<svg class='breadcrumb__separator' xmlns='http://www.w3.org/2000/svg' height='15' version='1.1' viewBox='0 0 416 416' width='10' xml:space='preserve'><polygon points='160,115.4 180.7,96 352,256 180.7,416 160,396.7 310.5,256 '></polygon></svg>";
-      $trailing_separator = $title = '';
-      if (theme_get_setting('zen_breadcrumb_title')) {
-        $item = menu_get_item();
-        if (!empty($item['tab_parent'])) {
-          // If we are on a non-default tab, use the tab's title.
-          $breadcrumb[] = check_plain($item['title']);
-        }
-        else {
-          $breadcrumb[] = drupal_get_title();
-        }
-      }
-      elseif (theme_get_setting('zen_breadcrumb_trailing')) {
-        $trailing_separator = $breadcrumb_separator;
-      }
-
-      // Provide a navigational heading to give context for breadcrumb links to
-      // screen-reader users.
-      if (empty($variables['title'])) {
-        $variables['title'] = t('You are here');
-      }
-      // Unless overridden by a preprocess function, make the heading invisible.
-      if (!isset($variables['title_attributes_array']['class'])) {
-        $variables['title_attributes_array']['class'][] = 'element-invisible';
-      }
-
-      // Build the breadcrumb trail.
-      $output = '<nav class="breadcrumb" role="navigation">';
-      $output .= '<h2' . drupal_attributes($variables['title_attributes_array']) . '>' . $variables['title'] . '</h2>';
-      $output .= '<ol class="breadcrumb__list"><li class="breadcrumb__item">' . implode($breadcrumb_separator . '</li><li class="breadcrumb__item">', $breadcrumb) . $trailing_separator . '</li></ol>';
-      $output .= '</nav>';
-    }
-  }
-
-  return $output;
 }
 
 /**

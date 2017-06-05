@@ -308,19 +308,6 @@ function dcomms_theme_menu_link__menu_footer_sub_menu(array $variables) {
 }
 
 /**
- * Implements theme_file_icon().
- */
-function dcomms_theme_file_icon($variables) {
-  $file = $variables['file'];
-  $icon_directory = drupal_get_path('theme', 'dcomms_theme') . '/images/document';
-
-  $mime = check_plain($file->filemime);
-  $icon_url = file_icon_path($file, $icon_directory);
-
-  return '<img alt="" class="file__icon" src="' . base_path() . $icon_url . '" title="' . $mime . '" />';
-}
-
-/**
  * Implements hook_ds_pre_render_alter().
  */
 function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$variables) {

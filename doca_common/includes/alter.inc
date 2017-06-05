@@ -6,57 +6,6 @@
  */
 
 /**
- * Implements hook_js_alter().
- */
-function doca_common_js_alter(&$javascript) {
-  $tabs_js_path = drupal_get_path('module', 'field_group') . '/horizontal-tabs/horizontal-tabs.js';
-  unset($javascript[$tabs_js_path]);
-}
-
-/**
- * Implements hook_media_wysiwyg_token_to_markup_alter().
- */
-function doca_common_media_wysiwyg_token_to_markup_alter(&$element, &$tag_info, $settings) {
-  // Add the relevant styles to the generated media wysiwyg dom elements. This
-  // needs to be done in slightly different ways for certain view modes.
-  if (isset($element['content']['file']['#attributes']['style'])) {
-    $styles = $element['content']['file']['#attributes']['style'];
-    $parts = explode(";", $styles);
-    for ($i = 0; $i < count($parts); $i++) {
-      if (substr(trim($parts[$i]), 0, 5) == 'float') {
-        // Move the float to the parent element.
-        $element['content']['#attributes']['class'][] = 'doca-media-' . trim(explode(':', $parts[$i])[1]);
-        $element['content']['#attributes']['style'] = $parts[$i];
-        unset($parts[$i]);
-        $element['content']['file']['#attributes']['style'] = implode(";", $parts);
-        break;
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_node_view.
- *
- * @param array &$build
- *        A renderable array representing the node content.
- */
-function doca_common_node_view_alter(&$build) {
-  if ($build['#node']->type == 'alert' && $build['#view_mode'] == 'rss_feed') {
-    $node = $build['#node'];
-    if (!empty($node->field_priority_level[LANGUAGE_NONE][0]['tid'])) {
-      $priority_level = $node->field_priority_level[LANGUAGE_NONE][0]['tid'];
-      if ($priority_level = taxonomy_term_load($priority_level)) {
-        $node->title = t('Alert Priority !priority: !title', [
-          '!priority' => $priority_level->name,
-          '!title' => $node->title,
-        ]);
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_block_view_alter().
  */
 function doca_common_block_view_alter(&$data, $block) {
@@ -153,6 +102,72 @@ function doca_common_ds_pre_render_alter(&$layout_render_array, $context, &$vari
           $variables['classes_array'][] = 'alert-priority-' . strtolower(trim($priority_level->name));
           $variables['alert_priority'] = $priority_level->name;
         }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook__field_group_build_pre_render_alter().
+ */
+function doca_common_field_group_build_pre_render_alter(&$element) {
+  if (isset($element['#node'])) {
+    $object = $element['#node'];
+    if ($object->type != 'funding') {
+      $object = NULL;
+    }
+  }
+  if (!empty($object) && !empty($object->field_funding_item) && $object->field_funding_item[LANGUAGE_NONE][0]['value'] == 'support') {
+    $element['group_formal_submissions']['#prefix'] = str_replace('Funding applications', 'Support applications', $element['group_formal_submissions']['#prefix']);
+  }
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function doca_common_js_alter(&$javascript) {
+  $tabs_js_path = drupal_get_path('module', 'field_group') . '/horizontal-tabs/horizontal-tabs.js';
+  unset($javascript[$tabs_js_path]);
+}
+
+/**
+ * Implements hook_media_wysiwyg_token_to_markup_alter().
+ */
+function doca_common_media_wysiwyg_token_to_markup_alter(&$element, &$tag_info, $settings) {
+  // Add the relevant styles to the generated media wysiwyg dom elements. This
+  // needs to be done in slightly different ways for certain view modes.
+  if (isset($element['content']['file']['#attributes']['style'])) {
+    $styles = $element['content']['file']['#attributes']['style'];
+    $parts = explode(";", $styles);
+    for ($i = 0; $i < count($parts); $i++) {
+      if (substr(trim($parts[$i]), 0, 5) == 'float') {
+        // Move the float to the parent element.
+        $element['content']['#attributes']['class'][] = 'doca-media-' . trim(explode(':', $parts[$i])[1]);
+        $element['content']['#attributes']['style'] = $parts[$i];
+        unset($parts[$i]);
+        $element['content']['file']['#attributes']['style'] = implode(";", $parts);
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_node_view.
+ *
+ * @param array &$build
+ *        A renderable array representing the node content.
+ */
+function doca_common_node_view_alter(&$build) {
+  if ($build['#node']->type == 'alert' && $build['#view_mode'] == 'rss_feed') {
+    $node = $build['#node'];
+    if (!empty($node->field_priority_level[LANGUAGE_NONE][0]['tid'])) {
+      $priority_level = $node->field_priority_level[LANGUAGE_NONE][0]['tid'];
+      if ($priority_level = taxonomy_term_load($priority_level)) {
+        $node->title = t('Alert Priority !priority: !title', [
+          '!priority' => $priority_level->name,
+          '!title' => $node->title,
+        ]);
       }
     }
   }

@@ -507,21 +507,6 @@ function doca_common_preprocess_panels_pane(&$variables) {
 }
 
 /**
- * Implements hook__field_group_build_pre_render_alter().
- */
-function doca_common_field_group_build_pre_render_alter(&$element) {
-  if (isset($element['#node'])) {
-    $object = $element['#node'];
-    if ($object->type != 'funding') {
-      $object = NULL;
-    }
-  }
-  if (!empty($object) && !empty($object->field_funding_item) && $object->field_funding_item[LANGUAGE_NONE][0]['value'] == 'support') {
-    $element['group_formal_submissions']['#prefix'] = str_replace('Funding applications', 'Support applications', $element['group_formal_submissions']['#prefix']);
-  }
-}
-
-/**
  * Implements hook_form_alter().
  */
 function doca_common_form_alter(&$form, &$form_state, $form_id) {

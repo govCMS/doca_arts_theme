@@ -163,34 +163,6 @@ function dcomms_theme_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
- * Render a read more link.
- *
- * @param string $href
- *   URL of the read more link.
- * @param string $text
- *   Text of the read more link.
- * @param boolean $external
- *   Whether the link is external or not. Defaults to FALSE.
- *
- * @return string
- *   HTML markup for read more link.
- */
-function dcomms_theme_read_more_link($href, $text, $external = FALSE) {
-  $template_file = drupal_get_path('theme', 'dcomms_theme') . '/templates/read-more-link.tpl.php';
-
-  // Make sure relative links start with /.
-  if (substr($href, 0, 4) != 'http' && substr($href, 0, 1) != '/') {
-    $href = base_path() . $href;
-  }
-
-  return theme_render_template($template_file, [
-    'href' => $href,
-    'text' => $text,
-    'external' => $external,
-  ]);
-}
-
-/**
  * Implements hook_preprocess_block().
  */
 function dcomms_theme_preprocess_block(&$variables) {

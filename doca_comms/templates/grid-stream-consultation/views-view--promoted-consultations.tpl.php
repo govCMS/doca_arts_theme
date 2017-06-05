@@ -56,7 +56,7 @@
       <?php print $more; ?>
       <?php elseif (!$pager): ?>
         <div class="spacer--bottom">
-            <?php print dcomms_theme_read_more_link('/have-your-say', t('View all consultations')); ?>
+            <?php print doca_common_read_more_link('/have-your-say', t('View all consultations')); ?>
         </div>
     <?php endif; ?>
 

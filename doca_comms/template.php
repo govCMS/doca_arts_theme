@@ -120,40 +120,6 @@ function _dcomms_theme_related_content($node) {
 }
 
 /**
- * Implements hook_preprocess_block().
- */
-function dcomms_theme_preprocess_block(&$variables) {
-  // Theming various blocks.
-  switch ($variables['block_html_id']) {
-    case 'block-system-main-menu':
-      $variables['classes_array'][] = 'header-menu';
-      $variables['title_attributes_array']['class'] = ['element-invisible'];
-      break;
-
-    case 'block-menu-menu-footer-menu':
-      $variables['classes_array'][] = 'layout-centered';
-      $variables['classes_array'][] = 'clearfix';
-      $variables['title_attributes_array']['class'] = ['element-invisible'];
-      break;
-
-    case 'block-menu-menu-footer-sub-menu':
-      $variables['classes_array'][] = 'layout-centered';
-      $variables['classes_array'][] = 'clearfix';
-      $variables['title_attributes_array']['class'] = ['element-invisible'];
-      break;
-  }
-
-  // Block template per bean type.
-  if ($variables['block']->module === 'bean') {
-    $beans = $variables['elements']['bean'];
-    $bean_keys = element_children($beans);
-    $bean = $beans[reset($bean_keys)];
-    // Add template suggestions for bean types.
-    $variables['theme_hook_suggestions'][] = 'block__bean__' . $bean['#bundle'];
-  }
-}
-
-/**
  * Implements theme_menu_tree__MENU_NAME().
  */
 function dcomms_theme_menu_tree__main_menu($variables) {

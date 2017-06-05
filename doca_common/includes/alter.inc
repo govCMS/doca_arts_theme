@@ -78,6 +78,87 @@ function doca_common_block_view_alter(&$data, $block) {
 }
 
 /**
+ * Implements hook_ds_pre_render_alter().
+ */
+function doca_common_ds_pre_render_alter(&$layout_render_array, $context, &$variables) {
+  if (isset($variables['type'])) {
+    $feature_types = ['page', 'blog_article', 'alert', 'news_article'];
+    if ($variables['type'] === 'consultation' || $variables['type'] === 'poll' || $variables['type'] === 'funding') {
+      // If viewed in iframe mode - add additional class.
+      if (isset($variables['view']) && $variables['view']->name === 'consultations_iframe') {
+        $variables['classes_array'][] = 'grid-stream__item--iframe';
+      }
+      // Modify the class if the node has a Featured Image.
+      $modifier_class = '';
+      if (!empty($variables['field_feature_image'])) {
+        $modifier_class = '--has-image';
+      }
+      // Add the relevant class to the template.
+      if ($variables['view_mode'] === 'grid_stream_portrait') {
+        $variables['classes_array'][] = 'grid-stream__item--vertical' . $modifier_class;
+      }
+      if ($variables['view_mode'] === 'grid_stream_portrait_small' && $variables['type'] === 'funding') {
+        $variables['classes_array'][] = 'grid-stream__item--vertical';
+      }
+      elseif ($variables['view_mode'] === 'grid_stream_landscape') {
+        $variables['classes_array'][] = 'clearfix__overflow grid-stream__item--landscape-small' . $modifier_class;
+      }
+      elseif ($variables['view_mode'] === 'grid_stream_upcoming') {
+        if (!empty($variables['field_feature_image'])) {
+          $modifier_class = '--has-image-description';
+        }
+        $variables['classes_array'][] = 'clearfix__overflow grid-stream__item--landscape-small' . $modifier_class;
+      }
+    }
+    elseif (in_array($variables['type'], $feature_types)) {
+      if ($variables['view_mode'] === 'grid_stream_portrait') {
+        $variables['classes_array'][] = 'grid-stream__item--portrait';
+      }
+      elseif ($variables['view_mode'] === 'grid_stream_landscape') {
+        $variables['classes_array'][] = 'clearfix__overflow grid-stream__item--landscape';
+      }
+      elseif ($variables['view_mode'] === 'grid_stream_portrait_small') {
+        $variables['classes_array'][] = 'grid-stream__item--portrait-small';
+      }
+    }
+    if ($variables['type'] === 'news_article' && $variables['view_mode'] === 'teaser') {
+      $variables['classes_array'][] = 'news-list__item';
+    }
+    // Add business area class to relevant items where relevant.
+    if (isset($variables['field_business_area']) && !empty($variables['field_business_area']) && $variables['view_mode'] != 'full') {
+      $hide_stream = FALSE;
+      if (isset($variables['field_business_area'][LANGUAGE_NONE]) && is_array($variables['field_business_area'][LANGUAGE_NONE][0])) {
+        $business_area_tid = $variables['field_business_area'][LANGUAGE_NONE][0]['tid'];
+      }
+      else {
+        $business_area_tid = $variables['field_business_area'][0]['tid'];
+      }
+
+      $subsites = doca_common_get_subsites();
+      $business_area_name = isset($subsites[$business_area_tid]) ? $subsites[$business_area_tid] : $business_area_tid;
+
+      $variables['classes_array'][] = 'grid-stream__item--business-area';
+      $variables['classes_array'][] = 'subsite__' . $business_area_name;
+
+      if ($hide_stream === TRUE) {
+        $variables['classes_array'][] = 'grid-stream__item--business-area--hide-stream';
+      }
+    }
+
+    // Add different classes to relevant priority levels of SSO Alerts.
+    if ($variables['type'] == 'alert') {
+      if (isset($variables['field_priority_level']) && count($variables['field_priority_level'])) {
+        $priority_level = $variables['field_priority_level'][LANGUAGE_NONE][0]['tid'];
+        if ($priority_level = taxonomy_term_load($priority_level)) {
+          $variables['classes_array'][] = 'alert-priority-' . strtolower(trim($priority_level->name));
+          $variables['alert_priority'] = $priority_level->name;
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function doca_common_form_webform_client_form_alter(&$form, &$form_state, $form_id) {

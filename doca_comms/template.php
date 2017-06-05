@@ -6,62 +6,6 @@
  */
 
 /**
- * Implements theme_menu_tree__MENU_NAME().
- */
-function dcomms_theme_menu_tree__menu_footer_menu($variables) {
-  return '<ul class="footer-menu">' . $variables['tree'] . '</ul>';
-}
-
-/**
- * Implements theme_menu_link__MENU_NAME().
- */
-function dcomms_theme_menu_link__menu_footer_menu(array $variables) {
-  $element = $variables['element'];
-  $sub_menu = '';
-  if ($element['#original_link']['depth'] === '1') {
-    $item_class = 'footer-menu__column';
-    $link_class = 'footer-menu__title';
-  }
-  else {
-    $item_class = 'footer-menu__item';
-    $link_class = '';
-  }
-  if (isset($element['#below'])) {
-    $sub_menu = drupal_render($element['#below']);
-  }
-  $element['#localized_options']['attributes']['class'][] = $link_class;
-  $element['#localized_options']['html'] = TRUE;
-
-  $output = l(check_plain($element['#title']), $element['#href'], $element['#localized_options']);
-
-  return '<li class="' . $item_class . '">' . $output . $sub_menu . "</li>\n";
-}
-
-/**
- * Implements theme_menu_tree__MENU_NAME().
- */
-function dcomms_theme_menu_tree__menu_footer_sub_menu($variables) {
-  return '<ul class="list-unstyled list-inline">' . $variables['tree'] . '</ul>';
-}
-
-/**
- * Implements theme_menu_link__MENU_NAME().
- */
-function dcomms_theme_menu_link__menu_footer_sub_menu(array $variables) {
-  $element = $variables['element'];
-  $sub_menu = '';
-
-  if (isset($element['#below'])) {
-    $sub_menu = drupal_render($element['#below']);
-  }
-  $element['#localized_options']['attributes']['class'][] = 'footer_menu__link';
-  $element['#localized_options']['html'] = TRUE;
-  $output = l(check_plain($element['#title']), $element['#href'], $element['#localized_options']);
-
-  return '<li class="footer-menu__item">' . $output . $sub_menu . "</li>\n";
-}
-
-/**
  * Returns HTML for an active facet item (in search).
  *
  * @param $variables

@@ -62,6 +62,23 @@ function doca_common_breadcrumb($variables) {
 }
 
 /**
+ * Implements theme_file_icon().
+ */
+function doca_common_file_icon($variables) {
+  $file = $variables['file'];
+  $icon_directory = drupal_get_path('theme', 'doca_common') . '/dist/images/document';
+
+  $mime = check_plain($file->filemime);
+  $icon_url = file_icon_path($file, $icon_directory);
+
+  if ($icon_url == FALSE) {
+    $icon_url = $icon_directory . '/generic.png';
+  }
+
+  return '<img alt="" class="file__icon" src="' . base_path() . $icon_url . '" title="' . $mime . '" />';
+}
+
+/**
  * Implements hook_theme().
  */
 function doca_common_theme($existing, $type, $theme, $path) {

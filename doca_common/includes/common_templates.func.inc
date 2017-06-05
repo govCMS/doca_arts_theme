@@ -6,6 +6,21 @@
  */
 
 /**
+ * Returns HTML for a menu with a heading and wrapper.
+ */
+function doca_common_block_render($module, $delta) {
+  $output = '';
+  $block = block_load($module, $delta);
+  if (isset($block->bid)) {
+    $block_content = _block_render_blocks([$block]);
+    $block_array = _block_get_renderable_array($block_content);
+    $output = drupal_render($block_array);
+  }
+
+  return $output;
+}
+
+/**
  * Get standard page node ids that are menu children of a given menu link.
  *
  * @param array $item
@@ -56,6 +71,20 @@ function doca_common_get_subsites() {
 }
 
 /**
+ * Returns the poll type based on number of choices.
+ */
+function doca_common_get_poll_type($nid) {
+  $node = node_load($nid);
+  $choices = count($node->choice);
+  $poll_type = 'binary';
+  if ($choices > '2') {
+    $poll_type = 'multiple';
+  }
+
+  return $poll_type;
+}
+
+/**
  * Render a read more link.
  *
  * @param string $href
@@ -84,6 +113,120 @@ function doca_common_read_more_link($href, $text, $external = FALSE) {
 }
 
 /**
+ * Fill related content with content from a category term.
+ *
+ * @param array $related_content_nids
+ *   Array of related content node ids.
+ * @param int $limit
+ *   Maximum number of related content nodes.
+ * @param object $node
+ *   Drupal node.
+ * @param string $field_name
+ *   Field name with category term.
+ */
+function doca_common_related_content_category_term(&$related_content_nids, $limit, $node, $field_name) {
+  if (count($related_content_nids) < $limit && isset($node->{$field_name}[LANGUAGE_NONE][0]['tid'])) {
+    $query = db_select('node', 'n')
+      ->fields('n', ['nid']);
+    $query->join('field_data_' . $field_name, 'tags', 'n.nid = tags.entity_id AND n.vid = tags.revision_id');
+    $query->condition('n.status', 1, '=')
+      ->condition('n.type', $node->type, '=')
+      ->condition('n.nid', $node->nid, '<>');
+    if (!empty($related_content_nids)) {
+      $query->condition('n.nid', $related_content_nids, 'NOT IN');
+    }
+    $query->condition('tags.' . $field_name . '_tid', $node->{$field_name}[LANGUAGE_NONE][0]['tid'], '=')
+      ->orderBy('title', 'ASC');
+    $query->addTag('node_access');
+    $result = $query->range(0, $limit - count($related_content_nids))
+      ->execute();
+    foreach ($result as $row) {
+      $related_content_nids[] = $row->nid;
+    }
+  }
+}
+
+/**
+ * Generated related content for a node.
+ *
+ * @param object $node
+ *   Node.
+ *
+ * @return array
+ *   Render Array.
+ */
+function doca_common_related_content($node) {
+  $limit = 4;
+  $related_content_nids = [];
+
+  // First fill related content with content of same type with highest number
+  // of the same tags.
+  $tids = [];
+  $tags = field_get_items('node', $node, 'field_tags');
+  if ($tags) {
+    foreach ($tags as $term) {
+      $tids[] = $term['tid'];
+    }
+  }
+  if (!empty($tids)) {
+    $query = db_select('node', 'n')->fields('n', ['nid']);
+    $query->join('field_data_field_tags', 'tags', 'n.nid = tags.entity_id AND n.vid = tags.revision_id');
+    $query->condition('n.status', 1, '=')
+      ->condition('n.nid', $node->nid, '<>')
+      ->condition('tags.field_tags_tid', $tids, 'IN')
+      ->groupBy('nid')
+      ->orderBy('nid_count', 'DESC')
+      ->orderBy('title', 'ASC')
+      ->addExpression('COUNT(nid)', 'nid_count');
+    $query->addTag('node_access');
+    $result = $query->range(0, $limit)
+      ->execute();
+    foreach ($result as $row) {
+      $related_content_nids[] = $row->nid;
+    }
+  }
+
+  // Next fill related content with content of same type in this business area.
+  doca_common_related_content_category_term($related_content_nids, $limit, $node, 'field_business_area');
+
+  // Next fill related content with content of same type in this stream.
+  doca_common_related_content_category_term($related_content_nids, $limit, $node, 'field_stream');
+
+  // Next fill related content with content of same type in this audience.
+  doca_common_related_content_category_term($related_content_nids, $limit, $node, 'field_audience');
+
+  // Finally fill related content with content of same type.
+  if (count($related_content_nids) < $limit) {
+    $query = db_select('node', 'n')
+      ->fields('n', ['nid'])
+      ->condition('n.status', 1, '=')
+      ->condition('n.type', $node->type, '=')
+      ->condition('n.nid', $node->nid, '<>');
+    if (!empty($related_content_nids)) {
+      $query->condition('n.nid', $related_content_nids, 'NOT IN');
+    }
+    $query->orderBy('title', 'ASC');
+    $query->addTag('node_access');
+    $result = $query->range(0, $limit - count($related_content_nids))
+      ->execute();
+    foreach ($result as $row) {
+      $related_content_nids[] = $row->nid;
+    }
+  }
+
+  // Get list of links from related content nodes.
+  $items = [];
+  foreach (node_load_multiple($related_content_nids) as $related_nid => $related_node) {
+    $items[] = l($related_node->title, 'node/' . $related_nid);
+  }
+
+  return [
+    '#theme' => 'list_arrow',
+    '#items' => $items,
+  ];
+}
+
+/**
  * Trim HTML into plain text of the given length.
  *
  * @param string $markup
@@ -96,20 +239,6 @@ function doca_common_read_more_link($href, $text, $external = FALSE) {
  */
 function doca_common_trim($markup, $trim_length) {
   return truncate_utf8(strip_tags($markup), $trim_length, TRUE, TRUE);
-}
-
-/**
- * Returns the poll type based on number of choices.
- */
-function doca_common_get_poll_type($nid) {
-  $node = node_load($nid);
-  $choices = count($node->choice);
-  $poll_type = 'binary';
-  if ($choices > '2') {
-    $poll_type = 'multiple';
-  }
-
-  return $poll_type;
 }
 
 /**

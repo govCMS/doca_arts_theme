@@ -32,11 +32,11 @@ function doca_common_preprocess_page(&$variables, $hook) {
   drupal_add_js(['gaSettings' => ['gaCode' => $ga_code]], 'setting');
 
   // Create template variables for the header menu block.
-  $variables['header_search'] = _doca_common_block_render('search', 'form');
-  $variables['header_menu'] = _doca_common_block_render('system', 'main-menu');
+  $variables['header_search'] = doca_common_block_render('search', 'form');
+  $variables['header_menu'] = doca_common_block_render('system', 'main-menu');
   // Create template variables for the footer menu blocks.
-  $variables['footer_menu'] = _doca_common_block_render('menu', 'menu-footer-menu');
-  $variables['footer_auxilary_menu'] = _doca_common_block_render('menu', 'menu-footer-sub-menu');
+  $variables['footer_menu'] = doca_common_block_render('menu', 'menu-footer-menu');
+  $variables['footer_auxilary_menu'] = doca_common_block_render('menu', 'menu-footer-sub-menu');
 
   $header = drupal_get_http_header("status");
   if ($header === "404 Not Found") {
@@ -407,7 +407,7 @@ function doca_common_preprocess_node(&$variables, $hook) {
 
     // Related content.
     if (isset($hide_related_content) && !$hide_related_content) {
-      $variables['content']['related_content'] = _doca_common_related_content($variables['node']);
+      $variables['content']['related_content'] = doca_common_related_content($variables['node']);
     }
   }
 

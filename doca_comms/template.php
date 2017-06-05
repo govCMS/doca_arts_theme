@@ -516,16 +516,6 @@ function dcomms_theme_ds_pre_render_alter(&$layout_render_array, $context, &$var
 }
 
 /**
- * Implements template_preprocess_poll_results().
- */
-function dcomms_theme_preprocess_poll_results(&$variables) {
-  $node = node_load($variables['nid']);
-  $keys = array_keys($node->choice);
-  $variables['votes_1'] = $node->choice[$keys[0]]['chvotes'];
-  $variables['votes_2'] = $node->choice[$keys[1]]['chvotes'];
-}
-
-/**
  * Returns HTML for an active facet item (in search).
  *
  * @param $variables

@@ -733,23 +733,6 @@ function doca_common_menu_link__menu_footer_sub_menu(array $variables) {
 }
 
 /**
- * Implements theme_file_icon().
- */
-function doca_common_file_icon($variables) {
-  $file = $variables['file'];
-  $icon_directory = drupal_get_path('theme', 'doca_common') . '/dist/images/document';
-
-  $mime = check_plain($file->filemime);
-  $icon_url = file_icon_path($file, $icon_directory);
-
-  if ($icon_url == FALSE) {
-    $icon_url = $icon_directory . '/generic.png';
-  }
-
-  return '<img alt="" class="file__icon" src="' . base_path() . $icon_url . '" title="' . $mime . '" />';
-}
-
-/**
  * Implements hook_ds_pre_render_alter().
  */
 function doca_common_ds_pre_render_alter(&$layout_render_array, $context, &$variables) {

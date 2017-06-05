@@ -175,3 +175,170 @@ function doca_common_preprocess_poll_results(&$variables) {
   $variables['votes_1'] = $node->choice[$keys[0]]['chvotes'];
   $variables['votes_2'] = $node->choice[$keys[1]]['chvotes'];
 }
+
+/**
+ * Implements template_preprocess_field().
+ */
+function doca_common_preprocess_field(&$variables, $hook) {
+  $element =& $variables['element'];
+  $variables['theme_hook_suggestions'][] = 'field__' . $element['#field_name'] . '__' . $element['#view_mode'];
+  $variables['theme_hook_suggestions'][] = 'field__' . $element['#bundle'] . '__' . $element['#view_mode'];
+  $variables['theme_hook_suggestions'][] = 'field__' . $element['#bundle'] . '__' . $element['#view_mode'] . '__' . $element['#field_name'];
+
+  if (($element['#field_type'] === 'text_with_summary' || $element['#field_type'] === 'text_long') && ($element['#formatter'] === 'text_summary_or_trimmed' || $element['#formatter'] === 'text_trimmed')) {
+    $instance = field_info_instance($element['#entity_type'], $element['#field_name'], $element['#bundle']);
+    $display = $instance['display'][$element['#view_mode']];
+    $trim_length = $display['settings']['trim_length'];
+    $use_summary = $element['#formatter'] === 'text_summary_or_trimmed';
+    foreach ($element['#items'] as $delta => $item) {
+      $markup = ($use_summary && !empty($item['safe_summary'])) ? $item['safe_summary'] : $item['safe_value'];
+      $variables['items'][$delta]['#markup'] = doca_common_trim($markup, $trim_length);
+    }
+  }
+
+  if ($element['#field_name'] === 'node_link') {
+    $variables['read_more_text'] = t('Learn more');
+    $node = $element['#object'];
+    if (!empty($node->field_read_more_text[LANGUAGE_NONE][0]['safe_value'])) {
+      $variables['read_more_text'] = $node->field_read_more_text[LANGUAGE_NONE][0]['safe_value'];
+    }
+  }
+
+  if ($element['#field_type'] === 'image') {
+    foreach ($variables['items'] as $delta => $item) {
+      if (isset($item['#item'])) {
+        if ($item['#item']['filemime'] === 'image/svg+xml') {
+          unset($variables['items'][$delta]['#image_style']);
+        }
+      }
+
+      if (isset($item['#file'])) {
+        if ($item['#file']->filemime) {
+          if ($item['#file']->filemime === 'image/svg+xml') {
+            $variables['items'][$delta]['file']['#theme'] = 'image';
+          }
+        }
+      }
+    }
+  }
+
+  // Add consultation vars to relevant fields.
+  $consultation_fields = [
+    'hys_progress_bar',
+    'field_formal_submission_cta_1',
+    'field_consultation_date',
+  ];
+  $is_consultation_field = in_array($variables['element']['#field_name'], $consultation_fields);
+  if ($is_consultation_field) {
+    _consultation_vars($variables, $element['#object']);
+  }
+
+  if ($element['#field_name'] == 'field_consultation_date') {
+    if (isset($element['#object']->field_display_fund_period[LANGUAGE_NONE]) && $element['#object']->field_display_fund_period[LANGUAGE_NONE][0]['value']) {
+      $variables['hide_date'] = TRUE;
+    }
+  }
+
+  // Replace title with promotional one-liner in non-full view modes.
+  if ($element['#field_name'] == 'title' && $element['#view_mode'] != 'full') {
+    if (isset($element['#object']->field_promotional_one_liner) && !empty($element['#object']->field_promotional_one_liner)) {
+      $variables['one_liner'] = truncate_utf8($element['#object']->field_promotional_one_liner[LANGUAGE_NONE][0]['value'], 35, TRUE, TRUE);
+    }
+  }
+
+  // Strip certain characters for Swift RSS integration.
+  if ($element['#view_mode'] == 'rss_feed') {
+    if ($element['#formatter'] == 'text_plain' && $element['#bundle'] == 'alert') {
+      // Manually control markup for Alert content.
+      $allowed_tags = '<p><br><h1><h2><h3><h4><h5><h6><a><b><strong><i><em><img>';
+      $clean = strip_tags($element['#items'][0]['value'], $allowed_tags);
+      $variables['items'][0]['#markup'] = check_markup($clean, 'rich_text');
+    }
+
+    // Replace incompatible characters.
+    $variables['items'][0]['#markup'] = str_replace(
+      [
+        '—',
+        '–',
+        '“',
+        '”',
+        '’',
+        '&nbsp;',
+      ],
+      [
+        '-',
+        '-',
+        '"',
+        '"',
+        '\'',
+        ' ',
+      ],
+      $variables['items'][0]['#markup']
+    );
+
+  }
+
+  // Get the node.
+  $node = $element['#object'];
+  // Return whether a node has the 'External source' field filled in.
+  $external_source = _doca_admin_return_node_has_external_source($node);
+  $variables['external_source'] = $external_source;
+
+  if ($variables['element']['#field_name'] == 'field_stackla_embed_para') {
+    drupal_add_js(drupal_get_path('theme', 'doca_common') . '/vendor/js/stackla.js', ['file']);
+  }
+  if ($element['#field_name'] === 'formal_submission_webform') {
+    if ($element['#bundle'] == 'funding') {
+      if (isset($element['#object']->field_funding_app_webform[LANGUAGE_NONE])) {
+        $variables['form_id'] = $element['#object']->field_funding_app_webform[LANGUAGE_NONE][0]['target_id'];
+      }
+    }
+    else {
+      $variables['form_id'] = theme_get_setting('have_your_say_wform_nid');
+    }
+  }
+
+  if ($element['#field_name'] === 'field_feature_image' || $element['#field_name'] === 'field_pbundle_image' || $element['#field_name'] === 'field_image') {
+    $img_class = '';
+    $img_url = '';
+    $has_caption = 0;
+    $img_caption = '';
+    $img_hover = '';
+    $caption_d = '';
+    $caption_mob = '';
+    $variables['img_caption'] = '';
+    foreach ($variables['items'] as $delta => $item) {
+      if (isset($item['#item']['field_artist'][LANGUAGE_NONE][0]['safe_value'])) {
+        $img_class = 'featured-with-caption';
+        $has_caption = 1;
+        $caption_d = '<span class="visible--md">' . $item['#item']['field_artist'][LANGUAGE_NONE][0]['safe_value'] . '<span class="feature-caption-link"> (detail) +</span></span>';
+        $img_hover = '<div class="featured-overlay">' . $item['#item']['field_artist'][LANGUAGE_NONE][0]['safe_value'];
+      }
+      if (isset($item['#item']['field_file_image_title_text'][LANGUAGE_NONE][0]['safe_value'])) {
+        $img_hover .= ' - ' . $item['#item']['field_file_image_title_text'][LANGUAGE_NONE][0]['safe_value'];
+      }
+      if (isset($item['#item']['field_read_more_text'][LANGUAGE_NONE][0]['safe_value'])) {
+        $img_hover .= '<span>' . $item['#item']['field_read_more_text'][LANGUAGE_NONE][0]['safe_value'] . '</span>';
+      }
+      $img_hover .= '</div>';
+      if (isset($item['#item']['field_link_to'][LANGUAGE_NONE][0]['url'])) {
+        $img_url = $item['#item']['field_link_to'][LANGUAGE_NONE][0]['url'];
+        $caption_mob = '<span class="visible--xs">Image credit +</span>';
+      }
+      if ($has_caption) :
+        $img_caption .= '<div class="featured-with-caption__caption no-url">';
+        if ($img_url) :
+          $img_caption = '<div class="featured-with-caption__caption"><a href="' . $img_url . '"target="_blank">';
+        endif;
+        $img_caption .= $caption_mob;
+        $img_caption .= $caption_d;
+        if ($img_url) :
+          $img_caption .= '</a>';
+        endif;
+        $img_caption .= '</div>' . $img_hover;
+      endif;
+      $variables['img_caption'] = $img_caption;
+    }
+    $variables['img_class'] = $img_class;
+  }
+}

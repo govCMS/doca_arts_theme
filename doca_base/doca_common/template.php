@@ -21,36 +21,6 @@ include_once dirname(__FILE__) . '/includes/preprocess.inc';
 include_once dirname(__FILE__) . '/includes/theme.inc';
 
 /**
- * Implements hook_js_alter().
- */
-function doca_common_js_alter(&$javascript) {
-  $tabs_js_path = drupal_get_path('module', 'field_group') . '/horizontal-tabs/horizontal-tabs.js';
-  unset($javascript[$tabs_js_path]);
-}
-
-/**
- * Implements hook_media_wysiwyg_token_to_markup_alter().
- */
-function doca_common_media_wysiwyg_token_to_markup_alter(&$element, &$tag_info, $settings) {
-  // Add the relevant styles to the generated media wysiwyg dom elements. This
-  // needs to be done in slightly different ways for certain view modes.
-  if (isset($element['content']['file']['#attributes']['style'])) {
-    $styles = $element['content']['file']['#attributes']['style'];
-    $parts = explode(";", $styles);
-    for ($i = 0; $i < count($parts); $i++) {
-      if (substr(trim($parts[$i]), 0, 5) == 'float') {
-        // Move the float to the parent element.
-        $element['content']['#attributes']['class'][] = 'doca-media-' . trim(explode(':', $parts[$i])[1]);
-        $element['content']['#attributes']['style'] = $parts[$i];
-        unset($parts[$i]);
-        $element['content']['file']['#attributes']['style'] = implode(";", $parts);
-        break;
-      }
-    }
-  }
-}
-
-/**
  * Fill related content with content from a category term.
  *
  * @param array $related_content_nids

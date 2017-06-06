@@ -5,7 +5,7 @@ core = 7.x
 base theme = doca_common
 
 ; Remove styles from base theme.
-stylesheets[all][] = dist/css/styles.css
+stylesheets[all][] = dist/css/common.css
 
 ; Then we add our own stylesheet.
 stylesheets[all][] = dist/css/site.css

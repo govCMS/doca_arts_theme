@@ -1,5 +1,5 @@
 screenshot = screenshot.png
-name = DoCA Site Theme
+name = DoCA Communications
 description = The Department of Communications and Arts theme for the govCMS website
 core = 7.x
 base theme = doca_common

@@ -2,10 +2,7 @@
 
 /**
  * @file
- * Contains the theme's functions to manipulate Drupal's default markup.
- *
- * Complete documentation for this file is available online.
- * @see https://drupal.org/node/1728096
+ * Doca common admin theme.
  */
 
 // Include the helper functions to make sharing between the main and admin themes easier.
@@ -27,6 +24,7 @@ function dcomms_admin_form_node_form_alter(&$form, &$form_state, $form_id) {
     $options['current'] = str_replace('consultation', 'funding', $options['current']);
   }
 }
+
 /**
  * Implements hook_form_FORM_ID_alter().
  *
@@ -36,30 +34,31 @@ function dcomms_admin_form_node_form_alter(&$form, &$form_state, $form_id) {
  *        The drupal form_state array.
  */
 function doca_admin_form_consultation_node_form_alter(&$form, &$form_state) {
-    // Get the node.
-    $node = $form['#node'];
+  // Get the node.
+  $node = $form['#node'];
 
-    // Get the value for whether the user should have access.
-    $access = _doca_admin_return_user_has_role();
-    // If the user has access.
-    if ($access) {
-        // Work out if this node can validly accept late submissions.
-        $accept_late_submissions = _doca_admin_accept_late_submission($node);
+  // Get the value for whether the user should have access.
+  $access = _doca_admin_return_user_has_role();
+  // If the user has access.
+  if ($access) {
+    // Work out if this node can validly accept late submissions.
+    $accept_late_submissions = _doca_admin_accept_late_submission($node);
 
-        // If able to accept late submissions.
-        if ($accept_late_submissions) {
-            // Get the late submission URL.
-            $url = _doca_admin_return_late_submission_url($node);
-            // Create a message to let the admin know the URL.
-            $args = array(
-                '!url' => $url,
-            );
-            $message = t('Use the following URL for late submissions: !url', $args);
-            // Finally output the message.
-            drupal_set_message($message);
-        }
+    // If able to accept late submissions.
+    if ($accept_late_submissions) {
+      // Get the late submission URL.
+      $url = _doca_admin_return_late_submission_url($node);
+      // Create a message to let the admin know the URL.
+      $args = [
+        '!url' => $url,
+      ];
+      $message = t('Use the following URL for late submissions: !url', $args);
+      // Finally output the message.
+      drupal_set_message($message);
     }
+  }
 }
+
 function dcomms_admin_form_workbench_moderation_moderate_form_alter(&$form, &$form_state, $form_id) {
   if (!empty($form['node']['#value'])) {
     $node = $form['node']['#value'];
@@ -68,37 +67,36 @@ function dcomms_admin_form_workbench_moderation_moderate_form_alter(&$form, &$fo
     }
   }
 }
+
 /**
  * Validation callback for funding node forms.
  */
 function doca_admin_clear_updates($form, &$form_state) {
-    if (taxonomy_term_load($form_state['values']['field_funding_type'][LANGUAGE_NONE][0]['tid'])->name == 'Rolling') {
-        // Don't validate on insert, only on changes.
-        if (!isset($form['#node']->field_consultation_date) || empty($form['#node']->field_consultation_date)) {
-            return;
-        }
-
-        // Grab current field value from node.
-        $current_field = reset($form_state['node']->field_consultation_date[$form_state['node']->language]);
-
-        // Check validity of form input.
-        if (!isset($form_state['values']['field_consultation_date']) || empty($form_state['values']['field_consultation_date'])) {
-            // Nothing to validate. Bail.
-            return;
-        }
-
-        // Get new field value from form_state.
-        $new_field = reset($form_state['values']['field_consultation_date'][$form_state['node']->language]);
-
-        // Compare versions of the start dates.
-        if ($current_field['value'] != $new_field['value']) {
-            // The funding start date is being changed, remove updates!
-            if (isset($form_state['values']['field_updates']) && !empty($form_state['values']['field_updates'])) {
-                doca_base_paragraphs_deleteconfirm($form, $form_state);
-            }
-        }
-
-
+  if (taxonomy_term_load($form_state['values']['field_funding_type'][LANGUAGE_NONE][0]['tid'])->name == 'Rolling') {
+    // Don't validate on insert, only on changes.
+    if (!isset($form['#node']->field_consultation_date) || empty($form['#node']->field_consultation_date)) {
+      return;
     }
+
+    // Grab current field value from node.
+    $current_field = reset($form_state['node']->field_consultation_date[$form_state['node']->language]);
+
+    // Check validity of form input.
+    if (!isset($form_state['values']['field_consultation_date']) || empty($form_state['values']['field_consultation_date'])) {
+      // Nothing to validate. Bail.
+      return;
+    }
+
+    // Get new field value from form_state.
+    $new_field = reset($form_state['values']['field_consultation_date'][$form_state['node']->language]);
+
+    // Compare versions of the start dates.
+    if ($current_field['value'] != $new_field['value']) {
+      // The funding start date is being changed, remove updates!
+      if (isset($form_state['values']['field_updates']) && !empty($form_state['values']['field_updates'])) {
+        doca_base_paragraphs_deleteconfirm($form, $form_state);
+      }
+    }
+  }
 }
 

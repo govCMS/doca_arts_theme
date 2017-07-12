@@ -1,0 +1,4 @@
+name        = DoCA Sub-theme Starter Kit
+description = The Department of Communications and Arts site theme for the govCMS website
+core        = 7.x
+base theme  = doca_common

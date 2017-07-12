@@ -14,5 +14,5 @@
 ?>
 
 <div class="spacer--bottom read-more--footer-wrapper">
-  <?php print doca_theme_read_more_link($more_url, $link_text); ?>
+  <?php print doca_common_read_more_link($more_url, $link_text); ?>
 </div>

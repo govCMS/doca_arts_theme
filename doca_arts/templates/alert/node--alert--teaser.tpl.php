@@ -36,5 +36,5 @@
 
   <?php print render($content['body']); ?>
 
-  <?php print doca_theme_read_more_link($node_url, $read_more_text, $external_source); ?>
+  <?php print doca_common_read_more_link($node_url, $read_more_text, $external_source); ?>
 </div>

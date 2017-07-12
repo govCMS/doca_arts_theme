@@ -457,40 +457,6 @@ function doca_theme_read_more_link($href, $text, $external = FALSE) {
 }
 
 /**
- * Implements hook_preprocess_block().
- */
-function doca_theme_preprocess_block(&$variables) {
-  // Theming various blocks.
-  switch ($variables['block_html_id']) {
-    case 'block-system-main-menu':
-      $variables['classes_array'][] = 'header-menu';
-      $variables['title_attributes_array']['class'] = ['element-invisible'];
-      break;
-
-    case 'block-menu-menu-footer-menu':
-      $variables['classes_array'][] = 'layout-centered';
-      $variables['classes_array'][] = 'clearfix';
-      $variables['title_attributes_array']['class'] = ['element-invisible'];
-      break;
-
-    case 'block-menu-menu-footer-sub-menu':
-      $variables['classes_array'][] = 'layout-centered';
-      $variables['classes_array'][] = 'clearfix';
-      $variables['title_attributes_array']['class'] = ['element-invisible'];
-      break;
-  }
-
-  // Block template per bean type.
-  if ($variables['block']->module === 'bean') {
-    $beans = $variables['elements']['bean'];
-    $bean_keys = element_children($beans);
-    $bean = $beans[reset($bean_keys)];
-    // Add template suggestions for bean types.
-    $variables['theme_hook_suggestions'][] = 'block__bean__' . $bean['#bundle'];
-  }
-}
-
-/**
  * Returns HTML for a menu with a heading and wrapper.
  */
 function _doca_theme_block_render($module, $delta) {

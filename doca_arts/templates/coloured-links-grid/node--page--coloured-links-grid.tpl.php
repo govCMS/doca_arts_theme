@@ -8,7 +8,7 @@
  */
 ?>
 <?php if ($title): ?>
-  <h2><?php print doca_theme_trim(render($title), 35); ?></h2>
+  <h2><?php print doca_common_trim(render($title), 35); ?></h2>
 <?php endif; ?>
 
 <div>

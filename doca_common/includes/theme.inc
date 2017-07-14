@@ -166,19 +166,6 @@ function doca_common_menu_tree__main_menu($variables) {
 
   return $output;
 }
-/**
- * Implements hook_menu_alter().
- */
-function doca_common_menu_alter(&$items) {
-    // Alter node clone link.
-    if (isset($items['node/%node/clone/%clone_token'])) {
-        // Convert to tab.
-        $items['node/%node/clone/%clone_token']['type'] = MENU_LOCAL_TASK;
-
-        // Move tab to the end.
-        $items['node/%node/clone/%clone_token']['weight'] = 10;
-    }
-}
 
 /**
  * Implements theme_menu_link__MENU_NAME().

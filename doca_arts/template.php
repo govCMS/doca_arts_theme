@@ -2,5 +2,5 @@
 
 /**
  * @file
- * Doca communication site custom theme.
+ * Template functions.
  */

@@ -4,6 +4,8 @@ description = The Department of Communications and Arts theme for the govCMS web
 core        = 7.x
 base theme  = doca_common
 
+scripts[] = dist/js/site.js
+
 regions[highlighted]   = Highlighted
 regions[help]          = Help
 regions[content]       = Content

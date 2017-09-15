@@ -8,7 +8,7 @@ The Department of Communications and Arts theme for the govCMS website
 ### Structure
 
 * doca_base - `common` and `admin` themes
-* doca_comms - `custom` theme for the site
+* doca_arts - `custom` site specific theme for the site
 
 ### doca_base git subtree
 

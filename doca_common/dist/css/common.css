@@ -6923,6 +6923,7 @@ img.iefix {
   }
 }
 
-body.section-have-your-say .filter__button {
+body.section-have-your-say .filter__button,
+body.section-funding-and-support .filter__button {
   clear: inherit;
 }

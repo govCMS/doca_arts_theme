@@ -6,6 +6,8 @@ bower_components
 
 # SaSS
 .sass-cache/
+dist/css/components/
+package-lock.json
 
 # Dependency directories
 node_modules/

@@ -6922,3 +6922,7 @@ img.iefix {
     display: block;
   }
 }
+
+body.section-have-your-say .filter__button {
+  clear: inherit;
+}

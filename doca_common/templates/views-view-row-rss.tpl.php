@@ -19,15 +19,12 @@
   $rss_author_raw = theme_get_setting('rss_author');
   $rss_author = 'Department of Communications and the Arts';
   if(!empty($rss_author_raw)) {
-    echo 'test';
     //see whether this has multiple entries by checking for carriage returns
     if(strstr($rss_author_raw, chr(13))) {
-      echo 'test2';
       //explode the newlines into an array
       $rss_author_array = explode(chr(13), $rss_author_raw);
       //loop through to find a URI match
       foreach($rss_author_array as $key => $value) {
-        echo $value;
         //if value contains a comma separator (and only 1 comma)
         if(substr_count($value, ',') !== 1) {
 	  //there should only be 1 comma separating terms, so skip item if not 1
@@ -36,6 +33,7 @@
         //explode on comma separator
         $rss_author_data = explode(',', $value, 1);
         //does URI match current govCMS path?
+        print_r($rss_author_data);
         echo request_path();
         if($rss_author_data[0] == request_path()) {
           echo 'test3';

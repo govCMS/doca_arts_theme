@@ -22,7 +22,7 @@
     //see whether this has multiple entries by checking for carriage returns
     if(strstr($rss_author_raw, chr(13))) {
       //explode the newlines into an array
-      $rss_author_array = explode(chr(13), $rss_author_raw);
+      $rss_author_array = preg_split('/\r\n?|\n/', $rss_author_raw, -1, PREG_SPLIT_NO_EMPTY);
       //loop through to find a URI match
       foreach($rss_author_array as $key => $value) {
         //if value contains a comma separator (and only 1 comma)
@@ -31,12 +31,9 @@
           continue;
         }
         //explode on comma separator
-        $rss_author_data = explode(',', $value, 1);
+        $rss_author_data = explode(',', $value, 2);
         //does URI match current govCMS path?
-        print_r($rss_author_data);
-        echo request_path();
         if($rss_author_data[0] == request_path()) {
-          echo 'test3';
           //found it!
           $rss_author = $rss_author_data[1];
           //break out of loop

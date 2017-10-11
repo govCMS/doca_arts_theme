@@ -71,6 +71,10 @@
   </div>
 </header>
 
+<div class="layout-max">
+  <a href="/" title="Home" rel="home" class="header__inner__logo"></a>
+</div>
+
 <div id="page" class="spacer--top">
   <?php print render($tabs); ?>
 

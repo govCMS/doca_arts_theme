@@ -117,7 +117,7 @@
               if ( !empty($query) ) {
                 echo 'value="'.$query.'"';
               }
-            ?> placeholder="Search phone policies">
+            ?> placeholder="Search Department of Communicatons and the Arts">
             <input class="form-submit" id="edit-submit-full-site-search" name="" type="submit" value="Search">
           </form>
         </div>

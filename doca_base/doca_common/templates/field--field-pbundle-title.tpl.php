@@ -5,6 +5,9 @@
  */
 ?>
 <?php foreach ($items as $delta => $item): ?>
-  <?php print_r($variables); ?>
-  <?php print render($item); ?>
+  <?php if($variables['element']['#bundle'] == 'document_policy_list'): ?>
+    <?php print sprintf('<h2>%s</h2>', render($item)); ?>
+  <?php else: ?>
+    <?php print render($item); ?>
+  <?php endif; ?>
 <?php endforeach; ?>

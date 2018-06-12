@@ -3,8 +3,13 @@
   'use strict';
 
   Drupal.behaviors.site = {
-    attach: function () {
+    attach: function (context, settings) {
       // Custom site scripts.
+      $(document).ready(function () {
+        $('.modaal-gallery').modaal({
+          type: 'image'
+        });
+      });
     }
   };
 

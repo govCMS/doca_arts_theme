@@ -14,6 +14,17 @@
 
   'use strict';
 
+  Drupal.behaviors.site = {
+    attach: function (context, settings) {
+      // Custom site scripts.
+      $(document).ready(function () {
+        $('.modaal-gallery').modaal({
+          type: 'image'
+        });
+      });
+    }
+  };
+
   Drupal.behaviors.skipLink = {
     attach: function() {
       setTimeout(function() {

@@ -4,6 +4,12 @@ description = The Department of Communications and Arts theme for the govCMS web
 core        = 7.x
 base theme  = doca_common
 
+; Remove styles from base theme.
+stylesheets[all][] = dist/css/common.css
+
+; Then we add our own stylesheet.
+stylesheets[all][] = dist/css/site.css
+
 scripts[] = dist/js/site.js
 
 regions[highlighted]   = Highlighted

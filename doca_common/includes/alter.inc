@@ -171,6 +171,10 @@ function doca_common_js_alter(&$javascript) {
       $replace_jquery = TRUE;
     }
   }
+  $node = menu_get_object();
+  if ($node->type == 'gallery') {
+    $replace_jquery = TRUE;
+  }
   // Swap out jQuery to use an updated version of the library.
   if ($replace_jquery) {
     $javascript['misc/jquery.js']['data'] = path_to_theme() . '/../../doca_base/doca_common/vendor/js/jquery-1.11.3.min.js';

@@ -5,8 +5,9 @@
 // Styleguide components.spacer
 %stacklafw, .stacklafw {
   padding: 1rem;
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
   @include breakpoint($medium) {
     padding-top: 3rem;
+    margin-bottom: 5rem;
   }
 }

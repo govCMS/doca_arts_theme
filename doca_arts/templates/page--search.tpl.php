@@ -101,26 +101,6 @@
         <ul class="action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
       <div class="layout-max">
-        <div class="search-form-top">
-          <form action="#" method="get" class="spacer">
-            <input class="form-text" id="edit-search-api-views-fulltext" maxlength="128" name="search_api_views_fulltext" size="30" type="text"
-            <?php
-              // the query string
-              if ( isset($_GET['search_api_views_fulltext']) ){
-                $query = htmlentities($_GET['search_api_views_fulltext']);
-              } else if( isset($_GET['query']) ) {
-                $query = htmlentities($_GET['query']);
-              } else {
-                $query = "";
-              }
-              $query = filter_xss($query);
-              if ( !empty($query) ) {
-                echo 'value="'.$query.'"';
-              }
-            ?> placeholder="Search Department of Communicatons and the Arts">
-            <input class="form-submit" id="edit-submit-full-site-search" name="" type="submit" value="Search">
-          </form>
-        </div>
          <section class="layout-sidebar__main">
            <?php print render($page['content']); ?>
          </section>

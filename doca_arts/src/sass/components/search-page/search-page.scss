@@ -1,0 +1,54 @@
+// Search page specific style
+
+.view-full-site-search{
+  &.view-id-full_site_search{
+    &.document-list{
+      padding-top: 0;
+      .view-filters{
+        margin-bottom: 3rem;
+        form{
+          &#views-exposed-form-full-site-search-page{
+            .filter__wrapper{
+              padding: 1rem 0 0 0;
+
+              .filter__left{
+                float: none;
+                margin: 0;
+                display: inline-block;
+                width: 100%;
+                vertical-align: top;
+                @include breakpoint($medium) {
+                  width: auto;
+                  min-width: 400px
+                }
+
+
+                .filter{
+                  width: 100%;
+                  border: none;
+                  margin: 0;
+                  padding: 0;
+                  .form-item{
+                    width: 100%;
+                    display: block;
+                    input[type='text']{
+                      width: 100%;
+                      max-width: unset;
+                      min-width: unset;
+                    }
+                  }
+                }
+              }
+
+              .filter__button{
+                padding: 0;
+                display: inline-block;
+                vertical-align: top;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

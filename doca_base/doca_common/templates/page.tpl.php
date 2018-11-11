@@ -169,7 +169,7 @@
         </div>
       </div>
     <?php endif; ?>
-    <img class="iefix" src="<?php print path_to_theme(); ?>/dist/images/bg--point--black.svg">
+    <img class="iefix" src="<?php print base_path() . drupal_get_path('theme', 'doca_common');  ?>/dist/images/bg--point--black.svg">
     <?php print render($page['footer_top']); ?>
     <div class="footer__wrapper">
 

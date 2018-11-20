@@ -47,10 +47,10 @@
   <?php if ( $google_tag_manager_code['script_in_head'] ) {print $google_tag_manager_code['script_in_head'];} ?>
 </head>
 <body class="<?php if (theme_get_setting('external_link_enable_popup') == 1) {$classes .=' caretaker';} print $classes; ?>" <?php print $attributes;?>>
+<?php if ( $google_tag_manager_code['nonscript_in_body_first'] ) {print $google_tag_manager_code['nonscript_in_body_first'];} ?>
 <?php if ($skip_link_text && $skip_link_anchor): ?>
   <a id="skip-link" href="#<?php print $skip_link_anchor; ?>" class="element-invisible element-focusable" tabindex="1"><?php print $skip_link_text; ?></a>
 <?php endif; ?>
-<?php if ( $google_tag_manager_code['nonscript_in_body_first'] ) {print $google_tag_manager_code['nonscript_in_body_first'];} ?>
 <?php print $page_top; ?>
 <?php print $page; ?>
 <?php print $page_bottom; ?>
